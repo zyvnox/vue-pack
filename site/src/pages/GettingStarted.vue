@@ -312,13 +312,13 @@
       class="pt-6 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between"
     >
       <RouterLink
-        to="/installation"
+        to="/doc/installation"
         class="text-xs font-semibold text-blue-600 dark:text-blue-400 hover:underline"
       >
         Next: Full System Requirements & Peer Dependencies →
       </RouterLink>
       <RouterLink
-        to="/examples/form-modal"
+        to="/doc/examples/form-modal"
         class="text-xs font-semibold text-slate-600 dark:text-slate-400 hover:underline"
       >
         Explore FormModal Engine ↗
@@ -332,7 +332,7 @@ import { ref } from 'vue'
 import CodeBlock from '@/components/CodeBlock.vue'
 import pkg from '../../../package.json'
 
-const version = pkg.version || '0.1.0'
+const version = pkg.version || '0.1.1'
 const activeTab = ref<'npm' | 'cdn'>('npm')
 
 const npmUsageCode = `<template>
@@ -361,13 +361,23 @@ const cdnMethodACode = `<!DOCTYPE html>
   <title>Zyvnox Vue Pack - jsDelivr ESM</title>
   <!-- 1. Import library stylesheet -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@zyvnox/vue-pack@${version}/dist/style.css" />
+
+  <!-- 2. Importmap maps Vue & Zyvnox Vue Pack for clean native browser ES modules -->
+  <script type="importmap">
+  {
+    "imports": {
+      "vue": "https://cdn.jsdelivr.net/npm/vue@3.5/dist/vue.esm-browser.js",
+      "@zyvnox/vue-pack": "https://cdn.jsdelivr.net/npm/@zyvnox/vue-pack@${version}/dist/cdn/vue-pack.es.js"
+    }
+  }
+  <\/script>
 </head>
 <body>
   <div id="app"></div>
 
   <script type="module">
-    import { createApp, ref } from 'https://cdn.jsdelivr.net/npm/vue@3.5/dist/vue.esm-browser.js'
-    import { FormModal, TextInput } from 'https://cdn.jsdelivr.net/npm/@zyvnox/vue-pack@${version}/dist/zyvnox-vue-pack.es.js'
+    import { createApp, ref } from 'vue'
+    import { FormModal, TextInput } from '@zyvnox/vue-pack'
 
     const app = createApp({
       components: { FormModal, TextInput },
@@ -393,12 +403,12 @@ const cdnMethodBCode = `<!DOCTYPE html>
   <title>Zyvnox Vue Pack - esm.sh Import Map</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@zyvnox/vue-pack@${version}/dist/style.css" />
 
-  <!-- 1. Define browser import maps -->
+  <!-- 1. Define browser import maps with shared Vue 3 runtime compiler -->
   <script type="importmap">
   {
     "imports": {
-      "vue": "https://cdn.jsdelivr.net/npm/vue@3.5/dist/vue.runtime.esm-browser.js",
-      "@zyvnox/vue-pack": "https://esm.sh/@zyvnox/vue-pack@${version}"
+      "vue": "https://cdn.jsdelivr.net/npm/vue@3.5/dist/vue.esm-browser.js",
+      "@zyvnox/vue-pack": "https://esm.sh/@zyvnox/vue-pack@${version}?external=vue"
     }
   }
   <\/script>
@@ -407,12 +417,20 @@ const cdnMethodBCode = `<!DOCTYPE html>
   <div id="app"></div>
 
   <script type="module">
-    import { createApp } from 'vue'
+    import { createApp, ref } from 'vue'
     import { TextInput } from '@zyvnox/vue-pack'
 
     const app = createApp({
       components: { TextInput },
-      template: \`<div class="p-6"><TextInput label="Import Map Demo" /></div>\`
+      setup() {
+        const name = ref('John Doe')
+        return { name }
+      },
+      template: \`
+        <div class="p-6 max-w-md mx-auto">
+          <TextInput v-model="name" label="Import Map Demo" />
+        </div>
+      \`
     })
     app.mount('#app')
   <\/script>
@@ -430,10 +448,10 @@ const cdnMethodCCode = `<!DOCTYPE html>
 <body>
   <div id="app"></div>
 
-  <!-- 2. Load Vue 3 Global first -->
-  <script src="https://unpkg.com/vue@3/dist/vue.global.js"><\/script>
+  <!-- 2. Load Vue 3 Global first (with in-browser template compiler) -->
+  <script src="https://cdn.jsdelivr.net/npm/vue@3.5/dist/vue.global.js"><\/script>
 
-  <!-- 3. Load Zyvnox Vue Pack UMD Bundle -->
+  <!-- 3. Load Zyvnox Vue Pack Standalone CDN UMD Bundle -->
   <script src="https://cdn.jsdelivr.net/npm/@zyvnox/vue-pack@${version}/dist/cdn/vue-pack.umd.js"><\/script>
 
   <!-- 4. Components are available on global window.ZyvnoxVuePack -->

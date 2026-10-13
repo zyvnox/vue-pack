@@ -7,7 +7,7 @@
         <span
           class="px-2.5 py-0.5 rounded text-[11px] font-mono font-semibold bg-amber-100 dark:bg-amber-950/70 text-amber-700 dark:text-amber-400 border border-amber-300/60 dark:border-amber-800/60"
         >
-          v0.1.0 Early Release
+          v0.1.1 Early Release
         </span>
       </div>
       <p class="text-sm text-slate-600 dark:text-slate-400 max-w-2xl">

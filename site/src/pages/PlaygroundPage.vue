@@ -23,10 +23,19 @@
         <RouterLink
           to="/"
           class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white bg-slate-100 hover:bg-slate-200 dark:bg-slate-800/80 dark:hover:bg-slate-700 transition-colors border border-slate-200 dark:border-slate-700/60"
-          title="Back to documentation home"
+          title="Back to Home Page"
         >
-          <span>←</span>
-          <span>Back to Docs</span>
+          <span>🏠</span>
+          <span class="hidden sm:inline">Home</span>
+        </RouterLink>
+
+        <RouterLink
+          to="/doc"
+          class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white bg-slate-100 hover:bg-slate-200 dark:bg-slate-800/80 dark:hover:bg-slate-700 transition-colors border border-slate-200 dark:border-slate-700/60"
+          title="Go to Documentation"
+        >
+          <span>📖</span>
+          <span>Docs</span>
         </RouterLink>
       </div>
 
@@ -95,12 +104,12 @@
       <section
         class="h-1/2 md:h-full md:w-1/2 flex flex-col border-b md:border-b-0 border-slate-200 dark:border-slate-800"
       >
-        <CodeEditor v-model="code" />
+        <CodeEditor v-model="code" :is-dark="isDark" />
       </section>
 
       <!-- Right: Live Preview (50%) -->
       <section class="h-1/2 md:h-full md:w-1/2 flex flex-col">
-        <Preview :code="code" :is-dark="isDark" />
+        <Preview :code="code" :is-dark="isDark" :version="version" />
       </section>
     </main>
   </div>
@@ -114,15 +123,30 @@ import { useDark } from '@/composables/useDark'
 import { SponsorButton } from '@zyvnox/vue-pack/components'
 import pkg from '../../../package.json'
 
-const version = pkg.version || '0.1.0'
+const version = pkg.version || '0.1.1'
 const { isDark, toggleDark } = useDark()
 
 const defaultCode = `<script setup>
 import { ref } from 'vue'
-import { FormModal, TextInput } from '@zyvnox/vue-pack/components'
+import { TextInput, FormModal } from '@zyvnox/vue-pack/components'
 import '@zyvnox/vue-pack/style.css'
 
 const name = ref('Zyvnox User')
+const isOpen = ref(false)
+
+const schema = {
+  email: {
+    type: 'email',
+    label: 'Email Address',
+    required: true,
+    placeholder: 'user@example.com'
+  },
+  role: {
+    type: 'text',
+    label: 'User Role',
+    placeholder: 'e.g. Frontend Developer'
+  }
+}
 <\/script>
 
 <template>
@@ -145,9 +169,26 @@ const name = ref('Zyvnox User')
         <span class="text-slate-500 dark:text-slate-400">Current value:</span>
         <span class="font-mono text-emerald-600 dark:text-emerald-400 font-semibold">{{ name }}</span>
       </div>
+
+      <div class="mt-4">
+        <button
+          type="button"
+          @click="isOpen = true"
+          class="w-full py-2 px-4 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-medium text-xs transition-colors shadow-sm cursor-pointer"
+        >
+          Open Form Modal Demo
+        </button>
+      </div>
     </div>
 
-    <FormModal title="Live Test Dialog" />
+    <!-- Modal Form (controlled by isOpen state) -->
+    <FormModal
+      v-if="isOpen"
+      title="Live Dialog Form"
+      :schema="schema"
+      @cancel="isOpen = false"
+      @submit="isOpen = false"
+    />
   </div>
 </template>`
 

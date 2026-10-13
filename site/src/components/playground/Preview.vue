@@ -15,7 +15,7 @@
       <div class="flex items-center gap-3 text-[11px] text-slate-400 dark:text-slate-500">
         <span>Vue 3.5+</span>
         <span>•</span>
-        <span>@zyvnox/vue-pack 0.1.0</span>
+        <span>@zyvnox/vue-pack {{ version }}</span>
       </div>
     </div>
 
@@ -38,9 +38,11 @@ const props = withDefaults(
   defineProps<{
     code: string
     isDark?: boolean
+    version?: string
   }>(),
   {
     isDark: false,
+    version: '0.1.1',
   },
 )
 
@@ -68,34 +70,74 @@ function parseSFC(sfcCode: string) {
 const generatedSrcDoc = computed(() => {
   const { template, script } = parseSFC(props.code)
 
+  // Extract explicitly imported component names from the user's script
+  const importedComponents = new Set<string>()
+  const importMatches = script.matchAll(/import\s+\{([^}]+)\}\s+from\s+['"][^'"]+['"]/g)
+  for (const m of importMatches) {
+    if (m[1]) {
+      m[1].split(',').forEach((item) => {
+        const parts = item.trim().split(/\s+as\s+/)
+        const localName = parts[parts.length - 1].trim()
+        if (localName) importedComponents.add(localName)
+      })
+    }
+  }
+  const defaultImports = script.matchAll(/import\s+([a-zA-Z0-9_$]+)\s+from\s+['"][^'"]+['"]/g)
+  for (const m of defaultImports) {
+    if (m[1] && !m[1].startsWith('{')) {
+      importedComponents.add(m[1].trim())
+    }
+  }
+
   // Clean script: remove static import declarations that we handle dynamically
   const cleanedScript = script
-    .replace(/import\s+{[^}]+}\s+from\s+['"][^'"]+['"]/g, '')
-    .replace(/import\s+['"][^'"]+['"]/g, '')
+    .replace(/import\s+[\s\S]*?from\s+['"][^'"]+['"];?/g, '')
+    .replace(/import\s+['"][^'"]+['"];?/g, '')
     .trim()
 
-  return `<!DOCTYPE html>
+  // Generate binding lines ONLY for explicitly imported identifiers
+  const importedBindingLines = Array.from(importedComponents)
+    .map(
+      (name) =>
+        `const ${name} = (window.ZyvnoxVuePack && window.ZyvnoxVuePack['${name}']) || (window.Vue && window.Vue['${name}']) || undefined;`,
+    )
+    .join('\n')
+
+  // Extract declared variable/function identifiers to expose them to template
+  const declaredIds = new Set<string>()
+  for (const id of importedComponents) {
+    declaredIds.add(id)
+  }
+  const varMatches = cleanedScript.matchAll(/(?:const|let|var|function)\s+([a-zA-Z0-9_$]+)/g)
+  for (const m of varMatches) {
+    if (m[1]) declaredIds.add(m[1])
+  }
+  // Common fallback reactive variables
+  ;['name', 'title', 'isOpen', 'count'].forEach((id) => declaredIds.add(id))
+
+  const returnScope = `{ ${Array.from(declaredIds)
+    .map((id) => `...(typeof ${id} !== 'undefined' ? { ${id} } : {})`)
+    .join(', ')} }`
+
+  return `
+<!DOCTYPE html>
 <html lang="en" class="${props.isDark ? 'dark' : ''}">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <!-- CDN Stylesheet for @zyvnox/vue-pack with local fallback for pre-published dev -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@zyvnox/vue-pack@0.1.0/dist/style.css" onerror="this.onerror=null;this.href='/src/style.css';" />
+  <!-- CDN Stylesheet for @zyvnox/vue-pack with resilient CDN fallback -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@unocss/reset/tailwind.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@zyvnox/vue-pack@${props.version}/dist/style.css" onerror="this.onerror=null;this.href='https://esm.sh/@zyvnox/vue-pack@${props.version}/dist/style.css';" />
   
   <!-- CDN Tailwind for layout in preview -->
   <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"><\/script>
 
-  <!-- Importmap -->
-  <script type="importmap">
-  {
-    "imports": {
-      "vue": "https://cdn.jsdelivr.net/npm/vue@3.5/dist/vue.esm-browser.js",
-      "@zyvnox/vue-pack": "https://cdn.jsdelivr.net/npm/@zyvnox/vue-pack@0.1.0/dist/zyvnox-vue-pack.es.js",
-      "@zyvnox/vue-pack/components": "https://cdn.jsdelivr.net/npm/@zyvnox/vue-pack@0.1.0/dist/components.es.js"
-    }
-  }
-  <\/script>
+  <!-- Vue 3.5 Global Build (with complete in-browser Runtime Template Compiler) -->
+  <script src="https://cdn.jsdelivr.net/npm/vue@3.5/dist/vue.global.js"><\/script>
 
+  <!-- @zyvnox/vue-pack Standalone CDN UMD Bundle (with all dependencies pre-bundled) -->
+  <script src="https://cdn.jsdelivr.net/npm/@zyvnox/vue-pack@${props.version}/dist/cdn/vue-pack.umd.js" onerror="this.onerror=null;this.src='https://unpkg.com/@zyvnox/vue-pack@${props.version}/dist/cdn/vue-pack.umd.js';"><\/script>
+  <script src="https://cdn.jsdelivr.net/npm/@unocss/runtime"><\/script>
   <style>
     html.dark body {
       background-color: #0f172a;
@@ -124,76 +166,118 @@ const generatedSrcDoc = computed(() => {
       white-space: pre-wrap;
     }
   </style>
+
 </head>
+
 <body>
   <div id="error-container"></div>
   <div id="app"></div>
 
-  <script type="module">
-    import { createApp, ref, reactive, computed, watch, onMounted } from 'vue'
-
-    const errorEl = document.getElementById('error-container')
-    function showError(msg) {
-      if (errorEl) {
-        errorEl.style.display = 'block'
-        errorEl.textContent = 'Preview Error: ' + msg
+  <script>
+    (function() {
+      const errorEl = document.getElementById('error-container')
+      function showError(msg) {
+        if (errorEl) {
+          errorEl.style.display = 'block'
+          errorEl.textContent = 'Preview Error: ' + msg
+        }
       }
-    }
 
-    window.addEventListener('error', (e) => {
-      showError(e.message || String(e))
-    })
+      window.addEventListener('error', function(e) {
+        showError(e.message || String(e))
+      })
 
-    async function init() {
-      let Components = {}
-      try {
-        Components = await import('@zyvnox/vue-pack/components')
-      } catch (err) {
-        try {
-          // Dev mode fallback before npm publish
-          Components = await import('/src/components/index.ts')
-        } catch (fallbackErr) {
-          showError('Failed to load @zyvnox/vue-pack/components from CDN or local fallback.')
+      window.addEventListener('unhandledrejection', function(e) {
+        showError(e.reason?.message || String(e.reason))
+      })
+
+      function start() {
+        if (!window.Vue) {
+          showError('Vue 3 failed to load from CDN. Please check your internet connection.')
           return
         }
-      }
 
-      try {
-        const App = {
-          template: ${JSON.stringify(template || '<div>No template</div>')},
-          setup() {
-            try {
-              ${cleanedScript}
-              // Return all variables created in scope if any
-              return {
-                ...(typeof name !== 'undefined' ? { name } : {}),
-                ...(typeof title !== 'undefined' ? { title } : {}),
-                ...(typeof isOpen !== 'undefined' ? { isOpen } : {}),
-                ...(typeof count !== 'undefined' ? { count } : {}),
-              }
-            } catch (setupErr) {
-              showError(setupErr.message)
-              return {}
-            }
-          }
+        const {
+          createApp,
+          ref,
+          shallowRef,
+          reactive,
+          shallowReactive,
+          computed,
+          watch,
+          watchEffect,
+          onMounted,
+          onUnmounted,
+          onUpdated,
+          nextTick,
+          provide,
+          inject,
+          toRef,
+          toRefs,
+          unref,
+          isRef
+        } = window.Vue
+
+        const Components = window.ZyvnoxVuePack || {}
+
+        function toKebab(str) {
+          return str.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase()
         }
 
-        const app = createApp(App)
-
-        // Register all library components
-        Object.entries(Components).forEach(([name, comp]) => {
-          if (comp && (typeof comp === 'object' || typeof comp === 'function')) {
-            app.component(name, comp)
+        // Only register components that were EXPLICITLY imported in the script
+        const importedComponentMap = {}
+        const explicitlyImported = ${JSON.stringify(Array.from(importedComponents))}
+        explicitlyImported.forEach(function(name) {
+          if (Components[name]) {
+            importedComponentMap[name] = Components[name]
+            const kebab = toKebab(name)
+            if (kebab !== name) {
+              importedComponentMap[kebab] = Components[name]
+            }
           }
         })
 
-        app.mount('#app')
-      } catch (appErr) {
-        showError(appErr.message)
-      }
-    }
+        try {
+          const App = {
+            template: ${JSON.stringify(template || '<div class="p-4 text-slate-500">No template provided</div>')},
+            components: importedComponentMap,
+            setup() {
+              try {
+                ${importedBindingLines}
+                ${cleanedScript}
+                return ${returnScope}
+              } catch (setupErr) {
+                showError('Script Setup Error: ' + setupErr.message)
+                return {}
+              }
+            }
+          }
 
-    init()
+          const app = createApp(App)
+
+          app.config.errorHandler = function(err) {
+            showError('Vue Runtime Error: ' + (err.message || String(err)))
+          }
+
+          app.config.warnHandler = function(msg) {
+            console.warn('[Vue warn]:', msg)
+            if (msg.includes('Failed to resolve component')) {
+              showError(msg)
+            }
+          }
+
+          app.mount('#app')
+        } catch (err) {
+          showError('App Mount Error: ' + (err.message || String(err)))
+        }
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', start)
+      } else {
+        start()
+      }
+    })()
   <\/script>
 </body>
 </html>`
