@@ -2,7 +2,7 @@
   <div class="space-y-8">
     <header class="border-b border-slate-200 dark:border-slate-800 pb-4">
       <h1 class="text-3xl font-bold text-slate-900 dark:text-white mb-2">
-        Combobox (SelectedOptions)
+        SelectedOptions (Searchable Combobox)
       </h1>
       <p class="text-sm text-slate-600 dark:text-slate-400">
         Searchable dropdown selection component with custom key/label option mapping, dynamic inline modal item creation (`withCreate`), custom tooltips, and i18n support.
@@ -11,7 +11,7 @@
 
     <!-- Demo 1: Basic Combobox -->
     <DemoSection title="Basic Searchable Select" description="Select from a list of predefined options with instant filtering.">
-      <Combobox
+      <SelectedOptions
         v-model="basic"
         label="Department"
         :options="departments"
@@ -29,7 +29,7 @@
 
     <!-- Demo 2: With Tooltip & Custom Option Views -->
     <DemoSection title="With Tooltip & Custom Key/Label Mappings" description="Maps internal keys to user-friendly display labels with tooltip guidance.">
-      <Combobox
+      <SelectedOptions
         v-model="withTooltip"
         label="Access Level"
         tooltip="Select minimum security clearance required for this role"
@@ -50,7 +50,7 @@
     <!-- Demo 3: Error & Disabled States -->
     <DemoSection title="External Error & Disabled States" description="Visual invalid feedback and locked selection menus.">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <Combobox
+        <SelectedOptions
           v-model="errorVal"
           label="Server Region"
           :options="['us-east-1', 'eu-west-1', 'ap-southeast-1']"
@@ -58,7 +58,7 @@
           required
           :error="'Please select a hosting region'"
         />
-        <Combobox
+        <SelectedOptions
           v-model="disabledVal"
           label="Default Billing Currency (Read-Only)"
           :options="['USD', 'EUR', 'IDR']"
@@ -88,7 +88,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { SelectedOptions as Combobox } from '@zyvnox/vue-pack/components'
+import { SelectedOptions } from '@zyvnox/vue-pack/components'
 import DemoSection from '@/components/DemoSection.vue'
 import CodeBlock from '@/components/CodeBlock.vue'
 import PropsTable, { type PropDef } from '@/components/PropsTable.vue'
@@ -109,7 +109,7 @@ const departments = [
 ]
 
 const basicCode = `<template>
-  <Combobox
+  <SelectedOptions
     v-model="dept"
     label="Department"
     :options="['Engineering', 'Design', 'Marketing']"
@@ -120,12 +120,12 @@ const basicCode = `<template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { SelectedOptions as Combobox } from '@zyvnox/vue-pack/components'
+import { SelectedOptions } from '@zyvnox/vue-pack/components'
 
 const dept = ref('')
 <\/script>`
 
-const tooltipCode = `<Combobox
+const tooltipCode = `<SelectedOptions
   v-model="clearance"
   label="Access Level"
   tooltip="Select minimum security clearance"
@@ -134,7 +134,7 @@ const tooltipCode = `<Combobox
   :options-view="['Read-Only (Viewer)', 'Standard Write (Editor)', 'Administrator', 'Organization Owner']"
 />`
 
-const errorCode = `<Combobox
+const errorCode = `<SelectedOptions
   v-model="region"
   label="Server Region"
   :options="['us-east-1', 'eu-west-1']"
@@ -142,7 +142,7 @@ const errorCode = `<Combobox
   required
   error="Please select a hosting region"
 />
-<Combobox
+<SelectedOptions
   v-model="currency"
   label="Default Billing Currency"
   :options="['USD', 'EUR']"

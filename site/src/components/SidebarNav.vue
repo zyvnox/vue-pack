@@ -567,10 +567,10 @@ const inputs: NavItem[] = [
   { name: 'TelInput', path: '/doc/examples/tel-input' },
   { name: 'UrlInput', path: '/doc/examples/url-input' },
   { name: 'TextAreaInput', path: '/doc/examples/text-area-input' },
-  { name: 'TextAreaQuill', path: '/doc/examples/text-area-quill' },
-  { name: 'Combobox', path: '/doc/examples/combobox' },
+  { name: 'TextAreaQuillInput', path: '/doc/examples/text-area-quill' },
+  { name: 'SelectedOptions', path: '/doc/examples/combobox' },
   { name: 'TagInput', path: '/doc/examples/tag-input' },
-  { name: 'ColorPicker', path: '/doc/examples/color-picker' },
+  { name: 'ColorInput', path: '/doc/examples/color-picker' },
   { name: 'DateInput', path: '/doc/examples/date-input' },
   { name: 'TimeInput', path: '/doc/examples/time-input' },
   { name: 'DateTimeInput', path: '/doc/examples/date-time-input' },
@@ -580,10 +580,10 @@ const inputs: NavItem[] = [
   { name: 'ImageArrayInput', path: '/doc/examples/image-array-input' },
   { name: 'ToggleInput', path: '/doc/examples/toggle-input' },
   { name: 'RateInput', path: '/doc/examples/rate-input' },
-  { name: 'LocationPicker', path: '/doc/examples/location-picker' },
-  { name: 'ArrayObject', path: '/doc/examples/array-object' },
+  { name: 'MapPicker', path: '/doc/examples/location-picker' },
+  { name: 'ArrayObjectInput', path: '/doc/examples/array-object' },
   { name: 'ObjectInput', path: '/doc/examples/object-input' },
-  { name: 'GroupRenderer', path: '/doc/examples/group-renderer' },
+  { name: 'GroupRendererInput', path: '/doc/examples/group-renderer' },
 ]
 
 const displays: NavItem[] = [

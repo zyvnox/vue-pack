@@ -2,7 +2,7 @@
   <div class="space-y-8">
     <header class="border-b border-slate-200 dark:border-slate-800 pb-4">
       <h1 class="text-3xl font-bold text-slate-900 dark:text-white mb-2">
-        TextAreaQuill (WYSIWYG Editor)
+        TextAreaQuillInput (WYSIWYG Editor)
       </h1>
       <p class="text-sm text-slate-600 dark:text-slate-400">
         Rich text WYSIWYG editor powered by Quill 2.0 with extended headers (H1–H5), image resizing, live word/char counters, min/max length validation, code-view mode, and AI generation hooks.

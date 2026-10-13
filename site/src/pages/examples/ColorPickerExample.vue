@@ -2,7 +2,7 @@
   <div class="space-y-8">
     <header class="border-b border-slate-200 dark:border-slate-800 pb-4">
       <h1 class="text-3xl font-bold text-slate-900 dark:text-white mb-2">
-        ColorPicker
+        ColorInput (Color Selector)
       </h1>
       <p class="text-sm text-slate-600 dark:text-slate-400">
         Color selection component supporting both single hex color and multi-color palette array modes, palette item count validation (min/max), custom tooltips, and i18n support.
@@ -11,7 +11,7 @@
 
     <!-- Demo 1: Single Color Selection -->
     <DemoSection title="Single Color Picker" description="Picks a single HEX color code.">
-      <ColorPicker
+      <ColorInput
         v-model="singleColor"
         label="Theme Primary Color"
         :single="true"
@@ -32,7 +32,7 @@
       title="Multi-Color Palette (Min & Max Validation)"
       description="Select multiple colors to compose a theme palette with validation enforcing min 2 and max 4 colors."
     >
-      <ColorPicker
+      <ColorInput
         v-model="paletteColors"
         label="Brand Color Palette"
         tooltip="Select between 2 and 4 brand identity colors"
@@ -58,13 +58,13 @@
     <!-- Demo 3: Error & Disabled States -->
     <DemoSection title="External Error & Disabled States" description="Visual invalid palette warnings and read-only color displays.">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <ColorPicker
+        <ColorInput
           v-model="errorColor"
           label="Accent Highlight"
           :single="true"
           :error="['Selected color violates WCAG contrast guidelines against white']"
         />
-        <ColorPicker
+        <ColorInput
           v-model="disabledColor"
           label="Locked System Neutral (Read-Only)"
           :single="true"
@@ -93,7 +93,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { ColorInput as ColorPicker } from '@zyvnox/vue-pack/components'
+import { ColorInput } from '@zyvnox/vue-pack/components'
 import DemoSection from '@/components/DemoSection.vue'
 import CodeBlock from '@/components/CodeBlock.vue'
 import PropsTable, { type PropDef } from '@/components/PropsTable.vue'
@@ -105,7 +105,7 @@ const errorColor = ref('#ffff00')
 const disabledColor = ref('#64748b')
 
 const singleCode = `<template>
-  <ColorPicker
+  <ColorInput
     v-model="themeColor"
     label="Theme Primary Color"
     :single="true"
@@ -114,12 +114,12 @@ const singleCode = `<template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { ColorPicker } from '@zyvnox/vue-pack/components'
+import { ColorInput } from '@zyvnox/vue-pack/components'
 
 const themeColor = ref('#3b82f6')
 <\/script>`
 
-const paletteCode = `<ColorPicker
+const paletteCode = `<ColorInput
   v-model="palette"
   label="Brand Color Palette"
   :single="false"
@@ -129,13 +129,13 @@ const paletteCode = `<ColorPicker
   }"
 />`
 
-const errorCode = `<ColorPicker
+const errorCode = `<ColorInput
   v-model="accent"
   label="Accent Highlight"
   :single="true"
   :error="['Color violates WCAG contrast guidelines']"
 />
-<ColorPicker
+<ColorInput
   v-model="neutral"
   label="System Neutral"
   :single="true"

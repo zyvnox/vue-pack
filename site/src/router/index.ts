@@ -102,9 +102,17 @@ const routes: RouteRecordRaw[] = [
         component: () => import('@/pages/examples/TextAreaQuillExample.vue'),
       },
       {
+        path: 'examples/text-area-quill-input',
+        redirect: '/doc/examples/text-area-quill',
+      },
+      {
         path: 'examples/combobox',
         name: 'doc-example-combobox',
         component: () => import('@/pages/examples/ComboboxExample.vue'),
+      },
+      {
+        path: 'examples/selected-options',
+        redirect: '/doc/examples/combobox',
       },
       {
         path: 'examples/tag-input',
@@ -115,6 +123,10 @@ const routes: RouteRecordRaw[] = [
         path: 'examples/color-picker',
         name: 'doc-example-color-picker',
         component: () => import('@/pages/examples/ColorPickerExample.vue'),
+      },
+      {
+        path: 'examples/color-input',
+        redirect: '/doc/examples/color-picker',
       },
       {
         path: 'examples/date-input',
@@ -167,9 +179,17 @@ const routes: RouteRecordRaw[] = [
         component: () => import('@/pages/examples/LocationPickerExample.vue'),
       },
       {
+        path: 'examples/map-picker',
+        redirect: '/doc/examples/location-picker',
+      },
+      {
         path: 'examples/array-object',
         name: 'doc-example-array-object',
         component: () => import('@/pages/examples/ArrayObjectExample.vue'),
+      },
+      {
+        path: 'examples/array-object-input',
+        redirect: '/doc/examples/array-object',
       },
       {
         path: 'examples/object-input',
@@ -180,6 +200,10 @@ const routes: RouteRecordRaw[] = [
         path: 'examples/group-renderer',
         name: 'doc-example-group-renderer',
         component: () => import('@/pages/examples/GroupRendererExample.vue'),
+      },
+      {
+        path: 'examples/group-renderer-input',
+        redirect: '/doc/examples/group-renderer',
       },
       // === Display ===
       {
