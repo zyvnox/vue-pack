@@ -98,7 +98,7 @@
           <p class="font-semibold mb-0.5">Peer Dependencies</p>
           <p>
             Ensure <code>vue</code> (^3.5.18+) and <code>zod</code> (v3 or v4) are installed in your
-            project. If you plan to use <code>LocationPicker</code>, install
+            project. If you plan to use <code>MapPicker</code>, install
             <code>leaflet</code> (^1.9.4) as well.
           </p>
         </div>

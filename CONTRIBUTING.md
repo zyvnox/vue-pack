@@ -161,7 +161,7 @@ To maintain high code quality and enterprise reliability, please follow these gu
 `@zyvnox/vue-pack` supports isomorphic environments like Nuxt 3 and Node.js SSR:
 
 - Never invoke browser-only globals (`window`, `document`, `navigator`, `localStorage`, `indexedDB`) during top-level component setup.
-- Browser-dependent libraries (such as Leaflet for `LocationPicker` or Quill for `TextAreaQuill`) must be imported dynamically inside `onMounted()`:
+- Browser-dependent libraries (such as Leaflet for `MapPicker` or Quill for `TextAreaQuillInput`) must be imported dynamically inside `onMounted()`:
   ```typescript
   onMounted(async () => {
     const leafletModule = await import('leaflet')
@@ -205,7 +205,7 @@ We adhere to the [Conventional Commits](https://www.conventionalcommits.org/) sp
 | Type       | Description                                                        | Example                                                       |
 | :--------- | :----------------------------------------------------------------- | :------------------------------------------------------------ |
 | `feat`     | A new feature or component                                         | `feat(components): add TagInput max tags limit`               |
-| `fix`      | A bug fix                                                          | `fix(LocationPicker): fix geocoding fallback for empty query` |
+| `fix`      | A bug fix                                                          | `fix(MapPicker): fix geocoding fallback for empty query`     |
 | `docs`     | Documentation changes                                              | `docs: add Nominatim external service guide to README`        |
 | `style`    | Formatting, whitespace, missing semi-colons (no code logic change) | `style: format table pagination template`                     |
 | `refactor` | Refactoring code without fixing bugs or adding features            | `refactor(indexedDB): streamline dynamic store creation`      |

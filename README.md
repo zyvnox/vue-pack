@@ -49,7 +49,7 @@ Instead of writing redundant templates, form state handlers, and table logic fro
 | 🛡️ **Type-Safe Validation**   | First-class Zod support with full type inference (`z.infer<T>`) for form state and CRUD mutation pipelines.  |
 | 💾 **IndexedDB Engine**       | Autonomous IndexedDB manager with on-demand store creation, Zod cache filtering, and batch transactions.     |
 | 🔒 **Secure Fetch Client**    | Built-in HTTP client handling Cookie credentials, Bearer tokens, custom headers, and `SecureFetchError`.     |
-| 🗺️ **GIS & Rich Text**        | Interactive Leaflet maps (`LocationPicker`) with route distance calculation and Quill 2.0 WYSIWYG editor.    |
+| 🗺️ **GIS & Rich Text**        | Interactive Leaflet maps (`MapPicker`) with route distance calculation and Quill 2.0 WYSIWYG editor (`TextAreaQuillInput`). |
 | 🌐 **Extensible i18n System** | Built-in languages (`en`, `id`) with dynamic `registerLanguage` API and deep-merge fallback.                 |
 | 🎨 **Zero Scoped CSS**        | Atomic UnoCSS classes prefixed with `zyvnox-` ensuring no conflicting style overrides in your app.           |
 | ⚡ **Isomorphic & SSR Ready** | Hydration-safe components, safe SSR sanitization fallbacks, and Nuxt 3 compatibility.                        |
@@ -112,8 +112,8 @@ vue-pack/
 
 ### 🎨 UI, Media & Specialized Engines
 
-- **[Leaflet](https://leafletjs.com/)** (`^1.9.4`) — Leading mobile-friendly interactive mapping library powering the `LocationPicker` GIS component for pin markers, tile layers, boundary bounds, and GeoJSON rendering.
-- **[Quill](https://quilljs.com/)** (`2.0.2`) — Powerful rich text editor with a modern modular architecture, driving the `TextAreaQuill` component with pixel-level typography, code views, and AI drafting capabilities.
+- **[Leaflet](https://leafletjs.com/)** (`^1.9.4`) — Leading mobile-friendly interactive mapping library powering the `MapPicker` GIS component for pin markers, tile layers, boundary bounds, and GeoJSON rendering.
+- **[Quill](https://quilljs.com/)** (`2.0.2`) — Powerful rich text editor with a modern modular architecture, driving the `TextAreaQuillInput` component with pixel-level typography, code views, and AI drafting capabilities.
 - **[quill-resize-module](https://github.com/kensnyder/quill-image-resize-module)** (`^2.1.0-beta.0`) — Modular add-on enabling interactive image resizing and alignment within Quill rich text fields.
 - **[Iconify (Material Design Icons)](https://icon-sets.iconify.design/mdi/)** (`^1.2.3`) — Comprehensive collection of Material Design vector icons integrated into UnoCSS for fast, resolution-independent UI glyphs.
 
@@ -161,7 +161,7 @@ bun add @zyvnox/vue-pack vue@^3.5.0 zod@^4.0.0 leaflet@^1.9.4
 >
 > - **`vue`** (`>= 3.5.0`): Required for generic component type inference, `<script setup>`, and reactive primitives.
 > - **`zod`** (`>= 3.23.0 || >= 4.0.0`): Powers runtime validation across forms, datatable CRUD actions, and IndexedDB cache parsing.
-> - **`leaflet`** (`>= 1.9.4`): Required when utilizing the `LocationPicker` GIS map component.
+> - **`leaflet`** (`>= 1.9.4`): Required when utilizing the `MapPicker` GIS map component.
 
 ---
 
@@ -503,7 +503,7 @@ Navigate to **"SEO Studio"** in the sidebar, or load optimal/suboptimal presets 
 
 ### 1. OpenStreetMap Tile Server
 
-The `LocationPicker` component loads base cartography tiles by default from the **OpenStreetMap Tile Server**:
+The `MapPicker` component loads base cartography tiles by default from the **OpenStreetMap Tile Server**:
 
 - **Tile Endpoint**: `https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png`
 - **Attribution**: Automatically credited with `'© OpenStreetMap'`.
@@ -511,7 +511,7 @@ The `LocationPicker` component loads base cartography tiles by default from the 
 
 ### 2. Address Geocoding: Default Nominatim API
 
-For interactive address and place searches, `LocationPicker` connects to the **OpenStreetMap Nominatim Geocoding API**:
+For interactive address and place searches, `MapPicker` connects to the **OpenStreetMap Nominatim Geocoding API**:
 
 - **Default Endpoint**:
   ```
@@ -529,7 +529,7 @@ For interactive address and place searches, `LocationPicker` connects to the **O
 
 ### 3. Configuring Alternative Geocoding Providers (`geocodeApi`)
 
-You can override the default Nominatim API by providing the `geocodeApi` prop on `<LocationPicker>` or inside your form schema (`type: 'mapPicker'`):
+You can override the default Nominatim API by providing the `geocodeApi` prop on `<MapPicker>` or inside your form schema (`type: 'mapPicker'`):
 
 #### A. Commercial Providers
 
@@ -538,13 +538,13 @@ Supply your API key for Google Maps, Geoapify, or Geocode.xyz:
 ```vue
 <template>
   <!-- Using Google Maps Geocoding API -->
-  <LocationPicker v-model="location" :geocodeApi="{ google: 'YOUR_GOOGLE_MAPS_API_KEY' }" />
+  <MapPicker v-model="location" :geocodeApi="{ google: 'YOUR_GOOGLE_MAPS_API_KEY' }" />
 
   <!-- Or using Geoapify API -->
-  <LocationPicker v-model="location" :geocodeApi="{ geoapify: 'YOUR_GEOAPIFY_API_KEY' }" />
+  <MapPicker v-model="location" :geocodeApi="{ geoapify: 'YOUR_GEOAPIFY_API_KEY' }" />
 
   <!-- Or using Geocode.xyz -->
-  <LocationPicker v-model="location" :geocodeApi="{ geocode: 'YOUR_GEOCODE_XYZ_KEY' }" />
+  <MapPicker v-model="location" :geocodeApi="{ geocode: 'YOUR_GEOCODE_XYZ_KEY' }" />
 </template>
 ```
 
@@ -554,7 +554,7 @@ To keep API keys hidden on the server or use a self-hosted geocoding engine (e.g
 
 ```vue
 <template>
-  <LocationPicker
+  <MapPicker
     v-model="location"
     :geocodeApi="{
       custom: {
@@ -566,7 +566,7 @@ To keep API keys hidden on the server or use a self-hosted geocoding engine (e.g
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { LocationPicker } from '@zyvnox/vue-pack/components'
+import { MapPicker } from '@zyvnox/vue-pack/components'
 
 const location = ref({ lat: '-7.250445', lng: '112.768845' })
 
@@ -589,7 +589,7 @@ const handleCustomGeocode = async (query: string): Promise<{ lat: number; lng: n
 
 #### Execution Priority Hierarchy:
 
-When the user triggers a search in `LocationPicker`, the component checks providers in the following order:
+When the user triggers a search in `MapPicker`, the component checks providers in the following order:
 
 1. `geocodeApi.custom.handler` (If defined, takes precedence over all third-party services)
 2. `geocodeApi.google` (Google Maps Geocoding API)
@@ -733,22 +733,26 @@ All inputs emit standard Vue 3 `v-model` (`update:modelValue`) events and valida
 | `TextInput`                      | Single-line text input     | Min/max length, duplicate checks, pattern regex.                                                     |
 | `NumberInput`                    | Numeric input              | Min/max bounds, integer-only constraint, duplicate checks.                                           |
 | `CurrencyInput`                  | Currency formatted input   | Locale-aware auto formatting (IDR/USD) with numeric model value.                                     |
+| `RateInput`                      | Star rating input          | Customizable max stars and interactive hover rating.                                                 |
 | `EmailInput`                     | RFC-compliant email input  | Email syntax validation and duplicate verification.                                                  |
+| `TelInput`                       | Phone number input         | International format regex validation and phone icons.                                               |
+| `UrlInput`                       | Web URL input              | Protocol-verified URL validation and link helper.                                                    |
 | `PasswordInput`                  | Secure password field      | Visibility toggling, uppercase, lowercase, numeric & symbol rules.                                   |
 | `TextAreaInput`                  | Multiline plain text       | Character limits and resizable rows.                                                                 |
-| `TextAreaQuill`                  | Rich text editor (WYSIWYG) | Quill 2.0 integration, image resize module, custom font sizes, code view, AI generator hook.         |
-| `LocationPicker`                 | GIS Map Coordinates Picker | Leaflet integration, OSM tiles, Nominatim fallback search, custom geocoders, GeoJSON boundary check. |
+| `TextAreaQuillInput`             | Rich text editor (WYSIWYG) | Quill 2.0 integration, image resize module, custom font sizes, code view, AI generator hook.         |
+| `MapPicker`                      | GIS Map Coordinates Picker | Leaflet integration, OSM tiles, Nominatim fallback search, custom geocoders, GeoJSON boundary check. |
 | `DateInput`                      | Date picker (`YYYY-MM-DD`) | Min and max date constraint bounds.                                                                  |
 | `DateTimeInput`                  | Date & Time picker         | ISO datetime string output.                                                                          |
 | `TimeInput`                      | Time picker (`HH:mm`)      | Min/max time bounds.                                                                                 |
-| `ComboboxComponent`              | Searchable dropdown        | Dynamic async fetch, local filtering, on-the-fly option creation.                                    |
+| `SelectedOptions`                | Searchable dropdown        | Dynamic async fetch, local filtering, on-the-fly option creation.                                    |
 | `ToggleInput`                    | Switch toggle input        | Boolean state switch.                                                                                |
 | `TagInput`                       | Tag chips manager          | String array with min/max tag limits.                                                                |
-| `ColorPicker`                    | Hex/RGB color selector     | Single and multi-color selection presets.                                                            |
+| `ColorInput`                     | Hex/RGB color selector     | Single and multi-color selection presets.                                                            |
 | `FileInput` / `FileArrayInput`   | Document file uploaders    | Size limit checks, MIME-type white-listing, multi-file arrays.                                       |
 | `ImageInput` / `ImageArrayInput` | Image upload with preview  | Aspect ratio enforcement, resolution constraints, canvas watermarking.                               |
-| `ArrayObject`                    | Nested form array manager  | Dynamic row additions, schema recursiveness, child deletion tracking.                                |
+| `ArrayObjectInput`               | Nested form array manager  | Dynamic row additions, schema recursiveness, child deletion tracking.                                |
 | `ObjectInput`                    | Single nested object       | Scoped schema grouping within a parent form.                                                         |
+| `GroupRendererInput`             | Multi-column fieldset      | Grouped fields with responsive grid columns.                                                         |
 
 ---
 
@@ -1040,13 +1044,13 @@ When rendering components that interact directly with the DOM (such as map picke
 ```vue
 <template>
   <ClientOnly fallback-tag="div" fallback="Loading map editor...">
-    <LocationPicker v-model="coordinates" label="Branch Location" />
+    <MapPicker v-model="coordinates" label="Branch Location" />
   </ClientOnly>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { LocationPicker } from '@zyvnox/vue-pack/components'
+import { MapPicker } from '@zyvnox/vue-pack/components'
 
 const coordinates = ref({ lat: '-7.250445', lng: '112.768845' })
 </script>

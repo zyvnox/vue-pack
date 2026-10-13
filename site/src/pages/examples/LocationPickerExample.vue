@@ -368,7 +368,7 @@ const basicCode = `<template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { MapPicker as MapPicker } from '@zyvnox/vue-pack/components'
+import { MapPicker } from '@zyvnox/vue-pack/components'
 
 const coords = ref({ lat: -7.245874, lng: 112.737821 })
 <\/script>`
