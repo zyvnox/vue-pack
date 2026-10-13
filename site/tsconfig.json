@@ -1,0 +1,30 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "strict": true,
+    "jsx": "preserve",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "types": ["vite/client"],
+    "paths": {
+      "@/*": ["./src/*"],
+
+      "@zyvnox/vue-pack": ["../dist/types/index.d.ts"],
+      "@zyvnox/vue-pack/components": ["../dist/types/components/index.d.ts"],
+      "@zyvnox/vue-pack/config": ["../dist/types/config.d.ts"],
+      "@zyvnox/vue-pack/init": ["../dist/types/init.d.ts"],
+      "@zyvnox/vue-pack/indexedDB": ["../dist/types/lib/indexedDB.d.ts"],
+      "@zyvnox/vue-pack/secureFetch": ["../dist/types/lib/secureFetch.d.ts"],
+      "@zyvnox/vue-pack/vue": ["../dist/types/plugin/vue.plugin.d.ts"],
+      "@zyvnox/vue-pack/type": ["../dist/types/configs/types/index.d.ts"],
+      "@zyvnox/vue-pack/*": ["../dist/types/*", "../dist/*"]
+    }
+  },
+  "include": ["src/**/*.ts", "src/**/*.vue", "src/**/*.d.ts"]
+}
