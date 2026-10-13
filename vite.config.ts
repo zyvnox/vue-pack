@@ -163,7 +163,7 @@ export default defineConfig(({ command }: any) => {
         entry: resolve(import.meta.dirname, 'src/index.ts'),
         name: 'ZyvnoxVuePack',
         fileName: (format: string) => `vue-pack.${format}.js`,
-        formats: ['umd'],
+        formats: ['umd', 'es'],
       },
       rollupOptions: {
         external: ['vue'],

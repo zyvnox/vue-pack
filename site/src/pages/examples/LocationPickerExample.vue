@@ -2,7 +2,7 @@
   <div class="space-y-8">
     <header class="border-b border-slate-200 dark:border-slate-800 pb-4">
       <h1 class="text-3xl font-bold text-slate-900 dark:text-white mb-2">
-        LocationPicker (GIS Leaflet Map)
+        MapPicker (GIS Leaflet Map)
       </h1>
       <p class="text-sm text-slate-600 dark:text-slate-400">
         Interactive Leaflet GIS map coordinate picker with draggable pin marker, search city filter,
@@ -15,7 +15,7 @@
       title="Interactive Leaflet Map Pin"
       description="Click on the map or drag the marker pin to update geographical coordinates."
     >
-      <LocationPicker
+      <MapPicker
         v-model="basicCoords"
         id="1"
         label="Delivery Destination Coordinates"
@@ -38,7 +38,7 @@
       title="With Schema Tooltip"
       description="Displays geolocation guidelines beside the map label."
     >
-      <LocationPicker
+      <MapPicker
         id="2"
         v-model="withTooltipCoords"
         label="Warehouse Logistics Hub"
@@ -59,7 +59,7 @@
       title="With Geolocation Validation"
       description="Restricts the map pin to a specific city boundary and displays an error message if the user attempts to place the pin outside of the allowed area."
     >
-      <LocationPicker
+      <MapPicker
         id="3"
         v-model="withTooltipCoords"
         label="Warehouse Logistics Hub"
@@ -83,7 +83,7 @@
       title="View-Only Display Map"
       description="Displays a pinned landmark location without editing controls."
     >
-      <LocationPicker
+      <MapPicker
         id="4"
         v-model="viewOnlyCoords"
         label="Surabaya Landmark (Tugu Pahlawan)"
@@ -103,7 +103,7 @@
       title="View-Only with Geo Routing Overlay"
       description="Displays a pinned landmark location with custom GeoJSON routing/boundary overlay."
     >
-      <LocationPicker
+      <MapPicker
         id="5"
         label="Surabaya Geo Boundary & Route"
         :geo-json="geoRoutingJson"
@@ -121,7 +121,7 @@
       title="Bounding Box Lat/Lng Validation"
       description="Restricts map pin placement to a rectangular geographic bounding box (minLat, maxLat, minLng, maxLng)."
     >
-      <LocationPicker
+      <MapPicker
         id="6"
         v-model="bboxCoords"
         label="Delivery Service Area (Surabaya Central Box)"
@@ -153,7 +153,7 @@
       title="Custom Payload Keys & Localization"
       description="Customizes the reactive v-model payload keys (latitude/longitude) and sets the map UI language to Indonesian ('id')."
     >
-      <LocationPicker
+      <MapPicker
         id="7"
         v-model="customKeyCoords"
         lat-key="latitude"
@@ -342,7 +342,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { MapPicker as LocationPicker } from '@zyvnox/vue-pack/components'
+import { MapPicker } from '@zyvnox/vue-pack/components'
 import DemoSection from '@/components/DemoSection.vue'
 import CodeBlock from '@/components/CodeBlock.vue'
 import PropsTable, { type PropDef } from '@/components/PropsTable.vue'
@@ -357,7 +357,7 @@ const bboxCoords = ref<any>({ lat: -7.245874, lng: 112.737821 })
 const customKeyCoords = ref<any>({ latitude: '-7.245874', longitude: '112.737821' })
 
 const basicCode = `<template>
-  <LocationPicker
+  <MapPicker
     v-model="coords"
     label="Delivery Destination"
     :initial-lat="-7.245874"
@@ -368,7 +368,7 @@ const basicCode = `<template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { MapPicker as LocationPicker } from '@zyvnox/vue-pack/components'
+import { MapPicker as MapPicker } from '@zyvnox/vue-pack/components'
 
 const coords = ref({ lat: -7.245874, lng: 112.737821 })
 <\/script>`
@@ -379,14 +379,14 @@ async function getGeoJsonUrl() {
   geoRoutingJson.value = geoJson
 }
 
-const tooltipCode = `<LocationPicker
+const tooltipCode = `<MapPicker
   v-model="hubCoords"
   label="Warehouse Logistics Hub"
   tooltip="Pinpoint primary loading dock entrance"
   tooltip-position="right"
 />`
 
-const geoValidationCode = `<LocationPicker
+const geoValidationCode = `<MapPicker
   v-model="hubCoords"
   label="Warehouse Logistics Hub"
   :validate="{
@@ -394,7 +394,7 @@ const geoValidationCode = `<LocationPicker
   }"
 />`
 
-const viewOnlyCode = `<LocationPicker
+const viewOnlyCode = `<MapPicker
   v-model="surabayaCoords"
   label="Surabaya Landmark (Tugu Pahlawan)"
   :view-only="true"
@@ -402,13 +402,13 @@ const viewOnlyCode = `<LocationPicker
   :initial-lng="112.737821"
 />`
 
-const geoRoutingCode = `<LocationPicker
+const geoRoutingCode = `<MapPicker
   label="Surabaya Geo Boundary & Route"
   :geo-json="geoRoutingJson"
   :view-only="true"
 />`
 
-const bboxCode = `<LocationPicker
+const bboxCode = `<MapPicker
   v-model="coords"
   label="Delivery Service Area"
   :validate="{
@@ -421,7 +421,7 @@ const bboxCode = `<LocationPicker
   :initial-lng="112.737821"
 />`
 
-const customKeyCode = `<LocationPicker
+const customKeyCode = `<MapPicker
   v-model="payload"
   lat-key="latitude"
   lng-key="longitude"

@@ -22,7 +22,7 @@
             >
             <span
               class="inline-block mt-0.5 text-[10px] font-mono whitespace-nowrap bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300 px-1.5 py-0.5 rounded"
-              >vue-pack v0.1.0 • Early</span
+              >vue-pack v0.1.1 • Early</span
             >
           </div>
         </RouterLink>
@@ -251,7 +251,7 @@
                 >
                 <span
                   class="inline-block mt-0.5 text-[10px] font-mono whitespace-nowrap bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300 px-1.5 py-0.5 rounded"
-                  >vue-pack v0.1.0</span
+                  >vue-pack v0.1.1</span
                 >
               </div>
             </RouterLink>
@@ -546,58 +546,58 @@ const filterItems = (items: NavItem[]) => {
 }
 
 const guides: NavItem[] = [
-  { name: 'Getting Started', path: '/getting-started' },
-  { name: 'Installation', path: '/installation' },
-  { name: 'Configuration', path: '/config' },
-  { name: 'i18n Localization', path: '/i18n' },
-  { name: '💖 Sponsor & Support', path: '/sponsor' },
+  { name: 'Getting Started', path: '/doc/getting-started' },
+  { name: 'Installation', path: '/doc/installation' },
+  { name: 'Configuration', path: '/doc/config' },
+  { name: 'i18n Localization', path: '/doc/i18n' },
+  { name: '💖 Sponsor & Support', path: '/doc/sponsor' },
 ]
 
 const engines: NavItem[] = [
-  { name: 'FormModal', path: '/examples/form-modal' },
-  { name: 'TabelData', path: '/examples/tabel-data' },
+  { name: 'FormModal', path: '/doc/examples/form-modal' },
+  { name: 'TabelData', path: '/doc/examples/tabel-data' },
 ]
 
 const inputs: NavItem[] = [
-  { name: 'TextInput', path: '/examples/text-input' },
-  { name: 'NumberInput', path: '/examples/number-input' },
-  { name: 'CurrencyInput', path: '/examples/currency-input' },
-  { name: 'EmailInput', path: '/examples/email-input' },
-  { name: 'PasswordInput', path: '/examples/password-input' },
-  { name: 'TelInput', path: '/examples/tel-input' },
-  { name: 'UrlInput', path: '/examples/url-input' },
-  { name: 'TextAreaInput', path: '/examples/text-area-input' },
-  { name: 'TextAreaQuill', path: '/examples/text-area-quill' },
-  { name: 'Combobox', path: '/examples/combobox' },
-  { name: 'TagInput', path: '/examples/tag-input' },
-  { name: 'ColorPicker', path: '/examples/color-picker' },
-  { name: 'DateInput', path: '/examples/date-input' },
-  { name: 'TimeInput', path: '/examples/time-input' },
-  { name: 'DateTimeInput', path: '/examples/date-time-input' },
-  { name: 'FileInput', path: '/examples/file-input' },
-  { name: 'FileArrayInput', path: '/examples/file-array-input' },
-  { name: 'ImageInput', path: '/examples/image-input' },
-  { name: 'ImageArrayInput', path: '/examples/image-array-input' },
-  { name: 'ToggleInput', path: '/examples/toggle-input' },
-  { name: 'RateInput', path: '/examples/rate-input' },
-  { name: 'LocationPicker', path: '/examples/location-picker' },
-  { name: 'ArrayObject', path: '/examples/array-object' },
-  { name: 'ObjectInput', path: '/examples/object-input' },
-  { name: 'GroupRenderer', path: '/examples/group-renderer' },
+  { name: 'TextInput', path: '/doc/examples/text-input' },
+  { name: 'NumberInput', path: '/doc/examples/number-input' },
+  { name: 'CurrencyInput', path: '/doc/examples/currency-input' },
+  { name: 'EmailInput', path: '/doc/examples/email-input' },
+  { name: 'PasswordInput', path: '/doc/examples/password-input' },
+  { name: 'TelInput', path: '/doc/examples/tel-input' },
+  { name: 'UrlInput', path: '/doc/examples/url-input' },
+  { name: 'TextAreaInput', path: '/doc/examples/text-area-input' },
+  { name: 'TextAreaQuill', path: '/doc/examples/text-area-quill' },
+  { name: 'Combobox', path: '/doc/examples/combobox' },
+  { name: 'TagInput', path: '/doc/examples/tag-input' },
+  { name: 'ColorPicker', path: '/doc/examples/color-picker' },
+  { name: 'DateInput', path: '/doc/examples/date-input' },
+  { name: 'TimeInput', path: '/doc/examples/time-input' },
+  { name: 'DateTimeInput', path: '/doc/examples/date-time-input' },
+  { name: 'FileInput', path: '/doc/examples/file-input' },
+  { name: 'FileArrayInput', path: '/doc/examples/file-array-input' },
+  { name: 'ImageInput', path: '/doc/examples/image-input' },
+  { name: 'ImageArrayInput', path: '/doc/examples/image-array-input' },
+  { name: 'ToggleInput', path: '/doc/examples/toggle-input' },
+  { name: 'RateInput', path: '/doc/examples/rate-input' },
+  { name: 'LocationPicker', path: '/doc/examples/location-picker' },
+  { name: 'ArrayObject', path: '/doc/examples/array-object' },
+  { name: 'ObjectInput', path: '/doc/examples/object-input' },
+  { name: 'GroupRenderer', path: '/doc/examples/group-renderer' },
 ]
 
 const displays: NavItem[] = [
-  { name: 'SafeHtml', path: '/examples/safe-html' },
-  { name: 'BaseImage', path: '/examples/base-image' },
-  { name: 'Tooltip', path: '/examples/tooltip' },
-  { name: 'ModalDetailData', path: '/examples/modal-detail-data' },
+  { name: 'SafeHtml', path: '/doc/examples/safe-html' },
+  { name: 'BaseImage', path: '/doc/examples/base-image' },
+  { name: 'Tooltip', path: '/doc/examples/tooltip' },
+  { name: 'ModalDetailData', path: '/doc/examples/modal-detail-data' },
 ]
 
 const feedbacks: NavItem[] = [
-  { name: 'AlertApp', path: '/examples/alert-app' },
-  { name: 'Loader', path: '/examples/loader' },
-  { name: 'WarningForm', path: '/examples/warning-form' },
+  { name: 'AlertApp', path: '/doc/examples/alert-app' },
+  { name: 'Loader', path: '/doc/examples/loader' },
+  { name: 'WarningForm', path: '/doc/examples/warning-form' },
 ]
 
-const utilities: NavItem[] = [{ name: 'SEO Studio', path: '/examples/seo-studio' }]
+const utilities: NavItem[] = [{ name: 'SEO Studio', path: '/doc/examples/seo-studio' }]
 </script>

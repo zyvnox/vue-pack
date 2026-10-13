@@ -1,9 +1,9 @@
-# @zyvnox/vue-pack v0.1.0 Early Release
+# @zyvnox/vue-pack v0.1.1 Early Release
 
 <div align="center">
 
 [![NPM Version](https://img.shields.io/npm/v/@zyvnox/vue-pack?style=for-the-badge&color=blue&logo=npm)](https://www.npmjs.com/package/@zyvnox/vue-pack)
-[![Status](https://img.shields.io/badge/Status-v0.1.0%20Early%20Release-amber?style=for-the-badge)](https://github.com/zyvnox/vue-pack)
+[![Status](https://img.shields.io/badge/Status-v0.1.1%20Early%20Release-amber?style=for-the-badge)](https://github.com/zyvnox/vue-pack)
 [![NPM Downloads](https://img.shields.io/npm/dm/@zyvnox/vue-pack?style=for-the-badge&color=brightgreen)](https://www.npmjs.com/package/@zyvnox/vue-pack)
 [![Vue 3](https://img.shields.io/badge/Vue-3.5+-4FC08D?style=for-the-badge&logo=vue.js&logoColor=white)](https://vuejs.org/)
 [![Vite 6](https://img.shields.io/badge/Vite-6.0+-646CFF?style=for-the-badge&logo=vite&logoColor=white)](https://vitejs.dev/)
@@ -20,7 +20,7 @@
 
 </div>
 
-> ⚠️ **v0.1.0 Early Release Notice:** This library is currently in active early development. Public APIs are subject to change prior to `v1.0.0` stable. For production use cases, please pin exact versions or test changes carefully. Feedback, issues, and contributions are warmly appreciated!
+> ⚠️ **v0.1.1 Early Release Notice:** This library is currently in active early development. Public APIs are subject to change prior to `v1.0.0` stable. For production use cases, please pin exact versions or test changes carefully. Feedback, issues, and contributions are warmly appreciated!
 
 ---
 
@@ -171,9 +171,9 @@ bun add @zyvnox/vue-pack vue@^3.5.0 zod@^4.0.0 leaflet@^1.9.4
 
 #### CDN Providers
 
-- **jsDelivr**: `https://cdn.jsdelivr.net/npm/@zyvnox/vue-pack@0.1.0/`
-- **unpkg**: `https://unpkg.com/@zyvnox/vue-pack@0.1.0/`
-- **esm.sh**: `https://esm.sh/@zyvnox/vue-pack@0.1.0`
+- **jsDelivr**: `https://cdn.jsdelivr.net/npm/@zyvnox/vue-pack@0.1.1/`
+- **unpkg**: `https://unpkg.com/@zyvnox/vue-pack@0.1.1/`
+- **esm.sh**: `https://esm.sh/@zyvnox/vue-pack@0.1.1`
 
 #### Option 1: Native ES Modules with W3C Import Map (Recommended for Modern Browsers)
 
@@ -186,7 +186,7 @@ bun add @zyvnox/vue-pack vue@^3.5.0 zod@^4.0.0 leaflet@^1.9.4
     <!-- 1. Include Pre-compiled UnoCSS Stylesheet -->
     <link
       rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/@zyvnox/vue-pack@0.1.0/dist/style.css"
+      href="https://cdn.jsdelivr.net/npm/@zyvnox/vue-pack@0.1.1/dist/style.css"
     />
 
     <!-- 2. W3C Import Map for Pure ESM Browser Resolution -->
@@ -194,12 +194,7 @@ bun add @zyvnox/vue-pack vue@^3.5.0 zod@^4.0.0 leaflet@^1.9.4
       {
         "imports": {
           "vue": "https://cdn.jsdelivr.net/npm/vue@3.5.18/dist/vue.esm-browser.prod.js",
-          "@zyvnox/vue-pack/components": "https://cdn.jsdelivr.net/npm/@zyvnox/vue-pack@0.1.0/dist/components.es.js",
-          "@zyvnox/vue-pack/vue": "https://cdn.jsdelivr.net/npm/@zyvnox/vue-pack@0.1.0/dist/vue.es.js",
-          "@zyvnox/vue-pack/config": "https://cdn.jsdelivr.net/npm/@zyvnox/vue-pack@0.1.0/dist/config.es.js",
-          "@zyvnox/vue-pack/indexedDB": "https://cdn.jsdelivr.net/npm/@zyvnox/vue-pack@0.1.0/dist/indexedDB.es.js",
-          "@zyvnox/vue-pack/secureFetch": "https://cdn.jsdelivr.net/npm/@zyvnox/vue-pack@0.1.0/dist/secureFetch.es.js",
-          "@zyvnox/vue-pack": "https://cdn.jsdelivr.net/npm/@zyvnox/vue-pack@0.1.0/dist/zyvnox-vue-pack.es.js"
+          "@zyvnox/vue-pack": "https://cdn.jsdelivr.net/npm/@zyvnox/vue-pack@0.1.1/dist/cdn/vue-pack.es.js"
         }
       }
     </script>
@@ -209,13 +204,13 @@ bun add @zyvnox/vue-pack vue@^3.5.0 zod@^4.0.0 leaflet@^1.9.4
 
     <script type="module">
       import { createApp, ref } from 'vue'
-      import { TextInput, Alert } from '@zyvnox/vue-pack/components'
+      import { TextInput, AlertApp } from '@zyvnox/vue-pack'
 
       createApp({
-        components: { TextInput, Alert },
+        components: { TextInput, AlertApp },
         template: `
           <div class="zyvnox-p-6 zyvnox-max-w-md zyvnox-mx-auto zyvnox-space-y-4">
-            <Alert type="success" title="CDN Loaded!">Vue 3 + Zyvnox Vue Pack via CDN.</Alert>
+            <AlertApp type="success" title="CDN Loaded!">Vue 3 + Zyvnox Vue Pack via CDN.</AlertApp>
             <TextInput v-model="name" label="Your Name" placeholder="Enter name..." />
           </div>
         `,
@@ -241,14 +236,14 @@ For legacy setups or quick non-modular prototyping:
     <title>Zyvnox Vue Pack UMD</title>
     <link
       rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/@zyvnox/vue-pack@0.1.0/dist/style.css"
+      href="https://cdn.jsdelivr.net/npm/@zyvnox/vue-pack@0.1.1/dist/style.css"
     />
 
     <!-- Vue 3 Peer Dependency (Global build) -->
     <script src="https://cdn.jsdelivr.net/npm/vue@3.5.18/dist/vue.global.prod.js"></script>
 
     <!-- Zyvnox Vue Pack Standalone UMD Bundle -->
-    <script src="https://cdn.jsdelivr.net/npm/@zyvnox/vue-pack@0.1.0/dist/cdn/vue-pack.umd.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@zyvnox/vue-pack@0.1.1/dist/cdn/vue-pack.umd.js"></script>
   </head>
   <body>
     <div id="app"></div>
@@ -404,7 +399,7 @@ Run `@zyvnox/vue-pack` directly in pure HTML without Node.js or bundlers, mirror
     <!-- Scoped stylesheet -->
     <link
       rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/@zyvnox/vue-pack@0.1.0/dist/style.css"
+      href="https://cdn.jsdelivr.net/npm/@zyvnox/vue-pack@0.1.1/dist/style.css"
     />
 
     <!-- W3C Browser Import Map -->
@@ -412,7 +407,7 @@ Run `@zyvnox/vue-pack` directly in pure HTML without Node.js or bundlers, mirror
       {
         "imports": {
           "vue": "https://cdn.jsdelivr.net/npm/vue@3.5.18/dist/vue.esm-browser.prod.js",
-          "@zyvnox/vue-pack/components": "https://cdn.jsdelivr.net/npm/@zyvnox/vue-pack@0.1.0/dist/components.es.js"
+          "@zyvnox/vue-pack": "https://cdn.jsdelivr.net/npm/@zyvnox/vue-pack@0.1.1/dist/cdn/vue-pack.es.js"
         }
       }
     </script>
@@ -422,15 +417,15 @@ Run `@zyvnox/vue-pack` directly in pure HTML without Node.js or bundlers, mirror
 
     <script type="module">
       import { createApp, ref } from 'vue'
-      import { TextInput, Alert } from '@zyvnox/vue-pack/components'
+      import { TextInput, AlertApp } from '@zyvnox/vue-pack'
 
       createApp({
-        components: { TextInput, Alert },
+        components: { TextInput, AlertApp },
         template: `
           <div class="zyvnox-max-w-lg zyvnox-mx-auto zyvnox-bg-white dark:zyvnox-bg-slate-800 zyvnox-p-6 zyvnox-rounded-2xl zyvnox-shadow-sm zyvnox-space-y-4">
-            <Alert type="info" title="Zero Build Environment">
+            <AlertApp type="info" title="Zero Build Environment">
               Running entirely in browser via native ES Modules!
-            </Alert>
+            </AlertApp>
             <TextInput v-model="email" label="Email Address" placeholder="you@company.com" />
             <p class="zyvnox-text-sm zyvnox-text-slate-500">Value: {{ email }}</p>
           </div>
@@ -1224,7 +1219,7 @@ Have a suggestion or found an issue?
 - **Feature Request:** [Request a Feature](https://github.com/zyvnox/vue-pack/issues/new?template=feature_request.md)
 - **Discussions / Q&A:** [GitHub Discussions](https://github.com/zyvnox/vue-pack/discussions)
 
-Please include `@zyvnox/vue-pack` version (`0.1.0`), your Vue version, and a minimal reproduction.
+Please include `@zyvnox/vue-pack` version (`0.1.1`), your Vue version, and a minimal reproduction.
 
 ---
 

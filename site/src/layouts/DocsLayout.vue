@@ -39,7 +39,7 @@
             <span
               class="block text-[9px] font-mono bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300 px-1 rounded"
             >
-              vue-pack v0.1.0 • Early
+              vue-pack v0.1.1 • Early
             </span>
           </div>
         </RouterLink>
@@ -83,7 +83,7 @@
         <div class="flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 dark:text-slate-400 gap-3 pt-2">
           <span>&copy; 2026 zyvnox • MIT License</span>
           <div class="flex items-center gap-4">
-            <RouterLink to="/sponsor" class="hover:underline text-amber-600 dark:text-amber-400 font-medium">💖 Sponsor</RouterLink>
+            <RouterLink to="/doc/sponsor" class="hover:underline text-amber-600 dark:text-amber-400 font-medium">💖 Sponsor</RouterLink>
             <a href="https://github.com/zyvnox/vue-pack" target="_blank" rel="noopener noreferrer" class="hover:underline">GitHub</a>
             <RouterLink to="/playground" class="hover:underline">Live Playground</RouterLink>
           </div>

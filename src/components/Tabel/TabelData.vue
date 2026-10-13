@@ -339,7 +339,7 @@
             <tr
               v-for="item in paginatedData"
               :key="item?.[propertys?.keys?.idKey ?? 'id']"
-              class="zyvnox-transition-colors hover:zyvnox-bg-slate-50/80 dark:hover:zyvnox-bg-slate-800/50"
+              class="zyvnox-transition-colors hover:zyvnox-bg-slate-50/80 dark:hover:zyvnox-bg-slate-800/50 zyvnox-border-b zyvnox-border-slate-100 dark:zyvnox-border-slate-800/80"
             >
               <td class="zyvnox-p-4 zyvnox-text-center">
                 <input
@@ -1335,3 +1335,22 @@ defineExpose({
   refreshData: setUpData,
 })
 </script>
+
+<style scoped>
+.table-scroll-container table tbody tr {
+  border-bottom: 1px solid #f1f5f9;
+}
+:global(.dark) .table-scroll-container table tbody tr,
+:root.dark .table-scroll-container table tbody tr,
+.dark .table-scroll-container table tbody tr {
+  border-bottom: 1px solid rgba(30, 41, 59, 0.85);
+}
+.table-scroll-container table thead tr {
+  border-bottom: 1px solid #e2e8f0;
+}
+:global(.dark) .table-scroll-container table thead tr,
+:root.dark .table-scroll-container table thead tr,
+.dark .table-scroll-container table thead tr {
+  border-bottom: 1px solid #334155;
+}
+</style>

@@ -1,9 +1,11 @@
-export function getNested(obj: any, path: string): any {
-  return path.split('.').reduce((acc, part) => acc?.[part], obj)
+export function getNested(obj: any, path: string | number): any {
+  if (path == null) return undefined
+  return String(path).split('.').reduce((acc, part) => acc?.[part], obj)
 }
 
-export function setNested(obj: any, path: string, value: any): void {
-  const parts = path.split('.')
+export function setNested(obj: any, path: string | number, value: any): void {
+  if (path == null) return
+  const parts = String(path).split('.')
   const last = parts.pop()!
   const target = parts.reduce((acc, part) => {
     if (!acc[part]) acc[part] = {}
@@ -12,8 +14,9 @@ export function setNested(obj: any, path: string, value: any): void {
   target[last] = value
 }
 
-export function unsetNested(obj: any, path: string) {
-  const keys = path.split('.')
+export function unsetNested(obj: any, path: string | number) {
+  if (path == null) return
+  const keys = String(path).split('.')
   let current = obj
   for (let i = 0; i < keys.length - 1; i++) {
     if (!(keys[i] in current)) return
@@ -42,8 +45,9 @@ function isEmpty(value: any): boolean {
   return false
 }
 
-export function deleteNestedAndCleanup(obj: any, path: string): void {
-  const parts = path.split('.')
+export function deleteNestedAndCleanup(obj: any, path: string | number): void {
+  if (path == null) return
+  const parts = String(path).split('.')
 
   // Fungsi rekursif internal
   const recurse = (currentObj: any, pathParts: string[]): boolean => {

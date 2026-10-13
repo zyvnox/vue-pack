@@ -1,6 +1,6 @@
 {
   "name": "@zyvnox/vue-pack",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": false,
   "description": "A comprehensive, schema-driven Vue 3 component library built with TypeScript and Vite.",
   "keywords": [
@@ -108,6 +108,11 @@
       "types": "./dist/types/configs/types/index.d.ts"
     },
     "./style.css": "./dist/style.css",
+    "./cdn": {
+      "types": "./dist/types/index.d.ts",
+      "import": "./dist/cdn/vue-pack.es.js",
+      "default": "./dist/cdn/vue-pack.umd.js"
+    },
     "./cdn/*": "./dist/cdn/*"
   },
   "engines": {
