@@ -44,7 +44,12 @@ export function validate<T = any>(schema: ZodType<T>, data: unknown): T {
         })
         .join(', ')
 
-      throw new Error(`Validation failed: ${errorMessages}`)
+      const err: any = new Error(`Validation failed: ${errorMessages}`)
+      err.isValidationError = true
+      err.status = 400
+      err.statusCode = 400
+      err.issues = error.issues
+      throw err
     }
 
     // Re-throw non-Zod errors

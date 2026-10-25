@@ -470,7 +470,7 @@ const hasInjectedShowAlert = typeof injectedShowAlert === 'function'
 const localLoader = ref<InstanceType<typeof LoaderSuccessError> | null>(null)
 const localAlert = ref<InstanceType<typeof AlertApp> | null>(null)
 
-function localShowAlert(status: 'error' | 'success', title: string, message: string[]) {
+function localShowAlert(status: 'error' | 'success' | 'warning' | 'info', title: string, message: string[]) {
   localAlert.value?.addAlert({
     type: status,
     title,

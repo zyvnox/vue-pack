@@ -39,7 +39,7 @@
             <span
               class="block text-[9px] font-mono bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300 px-1 rounded"
             >
-              vue-pack v0.1.1 • Early
+              vue-pack v0.1.2 • Early
             </span>
           </div>
         </RouterLink>

@@ -24,6 +24,13 @@
         </button>
         <button
           type="button"
+          @click="triggerWarning"
+          class="px-4 py-2 rounded-lg bg-amber-500 hover:bg-amber-600 text-white text-xs font-semibold transition-colors"
+        >
+          ⚠️ Trigger Warning Toast
+        </button>
+        <button
+          type="button"
           @click="triggerError"
           class="px-4 py-2 rounded-lg bg-rose-600 hover:bg-rose-700 text-white text-xs font-semibold transition-colors"
         >
@@ -61,6 +68,17 @@ const triggerSuccess = () => {
   })
 }
 
+const triggerWarning = () => {
+  alertRef.value?.addAlert({
+    type: 'warning',
+    title: 'Storage Capacity Alert',
+    messages: [
+      'Cloud storage utilization is currently at 88%.',
+      'Consider archiving older log files or upgrading your plan.',
+    ],
+  })
+}
+
 const triggerError = () => {
   alertRef.value?.addAlert({
     type: 'error',
@@ -92,7 +110,7 @@ const notify = () => {
 <\/script>`
 
 const exposedMethods = [
-  { name: 'addAlert', type: '(alert: { type: "success" | "error", title: string, messages: string[] }) => void', description: 'Dispatches a new stacked toast alert to the screen' },
+  { name: 'addAlert', type: '(alert: { type: "success" | "error" | "warning" | "info", title: string, messages: string[] }) => void', description: 'Dispatches a new stacked toast alert to the screen' },
 ]
 </script>
 

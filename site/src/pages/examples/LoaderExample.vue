@@ -31,6 +31,13 @@
         </button>
         <button
           type="button"
+          @click="showWarning"
+          class="px-4 py-2 rounded-lg bg-amber-500 hover:bg-amber-600 text-white text-xs font-semibold transition-colors"
+        >
+          ⚠️ Show Warning Screen
+        </button>
+        <button
+          type="button"
           @click="showError"
           class="px-4 py-2 rounded-lg bg-rose-600 hover:bg-rose-700 text-white text-xs font-semibold transition-colors"
         >
@@ -71,6 +78,10 @@ const showSuccess = () => {
   loaderRef.value?.show('success', 'Order Placed Successfully!')
 }
 
+const showWarning = () => {
+  loaderRef.value?.show('warning', 'Network latency high. Operating in fallback mode.')
+}
+
 const showError = () => {
   loaderRef.value?.show('error', 'Payment Authorization Failed')
 }
@@ -97,7 +108,7 @@ const processPayment = async () => {
 <\/script>`
 
 const exposedMethods = [
-  { name: 'show', type: '(type: "loading" | "success" | "error", message?: string) => void', description: 'Opens the overlay with the chosen animation and message' },
+  { name: 'show', type: '(type: "loading" | "success" | "warning" | "error", message?: string) => void', description: 'Opens the overlay with the chosen animation and message' },
   { name: 'hide', type: '() => void', description: 'Dismisses the overlay' },
 ]
 </script>
