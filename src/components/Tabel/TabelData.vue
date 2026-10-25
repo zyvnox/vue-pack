@@ -814,6 +814,7 @@
     <Loader ref="loader" />
     <WarningForm
       v-if="showWarningModel"
+      type="danger"
       :title="labels.warning.delete"
       :message="`${selectedItem.name ?? selectedItem[propertys?.keys?.nameKey ?? propertys?.keys?.idKey ?? 'id']}`"
       @confirm="
@@ -825,6 +826,7 @@
     />
     <WarningForm
       v-if="showWarningModelSelected"
+      type="danger"
       :title="labels.warning.deleteMany"
       :message="selectedItemNames"
       @confirm="() => DeleteSeletedData(selectedItems)"
@@ -1240,7 +1242,11 @@ onMounted(async () => {
 provide('TableComponents', { ShowAlert, loader, labels, t })
 provide('tableComponents', { ShowAlert, loader, labels, t })
 
-function ShowAlert(status: 'error' | 'success', title: string, message: string[]) {
+function ShowAlert(
+  status: 'error' | 'success' | 'warning' | 'info',
+  title: string,
+  message: string[],
+) {
   const AlertData = {
     type: status,
     title,

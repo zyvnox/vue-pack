@@ -1,6 +1,6 @@
 {
   "name": "@zyvnox/vue-pack",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "private": false,
   "description": "A comprehensive, schema-driven Vue 3 component library built with TypeScript and Vite.",
   "keywords": [
@@ -122,7 +122,6 @@
     "dev": "vite --config vite.config.ts --port=5173",
     "dev:site": "vite --config vite.config.ts --port=5173",
     "build": "run-p type-check \"build-only {@}\" --",
-    "preview": "vite preview",
     "build-only": "vite build",
     "type-check": "vue-tsc --build",
     "format": "prettier --write src/",

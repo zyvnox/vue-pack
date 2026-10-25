@@ -23,7 +23,7 @@
         <h3
           class="zyvnox-text-lg sm:zyvnox-text-xl zyvnox-font-bold zyvnox-text-slate-900 dark:zyvnox-text-white zyvnox-tracking-tight"
         >
-          Support Early Release v0.1.1 &rarr; v1.0.0
+          Support Early Release v0.1.2 &rarr; v1.0.0
         </h3>
 
         <p

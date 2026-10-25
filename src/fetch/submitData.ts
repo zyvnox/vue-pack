@@ -231,7 +231,12 @@ export const submitData = async <
 
   if (!response.ok) {
     const error = await response.json().catch(() => ({}))
-    throw new Error(error.message || 'Failed to process data')
+    const errObj: any = new Error(error.message || error.error || 'Failed to process data')
+    errObj.status = response.status
+    errObj.statusCode = response.status
+    errObj.errors = error.errors || error.data || error
+    errObj.response = response
+    throw errObj
   }
 
   const res = await response.json()

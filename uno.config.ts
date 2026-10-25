@@ -78,7 +78,9 @@ export default defineConfig({
         @keyframes zyvnox-slideDownFade { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes zyvnox-slideInFade { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: translateX(0); } }
         @keyframes zyvnox-revealContent { from { opacity: 0; transform: translateY(-10px); max-height: 0; } to { opacity: 1; transform: translateY(0); max-height: 1000px; } }
-        @keyframes zyvnox-spin { to { transform: rotate(360deg); } }
+        @keyframes zyvnox-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        .zyvnox-animate-spin { animation: zyvnox-spin 0.9s linear infinite !important; }
         
         /* Vue Transitions & Modals */
         .zyvnox-modal-overlay-enter-active { animation: zyvnox-fadeIn 0.3s ease-out; }
