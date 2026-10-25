@@ -22,6 +22,14 @@
         <!-- Right: Nav Links & Actions -->
         <div class="flex items-center gap-2 sm:gap-4">
           <RouterLink
+            to="/doc/whats-new"
+            class="px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors hidden md:inline-flex items-center gap-1"
+          >
+            <span>✨</span>
+            <span>What's New</span>
+          </RouterLink>
+
+          <RouterLink
             to="/doc"
             class="px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
           >
@@ -74,14 +82,15 @@
 
         <div class="max-w-4xl mx-auto text-center space-y-6">
           <!-- Release Status Pill -->
-          <div
-            class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-amber-50 dark:bg-amber-950/60 border border-amber-200 dark:border-amber-800 text-amber-700 dark:text-amber-300 text-xs font-semibold shadow-xs"
+          <RouterLink
+            to="/doc/whats-new"
+            class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-amber-50 dark:bg-amber-950/60 border border-amber-200 dark:border-amber-800 text-amber-700 dark:text-amber-300 text-xs font-semibold shadow-xs hover:border-amber-400 dark:hover:border-amber-600 transition-colors group cursor-pointer"
           >
             <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
-            <span>Version {{ version }} Early Release</span>
+            <span>What's New in v{{ version }}</span>
             <span class="text-amber-400 dark:text-amber-600">•</span>
-            <span>Vue 3.5+ & Vite 6 Ready</span>
-          </div>
+            <span class="group-hover:underline">Changelog & Updates ↗</span>
+          </RouterLink>
 
           <!-- Main Hero Headline -->
           <h1 class="text-4xl sm:text-6xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-[1.15]">
@@ -268,7 +277,7 @@ import { SponsorButton, SponsorCard } from '@zyvnox/vue-pack/components'
 import { useDark } from '@/composables/useDark'
 import pkg from '../../../package.json'
 
-const version = pkg.version || '0.1.1'
+const version = pkg.version || '0.1.2'
 const { isDark, toggleDark } = useDark()
 
 const selectedPm = ref<'npm' | 'pnpm' | 'yarn' | 'bun'>('npm')

@@ -7,9 +7,14 @@ import {
   transformerDirectives,
 } from 'unocss'
 
+import { resolve } from 'node:path'
+
 export default defineConfig({
   content: {
-    filesystem: ['src/**/*.{vue,js,ts}', '../src/**/*.{vue,js,ts}'],
+    filesystem: [
+      resolve(import.meta.dirname, 'src/**/*.{vue,js,ts}'),
+      resolve(import.meta.dirname, '../src/**/*.{vue,js,ts}'),
+    ],
   },
   presets: [
     presetWind4({ dark: 'class' }),
@@ -27,6 +32,18 @@ export default defineConfig({
   preflights: [
     {
       getCSS: () => `
+        @keyframes zyvnox-fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes zyvnox-slideUp { from { opacity: 0; transform: translateY(30px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
+        @keyframes zyvnox-slideIn { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } }
+        @keyframes zyvnox-slideInFromBottom { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes zyvnox-popIn { 0% { transform: scale(0.6); opacity: 0; } 80% { transform: scale(1.05); opacity: 1; } 100% { transform: scale(1); opacity: 1; } }
+        @keyframes zyvnox-scaleIn { from { opacity: 0; transform: translateY(20px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
+        @keyframes zyvnox-slideUpFade { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes zyvnox-slideDownFade { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes zyvnox-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        .zyvnox-animate-spin { animation: zyvnox-spin 0.9s linear infinite !important; }
+
         .space-y-1 > :not([hidden]) ~ :not([hidden]), .zyvnox-space-y-1 > :not([hidden]) ~ :not([hidden]) { margin-top: 0.25rem !important; }
         .space-y-2 > :not([hidden]) ~ :not([hidden]), .zyvnox-space-y-2 > :not([hidden]) ~ :not([hidden]) { margin-top: 0.5rem !important; }
         .space-y-3 > :not([hidden]) ~ :not([hidden]), .zyvnox-space-y-3 > :not([hidden]) ~ :not([hidden]) { margin-top: 0.75rem !important; }

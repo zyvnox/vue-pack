@@ -128,7 +128,7 @@
     "path": "/home/jsgdev/Code/zyvnox/vue-pack/node_modules/@vue/shared",
     "licenseFile": "/home/jsgdev/Code/zyvnox/vue-pack/node_modules/@vue/shared/LICENSE"
   },
-  "@zyvnox/vue-pack@0.1.1": {
+  "@zyvnox/vue-pack@0.1.2": {
     "licenses": "MIT",
     "repository": "https://github.com/zyvnox/vue-pack",
     "publisher": "zyvnox",

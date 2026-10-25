@@ -22,7 +22,7 @@
             >
             <span
               class="inline-block mt-0.5 text-[10px] font-mono whitespace-nowrap bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300 px-1.5 py-0.5 rounded"
-              >vue-pack v0.1.1 • Early</span
+              >vue-pack v0.1.2 • Early</span
             >
           </div>
         </RouterLink>
@@ -85,6 +85,13 @@
               "
             >
               <span>{{ item.name }}</span>
+              <span
+                v-if="item.badge"
+                class="text-[10px] px-1.5 py-0.2 rounded font-mono"
+                :class="item.badgeClass ?? 'bg-amber-100 dark:bg-amber-900/40 text-amber-600 dark:text-amber-400'"
+              >
+                {{ item.badge }}
+              </span>
             </RouterLink>
           </div>
         </section>
@@ -251,7 +258,7 @@
                 >
                 <span
                   class="inline-block mt-0.5 text-[10px] font-mono whitespace-nowrap bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300 px-1.5 py-0.5 rounded"
-                  >vue-pack v0.1.1</span
+                  >vue-pack v0.1.2</span
                 >
               </div>
             </RouterLink>
@@ -333,6 +340,13 @@
                   "
                 >
                   <span>{{ item.name }}</span>
+                  <span
+                    v-if="item.badge"
+                    class="text-[10px] px-1.5 py-0.2 rounded font-mono"
+                    :class="item.badgeClass ?? 'bg-amber-100 dark:bg-amber-900/40 text-amber-600 dark:text-amber-400'"
+                  >
+                    {{ item.badge }}
+                  </span>
                 </RouterLink>
               </div>
             </section>
@@ -538,6 +552,8 @@ onBeforeUnmount(() => {
 interface NavItem {
   name: string
   path: string
+  badge?: string
+  badgeClass?: string
 }
 
 const filterItems = (items: NavItem[]) => {
@@ -547,6 +563,12 @@ const filterItems = (items: NavItem[]) => {
 
 const guides: NavItem[] = [
   { name: 'Getting Started', path: '/doc/getting-started' },
+  {
+    name: "What's New?",
+    path: '/doc/whats-new',
+    badge: 'v0.1.2',
+    badgeClass: 'bg-amber-100 dark:bg-amber-950/70 text-amber-700 dark:text-amber-300 font-bold',
+  },
   { name: 'Installation', path: '/doc/installation' },
   { name: 'Configuration', path: '/doc/config' },
   { name: 'i18n Localization', path: '/doc/i18n' },
