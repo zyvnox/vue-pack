@@ -332,7 +332,7 @@ import { ref } from 'vue'
 import CodeBlock from '@/components/CodeBlock.vue'
 import pkg from '../../../package.json'
 
-const version = pkg.version || '0.1.1'
+const version = pkg.version || '0.1.2'
 const activeTab = ref<'npm' | 'cdn'>('npm')
 
 const npmUsageCode = `<template>

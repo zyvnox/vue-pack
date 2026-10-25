@@ -123,7 +123,7 @@ import { useDark } from '@/composables/useDark'
 import { SponsorButton } from '@zyvnox/vue-pack/components'
 import pkg from '../../../package.json'
 
-const version = pkg.version || '0.1.1'
+const version = pkg.version || '0.1.2'
 const { isDark, toggleDark } = useDark()
 
 const defaultCode = `<script setup>

@@ -47,7 +47,14 @@ function generateLibraryLicense() {
 }
 
 function ensureSrcStyle() {
+  const distStylePath = resolve(import.meta.dirname, 'dist/style.css')
   const srcStylePath = resolve(import.meta.dirname, 'src/style.css')
+  if (fs.existsSync(distStylePath)) {
+    try {
+      fs.copyFileSync(distStylePath, srcStylePath)
+    } catch {}
+    return distStylePath
+  }
   if (!fs.existsSync(srcStylePath)) {
     fs.writeFileSync(srcStylePath, '/* @zyvnox/vue-pack/style.css */\n')
   }
@@ -94,6 +101,18 @@ export default defineConfig(({ command }: any) => {
         tsconfigPath: './tsconfig.app.json',
       }),
       generateLibraryLicense(),
+      {
+        name: 'sync-style-to-src',
+        closeBundle() {
+          const distStyle = resolve(import.meta.dirname, 'dist/style.css')
+          const srcStyle = resolve(import.meta.dirname, 'src/style.css')
+          if (fs.existsSync(distStyle)) {
+            try {
+              fs.copyFileSync(distStyle, srcStyle)
+            } catch {}
+          }
+        },
+      },
       // Automatically trigger CDN UMD build in pipeline upon NPM build bundle completion
       {
         name: 'build-cdn-umd-trigger',

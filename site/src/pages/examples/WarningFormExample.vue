@@ -30,7 +30,7 @@
         message="This action cannot be undone. All database records and uploaded assets will be purged."
         confirm-text="Yes, Delete"
         cancel-text="Cancel"
-        :is-green="false"
+        type="danger"
         @confirm="handleDeleteConfirm"
         @cancel="showDelete = false"
       />
@@ -61,13 +61,44 @@
         message="Are you sure you want to approve this budget request of $120,000?"
         confirm-text="Approve"
         cancel-text="Go Back"
-        :is-green="true"
+        type="success"
         @confirm="handleApproveConfirm"
         @cancel="showApprove = false"
       />
 
       <template #code>
         <CodeBlock :code="approveCode" language="vue" />
+      </template>
+    </DemoSection>
+
+    <!-- Demo 3: Cautionary Warning Confirmation (Yellow) -->
+    <DemoSection title="Cautionary Warning Confirmation" description="Yellow/amber-themed modal for sensitive or caution-level operations.">
+      <div class="flex items-center gap-4">
+        <button
+          type="button"
+          @click="showWarning = true"
+          class="px-4 py-2 rounded-lg bg-amber-500 hover:bg-amber-600 text-white text-xs font-semibold transition-colors"
+        >
+          ⚠️ Restart Service
+        </button>
+        <span v-if="warningConfirmed" class="text-xs text-amber-600 dark:text-amber-400">
+          Service restarted!
+        </span>
+      </div>
+
+      <WarningForm
+        v-if="showWarning"
+        title="Restart Production Service?"
+        message="Restarting this service will briefly interrupt live background worker queues for approximately 30 seconds."
+        confirm-text="Yes, Restart"
+        cancel-text="Keep Running"
+        type="warning"
+        @confirm="handleWarningConfirm"
+        @cancel="showWarning = false"
+      />
+
+      <template #code>
+        <CodeBlock :code="warningCode" language="vue" />
       </template>
     </DemoSection>
 
@@ -99,6 +130,9 @@ const deleteConfirmed = ref(false)
 const showApprove = ref(false)
 const approveConfirmed = ref(false)
 
+const showWarning = ref(false)
+const warningConfirmed = ref(false)
+
 const handleDeleteConfirm = () => {
   deleteConfirmed.value = true
   showDelete.value = false
@@ -109,6 +143,11 @@ const handleApproveConfirm = () => {
   showApprove.value = false
 }
 
+const handleWarningConfirm = () => {
+  warningConfirmed.value = true
+  showWarning.value = false
+}
+
 const deleteCode = `<template>
   <button @click="show = true">Delete</button>
 
@@ -117,7 +156,7 @@ const deleteCode = `<template>
     title="Delete Item?"
     message="This cannot be undone."
     confirm-text="Delete"
-    :is-green="false"
+    type="danger"
     @confirm="onDelete"
     @cancel="show = false"
   />
@@ -139,15 +178,25 @@ const approveCode = `<WarningForm
   title="Approve Budget?"
   message="Are you sure you want to approve?"
   confirm-text="Approve"
-  :is-green="true"
+  type="success"
   @confirm="onApprove"
   @cancel="show = false"
 />`
 
+const warningCode = `<WarningForm
+  v-if="show"
+  title="Restart Service?"
+  message="This will briefly interrupt workers."
+  confirm-text="Restart"
+  type="warning"
+  @confirm="onRestart"
+  @cancel="show = false"
+/>`
+
 const propsList = [
+  { name: 'type', type: "'danger' | 'warning' | 'success' | 'info'", default: "'danger'", description: 'Color theme and icon mode of the confirmation dialog' },
   { name: 'title', type: 'string', description: 'Dialog header title' },
   { name: 'message', type: 'string', description: 'Detailed warning message explanation' },
-  { name: 'isGreen', type: 'boolean', default: 'false', description: 'If true, renders with emerald confirmation theme instead of red danger theme' },
   { name: 'confirmText', type: 'string', description: 'Label for confirmation button' },
   { name: 'cancelText', type: 'string', description: 'Label for cancellation button' },
   { name: 'lang', type: "'en' | 'id'", default: "'en'", description: 'Active language code' },

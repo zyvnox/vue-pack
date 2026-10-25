@@ -120,10 +120,10 @@ export function useFormModal<TEmit extends (event: any, ...args: any[]) => void>
       JSON.stringify(formData.value)
 
     if (!title && (!content || content === '{}')) {
-      ShowAlert?.('error', 'Konteks Kosong', [
+      ShowAlert?.('warning', 'Konteks Kosong', [
         'Harap isi form utama (seperti Nama/Judul dan Deskripsi) terlebih dahulu agar AI bisa membaca konteks data.',
       ])
-      loader?.value?.show('error', 'Data konteks kosong.')
+      loader?.value?.show('warning', 'Data konteks kosong.')
       isGeneratingSeo.value = false
       return
     }
@@ -466,7 +466,7 @@ export function useFormModal<TEmit extends (event: any, ...args: any[]) => void>
           if (errMessage) {
             setNested(errors.value, fullKey, errMessage)
             ShowAlert?.(
-              'error',
+              'warning',
               field.label ?? fullKey,
               Array.isArray(errMessage) ? errMessage : [errMessage],
             )
@@ -532,7 +532,7 @@ export function useFormModal<TEmit extends (event: any, ...args: any[]) => void>
       }
       setNested(errors.value, fullKey, errorMessage)
       const err = getNested(errors.value, fullKey)
-      ShowAlert?.('error', field.label ?? fullKey, Array.isArray(err) ? err : [err])
+      ShowAlert?.('warning', field.label ?? fullKey, Array.isArray(err) ? err : [err])
       return false
     }
 
@@ -574,12 +574,12 @@ export function useFormModal<TEmit extends (event: any, ...args: any[]) => void>
     if (field.required && isEmpty(value)) {
       setNested(errors.value, key, t(options.lang ?? 'en', { label: field.label ?? key }))
       const err = getNested(errors.value, key)
-      ShowAlert?.('error', field.label ?? key, Array.isArray(err) ? err : [err])
+      ShowAlert?.('warning', field.label ?? key, Array.isArray(err) ? err : [err])
       return false
     } else if (getNested(errorsInput.value, key)) {
       setNested(errors.value, key, getNested(errorsInput.value, key))
       const err = getNested(errors.value, key)
-      ShowAlert?.('error', field.label ?? key, Array.isArray(err) ? err : [err])
+      ShowAlert?.('warning', field.label ?? key, Array.isArray(err) ? err : [err])
       return false
     }
     return true
@@ -600,7 +600,7 @@ export function useFormModal<TEmit extends (event: any, ...args: any[]) => void>
       setNested(errors.value, fullKey, t(options.lang ?? 'en', { label: field.label ?? fullKey }))
       const err = getNested(errors.value, fullKey)
       if (err) {
-        ShowAlert?.('error', field.label ?? fullKey, Array.isArray(err) ? err : [err])
+        ShowAlert?.('warning', field.label ?? fullKey, Array.isArray(err) ? err : [err])
       }
       return false
     }
@@ -675,7 +675,8 @@ export function useFormModal<TEmit extends (event: any, ...args: any[]) => void>
     }
 
     if (options.isUpdate && !hasChanges.value) {
-      loader?.value?.show('error', labels?.message.noChange ?? 'No data has changed')
+      loader?.value?.show('warning', labels?.message.noChange ?? 'No data has changed')
+      ShowAlert?.('warning', 'Peringatan', [labels?.message.noChange ?? 'No data has changed'])
       setTimeout(() => {
         isSubmitting.value = false
       }, 2000)

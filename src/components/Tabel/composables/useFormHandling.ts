@@ -277,13 +277,43 @@ export function useFormHandling<TEmit extends (event: any, ...args: any[]) => vo
       loader.value?.show('success', successMessage)
       closeModal()
     } catch (err: any) {
-      ShowAlert(
-        'error',
-        errorMessage,
-        Object.entries(err).map(([key, message]) => `${key} : ${message}`),
-      )
-      loader.value?.show('error', errorMessage)
+      handleErrorResponse(err, errorMessage)
     }
+  }
+
+  function handleErrorResponse(err: any, fallbackErrorMessage: string) {
+    const is400OrValidation =
+      err?.status === 400 ||
+      err?.statusCode === 400 ||
+      err?.isValidationError === true ||
+      (typeof err?.message === 'string' &&
+        (err.message.toLowerCase().includes('validation') ||
+          err.message.toLowerCase().includes('bad request') ||
+          err.message.toLowerCase().includes('400')))
+
+    const alertType = is400OrValidation ? 'warning' : 'error'
+    const alertTitle = is400OrValidation
+      ? (labels.status?.warning ?? 'Warning')
+      : fallbackErrorMessage
+
+    let messages: string[] = []
+    if (err?.errors && typeof err.errors === 'object') {
+      messages = Array.isArray(err.errors)
+        ? err.errors.map((e: any) => (typeof e === 'string' ? e : e?.message || JSON.stringify(e)))
+        : Object.entries(err.errors).map(([k, m]) => `${k}: ${m}`)
+    } else if (err?.message) {
+      messages = [err.message]
+    } else if (typeof err === 'object' && err !== null) {
+      messages = Object.entries(err).map(([key, message]) => `${key} : ${message}`)
+    } else {
+      messages = [String(err)]
+    }
+
+    ShowAlert(alertType, alertTitle, messages)
+    loader.value?.show(
+      alertType,
+      is400OrValidation ? (labels.status?.warning ?? 'Periksa input data') : fallbackErrorMessage,
+    )
   }
 
   async function DeleteData(
@@ -344,12 +374,7 @@ export function useFormHandling<TEmit extends (event: any, ...args: any[]) => vo
       }
       loader.value?.show('success', labels.message.success.delete)
     } catch (err: any) {
-      ShowAlert(
-        'error',
-        labels.message.error.delete,
-        Object.entries(err).map(([key, message]) => `${key} : ${message}`),
-      )
-      loader.value?.show('error', labels.message.error.delete)
+      handleErrorResponse(err, labels.message.error.delete)
     } finally {
       closeModal()
     }
@@ -416,12 +441,7 @@ export function useFormHandling<TEmit extends (event: any, ...args: any[]) => vo
         return res
       }
     } catch (err: any) {
-      ShowAlert(
-        'error',
-        labels.message.error.deleteMany,
-        Object.entries(err).map(([key, message]) => `${key} : ${message}`),
-      )
-      loader.value?.show('error', labels.message.error.deleteMany)
+      handleErrorResponse(err, labels.message.error.deleteMany)
     }
   }
 

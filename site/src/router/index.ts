@@ -25,6 +25,11 @@ const routes: RouteRecordRaw[] = [
         component: () => import('@/pages/GettingStarted.vue'),
       },
       {
+        path: 'whats-new',
+        name: 'doc-whats-new',
+        component: () => import('@/pages/WhatsNewPage.vue'),
+      },
+      {
         path: 'installation',
         name: 'doc-installation',
         component: () => import('@/pages/InstallationPage.vue'),
@@ -278,6 +283,10 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/sponsor',
     redirect: '/doc/sponsor',
+  },
+  {
+    path: '/whats-new',
+    redirect: '/doc/whats-new',
   },
   {
     path: '/examples/:pathMatch(.*)*',

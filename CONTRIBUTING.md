@@ -50,7 +50,7 @@ When creating a new bug report, please provide as much context as possible:
 
 1. **Clear, descriptive title**: Summarize the problem concisely.
 2. **Environment Information**:
-   - `@zyvnox/vue-pack` version (e.g., `0.1.1`)
+   - `@zyvnox/vue-pack` version (e.g., `0.1.2`)
    - Vue version (e.g., `3.5.18`)
    - Node.js runtime version
    - Browser & OS (e.g., Chrome 129 on macOS / Firefox on Linux)

@@ -1,9 +1,9 @@
-# @zyvnox/vue-pack v0.1.1 Early Release
+# @zyvnox/vue-pack v0.1.2 Early Release
 
 <div align="center">
 
 [![NPM Version](https://img.shields.io/npm/v/@zyvnox/vue-pack?style=for-the-badge&color=blue&logo=npm)](https://www.npmjs.com/package/@zyvnox/vue-pack)
-[![Status](https://img.shields.io/badge/Status-v0.1.1%20Early%20Release-amber?style=for-the-badge)](https://github.com/zyvnox/vue-pack)
+[![Status](https://img.shields.io/badge/Status-v0.1.2%20Early%20Release-amber?style=for-the-badge)](https://github.com/zyvnox/vue-pack)
 [![NPM Downloads](https://img.shields.io/npm/dm/@zyvnox/vue-pack?style=for-the-badge&color=brightgreen)](https://www.npmjs.com/package/@zyvnox/vue-pack)
 [![Vue 3](https://img.shields.io/badge/Vue-3.5+-4FC08D?style=for-the-badge&logo=vue.js&logoColor=white)](https://vuejs.org/)
 [![Vite 6](https://img.shields.io/badge/Vite-6.0+-646CFF?style=for-the-badge&logo=vite&logoColor=white)](https://vitejs.dev/)
@@ -16,11 +16,11 @@
 
 **Enterprise Schema-Driven Vue 3 Component Library, Datatable Suite, and Offline-First Storage Utilities.**
 
-[Overview](#-overview) • [Project Structure](#-project-structure) • [Built With](#-built-with--core-dependencies) • [Installation & CDN](#-installation) • [Quick Start](#-quick-start) • [Subpath Architecture](#-subpath-architecture) • [SEO Studio & SERP Preview](#-real-time-seo-studio--serp-preview) • [Development & Scripts](#-development--workflow-scripts) • [API Reference](#-complete-subpath-api-reference) • [Contributing](#-contributing) • [License](#-license)
+[Overview](#-overview) • [What's New](#-whats-new-in-v012) • [Project Structure](#-project-structure) • [Built With](#-built-with--core-dependencies) • [Installation & CDN](#-installation) • [Quick Start](#-quick-start) • [Subpath Architecture](#-subpath-architecture) • [SEO Studio & SERP Preview](#-real-time-seo-studio--serp-preview) • [Development & Scripts](#-development--workflow-scripts) • [API Reference](#-complete-subpath-api-reference) • [Contributing](#-contributing) • [License](#-license)
 
 </div>
 
-> ⚠️ **v0.1.1 Early Release Notice:** This library is currently in active early development. Public APIs are subject to change prior to `v1.0.0` stable. For production use cases, please pin exact versions or test changes carefully. Feedback, issues, and contributions are warmly appreciated!
+> ⚠️ **v0.1.2 Early Release Notice:** This library is currently in active early development. Public APIs are subject to change prior to `v1.0.0` stable. For production use cases, please pin exact versions or test changes carefully. Feedback, issues, and contributions are warmly appreciated!
 
 ---
 
@@ -53,6 +53,52 @@ Instead of writing redundant templates, form state handlers, and table logic fro
 | 🌐 **Extensible i18n System** | Built-in languages (`en`, `id`) with dynamic `registerLanguage` API and deep-merge fallback.                 |
 | 🎨 **Zero Scoped CSS**        | Atomic UnoCSS classes prefixed with `zyvnox-` ensuring no conflicting style overrides in your app.           |
 | ⚡ **Isomorphic & SSR Ready** | Hydration-safe components, safe SSR sanitization fallbacks, and Nuxt 3 compatibility.                        |
+
+---
+
+## 🚀 What's New in v0.1.2
+
+Release `v0.1.2` delivers a comprehensive overhaul of feedback and alert UI components, smart validation routing, and developer experience enhancements:
+
+### 🎨 Visual & Feedback System Redesign
+- **`LoaderSuccessError` (`Loader`)**:
+  - Replaced the previous SVG spinner with an ultra-smooth, hardware-accelerated 60fps dual-ring CSS spinner.
+  - Added native first-class support for the `'warning'` status with an amber/yellow warning triangle icon.
+  - Eliminated dark mode double-circle border artifacts and clipped borders.
+- **`WarningForm` (Action Confirmation Dialog)**:
+  - **Unified `type` Prop API**: Deprecated legacy boolean flags (`:is-green`, `isWarning`, `isYellow`) in favor of a single, clean `type` prop:
+    ```vue
+    <!-- v0.1.2 Unified Syntax -->
+    <WarningForm
+      :show="isOpen"
+      type="warning" <!-- 'danger' | 'warning' | 'success' | 'info' -->
+      title="Discard Changes?"
+      desc="Are you sure you want to discard your draft? Unsaved changes will be lost."
+      confirm-text="Yes, Discard"
+      cancel-text="Keep Editing"
+      @confirm="handleDiscard"
+      @cancel="isOpen = false"
+    />
+    ```
+  - Fixed transparent confirm button styling across dark and light themes, ensuring consistent solid color fills.
+  - Overhauled dialog iconography with clean outline icons (`CheckCircle`, `AlertTriangle`, `Trash2`, `HelpCircle`).
+- **`AlertApp`**:
+  - Added yellow/amber warning alert mode (`bg-amber-500/10`, `text-amber-400`, `border-amber-500/30`).
+  - Redesigned dark mode alert surfaces with tinted translucent backgrounds and color-matched borders.
+
+### 🛡️ Smart Validation & HTTP 400 Bad Request Routing
+- **`TabelData` & `FormModal` Form Handlers**:
+  - Frontend validation errors and HTTP `400 Bad Request` responses are now automatically classified as **warnings** (amber) rather than fatal server errors (red).
+  - Fatal error indicators (red) are now strictly reserved for true server crashes (`HTTP 500+`) or unhandled exceptions, giving users clearer, more actionable feedback.
+
+### 🛠️ Developer Experience & Tooling
+- **Dev Server Style Sync**:
+  - Configured Vite build plugin `sync-style-to-src` so `src/style.css` stays continuously synchronized with `dist/style.css`.
+  - Resolved CSS rule discrepancies between `npm run dev` and `npm run site:preview`.
+- **Live Playground & Monaco Editor Updates**:
+  - Fixed auto-complete and example code snippets in the Monaco Editor Playground to use canonical component names (`MapPicker`, `TextAreaQuillInput`).
+- **Interactive Documentation**:
+  - Added a dedicated [What's New Documentation Page](https://zyvnox.github.io/vue-pack/doc/whats-new) (`/doc/whats-new`) with live interactive previews and migration notes.
 
 ---
 
@@ -171,9 +217,9 @@ bun add @zyvnox/vue-pack vue@^3.5.0 zod@^4.0.0 leaflet@^1.9.4
 
 #### CDN Providers
 
-- **jsDelivr**: `https://cdn.jsdelivr.net/npm/@zyvnox/vue-pack@0.1.1/`
-- **unpkg**: `https://unpkg.com/@zyvnox/vue-pack@0.1.1/`
-- **esm.sh**: `https://esm.sh/@zyvnox/vue-pack@0.1.1`
+- **jsDelivr**: `https://cdn.jsdelivr.net/npm/@zyvnox/vue-pack@0.1.2/`
+- **unpkg**: `https://unpkg.com/@zyvnox/vue-pack@0.1.2/`
+- **esm.sh**: `https://esm.sh/@zyvnox/vue-pack@0.1.2`
 
 #### Option 1: Native ES Modules with W3C Import Map (Recommended for Modern Browsers)
 
@@ -186,7 +232,7 @@ bun add @zyvnox/vue-pack vue@^3.5.0 zod@^4.0.0 leaflet@^1.9.4
     <!-- 1. Include Pre-compiled UnoCSS Stylesheet -->
     <link
       rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/@zyvnox/vue-pack@0.1.1/dist/style.css"
+      href="https://cdn.jsdelivr.net/npm/@zyvnox/vue-pack@0.1.2/dist/style.css"
     />
 
     <!-- 2. W3C Import Map for Pure ESM Browser Resolution -->
@@ -194,7 +240,7 @@ bun add @zyvnox/vue-pack vue@^3.5.0 zod@^4.0.0 leaflet@^1.9.4
       {
         "imports": {
           "vue": "https://cdn.jsdelivr.net/npm/vue@3.5.18/dist/vue.esm-browser.prod.js",
-          "@zyvnox/vue-pack": "https://cdn.jsdelivr.net/npm/@zyvnox/vue-pack@0.1.1/dist/cdn/vue-pack.es.js"
+          "@zyvnox/vue-pack": "https://cdn.jsdelivr.net/npm/@zyvnox/vue-pack@0.1.2/dist/cdn/vue-pack.es.js"
         }
       }
     </script>
@@ -236,14 +282,14 @@ For legacy setups or quick non-modular prototyping:
     <title>Zyvnox Vue Pack UMD</title>
     <link
       rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/@zyvnox/vue-pack@0.1.1/dist/style.css"
+      href="https://cdn.jsdelivr.net/npm/@zyvnox/vue-pack@0.1.2/dist/style.css"
     />
 
     <!-- Vue 3 Peer Dependency (Global build) -->
     <script src="https://cdn.jsdelivr.net/npm/vue@3.5.18/dist/vue.global.prod.js"></script>
 
     <!-- Zyvnox Vue Pack Standalone UMD Bundle -->
-    <script src="https://cdn.jsdelivr.net/npm/@zyvnox/vue-pack@0.1.1/dist/cdn/vue-pack.umd.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@zyvnox/vue-pack@0.1.2/dist/cdn/vue-pack.umd.js"></script>
   </head>
   <body>
     <div id="app"></div>
@@ -399,7 +445,7 @@ Run `@zyvnox/vue-pack` directly in pure HTML without Node.js or bundlers, mirror
     <!-- Scoped stylesheet -->
     <link
       rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/@zyvnox/vue-pack@0.1.1/dist/style.css"
+      href="https://cdn.jsdelivr.net/npm/@zyvnox/vue-pack@0.1.2/dist/style.css"
     />
 
     <!-- W3C Browser Import Map -->
@@ -407,7 +453,7 @@ Run `@zyvnox/vue-pack` directly in pure HTML without Node.js or bundlers, mirror
       {
         "imports": {
           "vue": "https://cdn.jsdelivr.net/npm/vue@3.5.18/dist/vue.esm-browser.prod.js",
-          "@zyvnox/vue-pack": "https://cdn.jsdelivr.net/npm/@zyvnox/vue-pack@0.1.1/dist/cdn/vue-pack.es.js"
+          "@zyvnox/vue-pack": "https://cdn.jsdelivr.net/npm/@zyvnox/vue-pack@0.1.2/dist/cdn/vue-pack.es.js"
         }
       }
     </script>
@@ -753,6 +799,74 @@ All inputs emit standard Vue 3 `v-model` (`update:modelValue`) events and valida
 | `ArrayObjectInput`               | Nested form array manager  | Dynamic row additions, schema recursiveness, child deletion tracking.                                |
 | `ObjectInput`                    | Single nested object       | Scoped schema grouping within a parent form.                                                         |
 | `GroupRendererInput`             | Multi-column fieldset      | Grouped fields with responsive grid columns.                                                         |
+
+---
+
+#### E. Feedback & Overlay Components
+
+Zyvnox Vue Pack provides enterprise-grade, theme-aware feedback components:
+
+| Component Name | Description | Key Features & Props |
+| :--- | :--- | :--- |
+| `LoaderSuccessError` (`Loader`) | Fullscreen or container status overlay | Smooth 60fps CSS spinner, supports `type: 'loading' \| 'success' \| 'warning' \| 'error'`. |
+| `WarningForm` | Confirmation modal dialog | Action confirmation dialog with unified `type: 'danger' \| 'warning' \| 'success' \| 'info'`, solid button states, and custom action callbacks. |
+| `AlertApp` | Inline contextual status banner | Supports `'info'`, `'success'`, `'warning'`, `'error'`, translucent dark surfaces, and auto-dismiss timer. |
+
+##### `WarningForm` Usage
+```vue
+<template>
+  <WarningForm
+    :show="showConfirm"
+    type="warning"
+    title="Discard Changes?"
+    desc="Any unsaved modifications will be permanently lost."
+    confirm-text="Discard"
+    cancel-text="Keep Editing"
+    @confirm="handleDiscard"
+    @cancel="showConfirm = false"
+  />
+</template>
+
+<script setup lang="ts">
+import { ref } from 'vue'
+import { WarningForm } from '@zyvnox/vue-pack'
+
+const showConfirm = ref(false)
+function handleDiscard() {
+  showConfirm.value = false
+  // discard logic
+}
+</script>
+```
+
+##### `Loader` Usage
+```vue
+<template>
+  <LoaderSuccessError ref="loaderRef" />
+  <button @click="runTask">Run Task</button>
+</template>
+
+<script setup lang="ts">
+import { ref } from 'vue'
+import { LoaderSuccessError } from '@zyvnox/vue-pack'
+
+const loaderRef = ref<InstanceType<typeof LoaderSuccessError>>()
+
+async function runTask() {
+  loaderRef.value?.show({ type: 'loading', message: 'Processing order...' })
+  try {
+    await processOrder()
+    loaderRef.value?.show({ type: 'success', message: 'Order completed successfully!' })
+  } catch (err: any) {
+    if (err?.status === 400) {
+      loaderRef.value?.show({ type: 'warning', message: 'Validation failed. Please verify input.' })
+    } else {
+      loaderRef.value?.show({ type: 'error', message: 'Internal server error occurred.' })
+    }
+  }
+}
+</script>
+```
 
 ---
 
@@ -1223,7 +1337,7 @@ Have a suggestion or found an issue?
 - **Feature Request:** [Request a Feature](https://github.com/zyvnox/vue-pack/issues/new?template=feature_request.md)
 - **Discussions / Q&A:** [GitHub Discussions](https://github.com/zyvnox/vue-pack/discussions)
 
-Please include `@zyvnox/vue-pack` version (`0.1.1`), your Vue version, and a minimal reproduction.
+Please include `@zyvnox/vue-pack` version (`0.1.2`), your Vue version, and a minimal reproduction.
 
 ---
 
