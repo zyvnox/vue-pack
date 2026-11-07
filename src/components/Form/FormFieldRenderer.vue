@@ -339,8 +339,8 @@
       @update:model-value="(val: any, key: string) => $emit('update:model-value', val, key)"
       @remove:errors="(key: string) => handlers.removeError(key)"
       @push:errors="(msg: string | string[], key: string) => handlers.pushError(msg, key)"
-      @multi-selected-change="(val, key) => $emit('multi-selected-change', val, key)"
-      @selected-option-change="(val, key) => $emit('selected-option-change', val, key)"
+      @multi-selected-change="(val: any, key: any) => $emit('multi-selected-change', val, key)"
+      @selected-option-change="(val: any, key: any) => $emit('selected-option-change', val, key)"
     />
 
     <ArrayObjectInput
@@ -438,8 +438,8 @@
       @create:Options="
         (k: string, o: string | number, v: string) => $emit('create:Options', k, o, v)
       "
-      @multi-selected-change="(val, key) => $emit('multi-selected-change', val, key)"
-      @selected-option-change="(val, key) => $emit('selected-option-change', val, key)"
+      @multi-selected-change="(val: any, key: any) => $emit('multi-selected-change', val, key)"
+      @selected-option-change="(val: any, key: any) => $emit('selected-option-change', val, key)"
       @update:model-value="(val: any, key: any) => $emit('update:model-value', val, key)"
       @remove:error="handlers.removeError"
       @push:error="handlers.pushError"

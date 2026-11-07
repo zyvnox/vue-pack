@@ -68,9 +68,33 @@
       </div>
     </div>
     <div
-      class="zyvnox-bg-slate-50 zyvnox-border-2 zyvnox-border-dashed zyvnox-border-slate-300 zyvnox-rounded-xl zyvnox-p-6 zyvnox-transition-colors zyvnox-duration-200 hover:zyvnox-bg-slate-100 hover:zyvnox-border-blue-500 dark:zyvnox-bg-slate-800 dark:zyvnox-border-slate-600 dark:hover:zyvnox-bg-slate-700 dark:hover:zyvnox-border-blue-400"
-      :class="{ 'zyvnox-border-red-300 dark:zyvnox-border-red-800': allErrors.length !== 0 }"
+      class="zyvnox-group zyvnox-relative zyvnox-bg-slate-50 zyvnox-border-2 zyvnox-border-dashed zyvnox-border-slate-300 zyvnox-rounded-xl zyvnox-p-6 zyvnox-transition-all zyvnox-duration-200 hover:zyvnox-bg-slate-100 hover:zyvnox-border-blue-500 dark:zyvnox-bg-slate-800 dark:zyvnox-border-slate-600 dark:hover:zyvnox-bg-slate-700 dark:hover:zyvnox-border-blue-400"
+      :class="{
+        'zyvnox-border-red-300 dark:zyvnox-border-red-800': allErrors.length !== 0,
+        'zyvnox-border-blue-500 zyvnox-bg-blue-50/70 dark:zyvnox-bg-blue-900/30 zyvnox-scale-[1.008] zyvnox-shadow-lg': isDragging && !disabled && !isAddButtonDisabled,
+      }"
+      @dragenter.prevent.stop="onDragEnter"
+      @dragover.prevent.stop="onDragOver"
+      @dragleave.prevent.stop="onDragLeave"
+      @drop.prevent.stop="onDrop"
     >
+      <!-- Drag Over Visual Overlay -->
+      <div
+        v-if="isDragging && !disabled && !isAddButtonDisabled"
+        class="zyvnox-absolute zyvnox-inset-0 zyvnox-z-20 zyvnox-flex zyvnox-flex-col zyvnox-items-center zyvnox-justify-center zyvnox-bg-blue-500/10 zyvnox-backdrop-blur-[2px] zyvnox-rounded-xl zyvnox-border-2 zyvnox-border-dashed zyvnox-border-blue-500 zyvnox-pointer-events-none"
+      >
+        <div class="zyvnox-w-12 zyvnox-h-12 zyvnox-rounded-full zyvnox-bg-blue-600 zyvnox-text-white zyvnox-flex zyvnox-items-center zyvnox-justify-center zyvnox-shadow-lg zyvnox-animate-bounce">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+            <circle cx="8.5" cy="8.5" r="1.5"></circle>
+            <polyline points="21 15 16 10 5 21"></polyline>
+          </svg>
+        </div>
+        <span class="zyvnox-mt-2 zyvnox-text-sm zyvnox-font-semibold zyvnox-text-blue-600 dark:zyvnox-text-blue-400">
+          {{ t('upload.dragDrop') || 'Drop images here' }}
+        </span>
+      </div>
+
       <div
         v-if="localPreviewUrls.length > 0"
         class="zyvnox-grid zyvnox-grid-cols-2 zyvnox-gap-4 zyvnox-mb-6 min-[480px]:zyvnox-grid-cols-3 md:zyvnox-grid-cols-4 lg:zyvnox-grid-cols-5"
@@ -99,12 +123,40 @@
 
       <div
         v-else
-        class="zyvnox-text-center zyvnox-py-8 zyvnox-px-4 zyvnox-text-slate-400 dark:zyvnox-text-slate-500"
+        class="zyvnox-flex zyvnox-flex-col zyvnox-items-center zyvnox-justify-center zyvnox-py-6 zyvnox-px-4 zyvnox-gap-3"
       >
-        <p>{{ labels?.message?.noItemSelected ?? t('message.noItemSelected') }}</p>
+        <div
+          class="zyvnox-w-12 zyvnox-h-12 zyvnox-rounded-full zyvnox-bg-blue-100/70 dark:zyvnox-bg-blue-900/30 zyvnox-flex zyvnox-items-center zyvnox-justify-center zyvnox-text-blue-600 dark:zyvnox-text-blue-400 zyvnox-transition-transform zyvnox-duration-200 group-hover:zyvnox-scale-110"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+            <circle cx="8.5" cy="8.5" r="1.5"></circle>
+            <polyline points="21 15 16 10 5 21"></polyline>
+          </svg>
+        </div>
+        <div class="zyvnox-text-center">
+          <p class="zyvnox-text-sm zyvnox-font-medium zyvnox-text-slate-700 dark:zyvnox-text-slate-200">
+            {{ t('upload.dragDrop') || 'Drag & drop images here' }}
+          </p>
+          <p class="zyvnox-text-xs zyvnox-text-slate-400 dark:zyvnox-text-slate-500 zyvnox-mt-0.5">
+            {{ t('upload.orClick') || 'or click to browse' }}
+          </p>
+        </div>
       </div>
 
-      <div class="zyvnox-text-center zyvnox-mt-4">
+      <div
+        class="zyvnox-flex zyvnox-flex-wrap zyvnox-items-center zyvnox-justify-center zyvnox-gap-3 zyvnox-mt-4"
+      >
         <input
           :id="id"
           type="file"
@@ -128,7 +180,7 @@
           type="button"
           @click="handleUrlInput"
           :disabled="isAddButtonDisabled"
-          class="zyvnox-inline-flex zyvnox-items-center zyvnox-gap-2 zyvnox-px-5 zyvnox-py-2.5 zyvnox-ml-2 zyvnox-font-medium zyvnox-border-none zyvnox-rounded-lg zyvnox-text-white zyvnox-bg-slate-600 zyvnox-cursor-pointer zyvnox-transition-all zyvnox-duration-200 hover:zyvnox-bg-slate-700 hover:zyvnox-scale-105 hover:zyvnox-shadow-lg disabled:zyvnox-opacity-60 disabled:zyvnox-cursor-not-allowed dark:zyvnox-bg-slate-500 dark:hover:zyvnox-bg-slate-400"
+          class="zyvnox-inline-flex zyvnox-items-center zyvnox-gap-2 zyvnox-px-5 zyvnox-py-2.5 zyvnox-font-medium zyvnox-border-none zyvnox-rounded-lg zyvnox-text-white zyvnox-bg-slate-600 zyvnox-cursor-pointer zyvnox-transition-all zyvnox-duration-200 hover:zyvnox-bg-slate-700 hover:zyvnox-scale-105 hover:zyvnox-shadow-lg disabled:zyvnox-opacity-60 disabled:zyvnox-cursor-not-allowed dark:zyvnox-bg-slate-500 dark:hover:zyvnox-bg-slate-400"
         >
           {{ t('upload.useUrl') }}
         </button>
@@ -183,6 +235,40 @@ const ShowAlert =
 // --- STATE MANAGEMENT ---
 const localPreviewUrls = ref<string[]>([])
 const localErrors = ref<string[]>([])
+const isDragging = ref(false)
+let dragCounter = 0
+
+function onDragEnter(e: DragEvent) {
+  if (props.disabled || isAddButtonDisabled.value) return
+  dragCounter++
+  isDragging.value = true
+}
+
+function onDragOver(e: DragEvent) {
+  if (props.disabled || isAddButtonDisabled.value) return
+  if (e.dataTransfer) {
+    e.dataTransfer.dropEffect = 'copy'
+  }
+}
+
+function onDragLeave(e: DragEvent) {
+  if (props.disabled || isAddButtonDisabled.value) return
+  dragCounter--
+  if (dragCounter <= 0) {
+    dragCounter = 0
+    isDragging.value = false
+  }
+}
+
+async function onDrop(e: DragEvent) {
+  if (props.disabled || isAddButtonDisabled.value) return
+  dragCounter = 0
+  isDragging.value = false
+  const files = e.dataTransfer?.files
+  if (files && files.length > 0) {
+    await processFiles(files)
+  }
+}
 
 // State khusus untuk Custom Watermark (jika props.watermark.url === 'upload')
 const customWatermarkSource = ref<string | File | null>(null)
@@ -527,11 +613,8 @@ async function handleUrlInput() {
   }
 }
 
-async function handleFileUpload(event: Event) {
+async function processFiles(files: FileList | File[]) {
   if (props.disabled) return
-
-  const target = event.target as HTMLInputElement
-  const files = target.files
   if (!files || files.length === 0) return
 
   const currentFiles = props.modelValue || []
@@ -539,7 +622,6 @@ async function handleFileUpload(event: Event) {
 
   if (maxFiles && currentFiles.length + files.length > maxFiles) {
     ShowAlert?.('error', getMessage('imageMaxFiles', { max: maxFiles }, props.lang ?? 'en'))
-    target.value = ''
     return
   }
 
@@ -567,7 +649,6 @@ async function handleFileUpload(event: Event) {
       finalFiles = await Promise.all(watermarkPromises)
     } catch (error) {
       console.error('Batch watermarking process failed:', error)
-      target.value = ''
       return
     }
   } else {
@@ -578,7 +659,15 @@ async function handleFileUpload(event: Event) {
   if (finalFiles.length > 0) {
     emit('update:modelValue', [...currentFiles, ...finalFiles])
   }
+}
 
+async function handleFileUpload(event: Event) {
+  if (props.disabled) return
+  const target = event.target as HTMLInputElement
+  const files = target.files
+  if (files) {
+    await processFiles(files)
+  }
   target.value = ''
 }
 

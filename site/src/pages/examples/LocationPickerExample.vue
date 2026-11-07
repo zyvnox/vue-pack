@@ -197,6 +197,19 @@
           class="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50 space-y-2"
         >
           <div class="flex items-center gap-2 font-bold text-slate-900 dark:text-white text-sm">
+            <span>🎯</span>
+            <span>Sync GPS Location</span>
+          </div>
+          <p class="text-xs text-slate-600 dark:text-slate-400">
+            Automatically queries the device's hardware Geolocation API, pins your current position,
+            centers the map view, and validates coordinates against boundaries.
+          </p>
+        </div>
+
+        <div
+          class="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50 space-y-2"
+        >
+          <div class="flex items-center gap-2 font-bold text-slate-900 dark:text-white text-sm">
             <span>🏠</span>
             <span>Reset to Home Center</span>
           </div>
@@ -566,6 +579,19 @@ const propsList: PropDef[] = [
     description:
       'Language code for internal map tooltips, search placeholders, guides, and error notices.',
   },
+  {
+    name: 'enableGps',
+    type: 'boolean',
+    default: 'true',
+    description:
+      'Enables the device GPS synchronization crosshair button in the toolbar header.',
+  },
+  {
+    name: 'gpsOptions',
+    type: '{ enableHighAccuracy?: boolean, timeout?: number, maximumAge?: number }',
+    description:
+      'Custom browser Geolocation API options passed to navigator.geolocation.getCurrentPosition.',
+  },
 ]
 
 const eventsList: EventDef[] = [
@@ -592,6 +618,18 @@ const eventsList: EventDef[] = [
       'Emitted when the user explicitly clicks anywhere on the Leaflet map to place a pin marker.',
   },
   {
+    name: 'gps-synced',
+    type: '(value: Record<string, string>, coords: GeolocationCoordinates) => void',
+    description:
+      'Emitted when device GPS synchronization completes successfully with retrieved coordinate details.',
+  },
+  {
+    name: 'gps-error',
+    type: '(error: GeolocationPositionError | Error) => void',
+    description:
+      'Emitted when device GPS synchronization fails due to permission denial, timeout, or lack of support.',
+  },
+  {
     name: 'locked-coordinates',
     type: '(value: Record<string, string>) => void',
     description:
@@ -613,6 +651,11 @@ const eventsList: EventDef[] = [
     name: 'remove:error',
     type: '(id: string) => void',
     description: 'Emitted when coordinates pass all validation rules and all errors are cleared.',
+  },
+  {
+    name: 'route-endpoints',
+    type: '(endpoints: { start: [number, number], end: [number, number] }) => void',
+    description: 'Emitted when a GeoJSON route is parsed and start/finish coordinates are extracted.',
   },
 ]
 

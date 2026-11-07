@@ -23,7 +23,7 @@
         <h3
           class="zyvnox-text-lg sm:zyvnox-text-xl zyvnox-font-bold zyvnox-text-slate-900 dark:zyvnox-text-white zyvnox-tracking-tight"
         >
-          Support Early Release v0.1.2 &rarr; v1.0.0
+          Support Early Release v0.1.3 &rarr; v1.0.0
         </h3>
 
         <p
@@ -35,6 +35,26 @@
       </div>
 
       <div class="zyvnox-flex zyvnox-flex-wrap zyvnox-items-center zyvnox-gap-3 zyvnox-shrink-0">
+        <!-- GitHub Sponsors CTA -->
+        <a
+          href="https://github.com/sponsors/zyvnox"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="zyvnox-inline-flex zyvnox-items-center zyvnox-gap-2 zyvnox-px-4 zyvnox-py-2.5 zyvnox-rounded-xl zyvnox-text-white zyvnox-font-semibold zyvnox-text-xs zyvnox-shadow-sm zyvnox-transition-all hover:zyvnox-opacity-90 hover:zyvnox-shadow-md hover:zyvnox-scale-[1.02] active:zyvnox-scale-[0.98] zyvnox-no-underline"
+          style="background-color: #EA4AAA;"
+        >
+          <svg
+            class="zyvnox-w-4 zyvnox-h-4 zyvnox-fill-current"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+            <path
+              d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+            />
+          </svg>
+          <span>GitHub Sponsors</span>
+        </a>
+
         <!-- Saweria CTA -->
         <a
           href="https://saweria.co/zyvnox"

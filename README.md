@@ -1,9 +1,9 @@
-# @zyvnox/vue-pack v0.1.2 Early Release
+# @zyvnox/vue-pack v0.1.3 Early Release
 
 <div align="center">
 
 [![NPM Version](https://img.shields.io/npm/v/@zyvnox/vue-pack?style=for-the-badge&color=blue&logo=npm)](https://www.npmjs.com/package/@zyvnox/vue-pack)
-[![Status](https://img.shields.io/badge/Status-v0.1.2%20Early%20Release-amber?style=for-the-badge)](https://github.com/zyvnox/vue-pack)
+[![Status](https://img.shields.io/badge/Status-v0.1.3%20Early%20Release-amber?style=for-the-badge)](https://github.com/zyvnox/vue-pack)
 [![NPM Downloads](https://img.shields.io/npm/dm/@zyvnox/vue-pack?style=for-the-badge&color=brightgreen)](https://www.npmjs.com/package/@zyvnox/vue-pack)
 [![Vue 3](https://img.shields.io/badge/Vue-3.5+-4FC08D?style=for-the-badge&logo=vue.js&logoColor=white)](https://vuejs.org/)
 [![Vite 6](https://img.shields.io/badge/Vite-6.0+-646CFF?style=for-the-badge&logo=vite&logoColor=white)](https://vitejs.dev/)
@@ -16,11 +16,11 @@
 
 **Enterprise Schema-Driven Vue 3 Component Library, Datatable Suite, and Offline-First Storage Utilities.**
 
-[Overview](#-overview) • [What's New](#-whats-new-in-v012) • [Project Structure](#-project-structure) • [Built With](#-built-with--core-dependencies) • [Installation & CDN](#-installation) • [Quick Start](#-quick-start) • [Subpath Architecture](#-subpath-architecture) • [SEO Studio & SERP Preview](#-real-time-seo-studio--serp-preview) • [Development & Scripts](#-development--workflow-scripts) • [API Reference](#-complete-subpath-api-reference) • [Contributing](#-contributing) • [License](#-license)
+[Overview](#-overview) • [What's New](#-whats-new-in-v013) • [Project Structure](#-project-structure) • [Built With](#-built-with--core-dependencies) • [Installation & CDN](#-installation) • [Quick Start](#-quick-start) • [Subpath Architecture](#-subpath-architecture) • [SEO Studio & SERP Preview](#-real-time-seo-studio--serp-preview) • [Development & Scripts](#-development--workflow-scripts) • [API Reference](#-complete-subpath-api-reference) • [Contributing](#-contributing) • [License](#-license)
 
 </div>
 
-> ⚠️ **v0.1.2 Early Release Notice:** This library is currently in active early development. Public APIs are subject to change prior to `v1.0.0` stable. For production use cases, please pin exact versions or test changes carefully. Feedback, issues, and contributions are warmly appreciated!
+> ⚠️ **v0.1.3 Early Release Notice:** This library is currently in active early development. Public APIs are subject to change prior to `v1.0.0` stable. For production use cases, please pin exact versions or test changes carefully. Feedback, issues, and contributions are warmly appreciated!
 
 ---
 
@@ -42,17 +42,62 @@ Instead of writing redundant templates, form state handlers, and table logic fro
 
 ## ✨ Key Features
 
-| Feature                       | Description                                                                                                  |
-| :---------------------------- | :----------------------------------------------------------------------------------------------------------- |
-| 🧩 **Schema-Driven UI**       | Define entire form layouts and datatable views declaratively via TypeScript/JSON schema configurations.      |
-| 🌳 **Subpath Tree-Shaking**   | Granular subpath imports (`/vue`, `/init`, `/indexedDB`, `/secureFetch`, `/config`, `/components`, `/type`). |
-| 🛡️ **Type-Safe Validation**   | First-class Zod support with full type inference (`z.infer<T>`) for form state and CRUD mutation pipelines.  |
-| 💾 **IndexedDB Engine**       | Autonomous IndexedDB manager with on-demand store creation, Zod cache filtering, and batch transactions.     |
-| 🔒 **Secure Fetch Client**    | Built-in HTTP client handling Cookie credentials, Bearer tokens, custom headers, and `SecureFetchError`.     |
+| Feature                       | Description                                                                                                                 |
+| :---------------------------- | :-------------------------------------------------------------------------------------------------------------------------- |
+| 🧩 **Schema-Driven UI**       | Define entire form layouts and datatable views declaratively via TypeScript/JSON schema configurations.                     |
+| 🌳 **Subpath Tree-Shaking**   | Granular subpath imports (`/vue`, `/init`, `/indexedDB`, `/secureFetch`, `/config`, `/components`, `/type`).                |
+| 🛡️ **Type-Safe Validation**   | First-class Zod support with full type inference (`z.infer<T>`) for form state and CRUD mutation pipelines.                 |
+| 💾 **IndexedDB Engine**       | Autonomous IndexedDB manager with on-demand store creation, Zod cache filtering, and batch transactions.                    |
+| 🔒 **Secure Fetch Client**    | Built-in HTTP client handling Cookie credentials, Bearer tokens, custom headers, and `SecureFetchError`.                    |
 | 🗺️ **GIS & Rich Text**        | Interactive Leaflet maps (`MapPicker`) with route distance calculation and Quill 2.0 WYSIWYG editor (`TextAreaQuillInput`). |
-| 🌐 **Extensible i18n System** | Built-in languages (`en`, `id`) with dynamic `registerLanguage` API and deep-merge fallback.                 |
-| 🎨 **Zero Scoped CSS**        | Atomic UnoCSS classes prefixed with `zyvnox-` ensuring no conflicting style overrides in your app.           |
-| ⚡ **Isomorphic & SSR Ready** | Hydration-safe components, safe SSR sanitization fallbacks, and Nuxt 3 compatibility.                        |
+| 🌐 **Extensible i18n System** | Built-in languages (`en`, `id`) with dynamic `registerLanguage` API and deep-merge fallback.                                |
+| 🎨 **Zero Scoped CSS**        | Atomic UnoCSS classes prefixed with `zyvnox-` ensuring no conflicting style overrides in your app.                          |
+| ⚡ **Isomorphic & SSR Ready** | Hydration-safe components, safe SSR sanitization fallbacks, and Nuxt 3 compatibility.                                       |
+
+---
+
+## 🚀 What's New in v0.1.3
+
+Release `v0.1.3` focuses on universal drag-and-drop file interactions, preview card polish, Quill WYSIWYG editor stability, and a cleaner source architecture:
+
+### 📦 Universal Drag & Drop Engine
+
+- **Full Drop Support Across All Uploaders**:
+  - `FileInput` (single file / document), `FileArrayInput` (multiple files / documents), `ImageInput` (single image), and `ImageArrayInput` (image gallery) now natively support smooth desktop drag-and-drop.
+  - **Zero-Flicker Counter-Based State Machine**: Uses an internal `dragCounter` tracker to prevent rapid flicker when dragging files across nested child elements.
+  - **Visual Drop Overlay**: Frosted-glass backdrop blur with an animated bouncing cloud icon and clear localized drop prompt (`upload.dragDrop`).
+
+### 🎴 Visual & Card Redesign (`FileInput`)
+
+- **Dedicated Document Preview Card**: Replaced overlapping background upload icons with an elegant card displaying file type icon, name, formatted size, and status.
+- **Button Spacing & Separation**: Added consistent `zyvnox-gap-3` spacing between `[ Upload ]`, `[ URL ]`, and `[ Remove ]` buttons across single and multi-file uploaders.
+- **External `:error` Prop Support**: Form-level and backend validation errors passed via the `:error` prop now render with high priority without colliding with internal file size/type errors.
+
+### 📝 Rich Text & WYSIWYG Stability (`TextAreaQuill`)
+
+- **Zero-Lag Image Alignment**: Replaced heavy recursive DOM `MutationObserver` loops with pure scoped CSS classes (`.ql-resize-toolbar`), delivering smooth 60fps interaction when clicking image align/resize buttons.
+- **Non-Props Attribute Inheritance Warning Fix**: Declared `inheritAttrs: false` with explicit `v-bind="$attrs"` on root wrapper, cleanly resolving Vue's extraneous attribute warnings for `required`.
+- **Quill 2.0 Native Toolbar Handlers**: Registered dedicated handlers for `undo`, `redo`, and `divider` formats, silencing Quill console warnings.
+- **Dark Mode Typography**: Resolved dark mode placeholder contrast and dropdown menu text wrapping.
+
+### 🗺️ GIS Mapping & Routing (`MapPicker` / `LocationPicker`)
+
+- **Smart Route Start & Finish Pin Markers**:
+  - Automatically identifies and extracts the start and finish endpoints from OSRM routes, ORS FeatureCollections, `LineString`, `MultiLineString`, and custom `waypoints` properties.
+  - **Start Marker (A)**: Emerald badge with uppercase "START" pill, circular "A" pin, and needle pointer pointing directly to the departure coordinate.
+  - **Finish Marker (B)**: Crimson badge with uppercase "FINISH" pill, circular "B" pin, and needle pointer pointing directly to the destination coordinate.
+  - **Interactive Popups**: Clicking either marker opens an informative coordinate card.
+  - **New Event Emit**: Dispatches `@route-endpoints="{ start: [lat, lng], end: [lat, lng] }"`.
+- **High-Accuracy GPS Synchronization**:
+  - One-click native GPS synchronization with status alerts (Success, Permission Denied, Unavailable, Timeout).
+  - Configurable GPS options (`enableHighAccuracy`, `timeout`, `maximumAge`) via `:gps-options`.
+- **Reactive GeoJSON Route Layer**:
+  - Deep watcher on `:geo-json` prop ensures routes rendered asynchronously (e.g. from network APIs) update immediately with automatic bounds fitting (`fitBounds`) and viewport padding.
+
+### 🏗️ Source Architecture & Build Discipline
+
+- **Pure Source Directory (`src/`)**: Completely removed compiled build artifacts (`src/style.css` 220KB) from the repository source tree.
+- **Automated Style Sync (`dist/style.css`)**: UnoCSS build scripts and Vite pipelines emit directly to `dist/style.css`, guaranteeing that `src/` contains 100% human-written source code.
 
 ---
 
@@ -61,6 +106,7 @@ Instead of writing redundant templates, form state handlers, and table logic fro
 Release `v0.1.2` delivers a comprehensive overhaul of feedback and alert UI components, smart validation routing, and developer experience enhancements:
 
 ### 🎨 Visual & Feedback System Redesign
+
 - **`LoaderSuccessError` (`Loader`)**:
   - Replaced the previous SVG spinner with an ultra-smooth, hardware-accelerated 60fps dual-ring CSS spinner.
   - Added native first-class support for the `'warning'` status with an amber/yellow warning triangle icon.
@@ -87,13 +133,16 @@ Release `v0.1.2` delivers a comprehensive overhaul of feedback and alert UI comp
   - Redesigned dark mode alert surfaces with tinted translucent backgrounds and color-matched borders.
 
 ### 🛡️ Smart Validation & HTTP 400 Bad Request Routing
+
 - **`TabelData` & `FormModal` Form Handlers**:
   - Frontend validation errors and HTTP `400 Bad Request` responses are now automatically classified as **warnings** (amber) rather than fatal server errors (red).
   - Fatal error indicators (red) are now strictly reserved for true server crashes (`HTTP 500+`) or unhandled exceptions, giving users clearer, more actionable feedback.
 
 ### 🛠️ Developer Experience & Tooling
-- **Dev Server Style Sync**:
-  - Configured Vite build plugin `sync-style-to-src` so `src/style.css` stays continuously synchronized with `dist/style.css`.
+
+- **Clean Architecture & Dev Style Handling**:
+  - `src/` is preserved strictly for pure source code; build artifacts are cleanly emitted to `dist/style.css`.
+  - Configured dev server to resolve `@zyvnox/vue-pack/style.css` directly to `dist/style.css` with automated fallback.
   - Resolved CSS rule discrepancies between `npm run dev` and `npm run site:preview`.
 - **Live Playground & Monaco Editor Updates**:
   - Fixed auto-complete and example code snippets in the Monaco Editor Playground to use canonical component names (`MapPicker`, `TextAreaQuillInput`).
@@ -108,13 +157,12 @@ Release `v0.1.2` delivers a comprehensive overhaul of feedback and alert UI comp
 
 ```
 vue-pack/
-├── src/                    # 📦 Core Library Source Code
+├── src/                    # 📦 Core Library Source Code (100% pure source, zero build artifacts)
 │   ├── components/         # Reusable UI components (FormModal, TabelData, Inputs, Display, Feedback)
 │   ├── configs/            # Schemas, TypeScript contracts, default configurations
 │   ├── lib/                # IndexedDB autonomous engine, secureFetch HTTP client
 │   ├── plugin/             # Vue 3 plugin (ZyvnoxVuePack)
-│   ├── init.ts             # Headless initialization helper (IndexedDB + i18n)
-│   └── style.css           # Bundled UnoCSS utilities with scoped zyvnox- prefix
+│   └── init.ts             # Headless initialization helper (IndexedDB + i18n)
 │
 ├── site/                   # 📚 Documentation & Live Playground Application (Port 5173)
 │   ├── src/                # Vue 3 SPA with Vue Router
@@ -217,9 +265,9 @@ bun add @zyvnox/vue-pack vue@^3.5.0 zod@^4.0.0 leaflet@^1.9.4
 
 #### CDN Providers
 
-- **jsDelivr**: `https://cdn.jsdelivr.net/npm/@zyvnox/vue-pack@0.1.2/`
-- **unpkg**: `https://unpkg.com/@zyvnox/vue-pack@0.1.2/`
-- **esm.sh**: `https://esm.sh/@zyvnox/vue-pack@0.1.2`
+- **jsDelivr**: `https://cdn.jsdelivr.net/npm/@zyvnox/vue-pack@0.1.3/`
+- **unpkg**: `https://unpkg.com/@zyvnox/vue-pack@0.1.3/`
+- **esm.sh**: `https://esm.sh/@zyvnox/vue-pack@0.1.3`
 
 #### Option 1: Native ES Modules with W3C Import Map (Recommended for Modern Browsers)
 
@@ -232,7 +280,7 @@ bun add @zyvnox/vue-pack vue@^3.5.0 zod@^4.0.0 leaflet@^1.9.4
     <!-- 1. Include Pre-compiled UnoCSS Stylesheet -->
     <link
       rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/@zyvnox/vue-pack@0.1.2/dist/style.css"
+      href="https://cdn.jsdelivr.net/npm/@zyvnox/vue-pack@0.1.3/dist/style.css"
     />
 
     <!-- 2. W3C Import Map for Pure ESM Browser Resolution -->
@@ -240,7 +288,7 @@ bun add @zyvnox/vue-pack vue@^3.5.0 zod@^4.0.0 leaflet@^1.9.4
       {
         "imports": {
           "vue": "https://cdn.jsdelivr.net/npm/vue@3.5.18/dist/vue.esm-browser.prod.js",
-          "@zyvnox/vue-pack": "https://cdn.jsdelivr.net/npm/@zyvnox/vue-pack@0.1.2/dist/cdn/vue-pack.es.js"
+          "@zyvnox/vue-pack": "https://cdn.jsdelivr.net/npm/@zyvnox/vue-pack@0.1.3/dist/cdn/vue-pack.es.js"
         }
       }
     </script>
@@ -282,14 +330,14 @@ For legacy setups or quick non-modular prototyping:
     <title>Zyvnox Vue Pack UMD</title>
     <link
       rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/@zyvnox/vue-pack@0.1.2/dist/style.css"
+      href="https://cdn.jsdelivr.net/npm/@zyvnox/vue-pack@0.1.3/dist/style.css"
     />
 
     <!-- Vue 3 Peer Dependency (Global build) -->
     <script src="https://cdn.jsdelivr.net/npm/vue@3.5.18/dist/vue.global.prod.js"></script>
 
     <!-- Zyvnox Vue Pack Standalone UMD Bundle -->
-    <script src="https://cdn.jsdelivr.net/npm/@zyvnox/vue-pack@0.1.2/dist/cdn/vue-pack.umd.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@zyvnox/vue-pack@0.1.3/dist/cdn/vue-pack.umd.js"></script>
   </head>
   <body>
     <div id="app"></div>
@@ -445,7 +493,7 @@ Run `@zyvnox/vue-pack` directly in pure HTML without Node.js or bundlers, mirror
     <!-- Scoped stylesheet -->
     <link
       rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/@zyvnox/vue-pack@0.1.2/dist/style.css"
+      href="https://cdn.jsdelivr.net/npm/@zyvnox/vue-pack@0.1.3/dist/style.css"
     />
 
     <!-- W3C Browser Import Map -->
@@ -453,7 +501,7 @@ Run `@zyvnox/vue-pack` directly in pure HTML without Node.js or bundlers, mirror
       {
         "imports": {
           "vue": "https://cdn.jsdelivr.net/npm/vue@3.5.18/dist/vue.esm-browser.prod.js",
-          "@zyvnox/vue-pack": "https://cdn.jsdelivr.net/npm/@zyvnox/vue-pack@0.1.2/dist/cdn/vue-pack.es.js"
+          "@zyvnox/vue-pack": "https://cdn.jsdelivr.net/npm/@zyvnox/vue-pack@0.1.3/dist/cdn/vue-pack.es.js"
         }
       }
     </script>
@@ -774,31 +822,31 @@ Renders sanitized HTML safely across both client and server environments using D
 
 All inputs emit standard Vue 3 `v-model` (`update:modelValue`) events and validation errors (`push:error`, `remove:error`):
 
-| Component Name                   | Description                | Key Features                                                                                         |
-| :------------------------------- | :------------------------- | :--------------------------------------------------------------------------------------------------- |
-| `TextInput`                      | Single-line text input     | Min/max length, duplicate checks, pattern regex.                                                     |
-| `NumberInput`                    | Numeric input              | Min/max bounds, integer-only constraint, duplicate checks.                                           |
-| `CurrencyInput`                  | Currency formatted input   | Locale-aware auto formatting (IDR/USD) with numeric model value.                                     |
-| `RateInput`                      | Star rating input          | Customizable max stars and interactive hover rating.                                                 |
-| `EmailInput`                     | RFC-compliant email input  | Email syntax validation and duplicate verification.                                                  |
-| `TelInput`                       | Phone number input         | International format regex validation and phone icons.                                               |
-| `UrlInput`                       | Web URL input              | Protocol-verified URL validation and link helper.                                                    |
-| `PasswordInput`                  | Secure password field      | Visibility toggling, uppercase, lowercase, numeric & symbol rules.                                   |
-| `TextAreaInput`                  | Multiline plain text       | Character limits and resizable rows.                                                                 |
-| `TextAreaQuillInput`             | Rich text editor (WYSIWYG) | Quill 2.0 integration, image resize module, custom font sizes, code view, AI generator hook.         |
-| `MapPicker`                      | GIS Map Coordinates Picker | Leaflet integration, OSM tiles, Nominatim fallback search, custom geocoders, GeoJSON boundary check. |
-| `DateInput`                      | Date picker (`YYYY-MM-DD`) | Min and max date constraint bounds.                                                                  |
-| `DateTimeInput`                  | Date & Time picker         | ISO datetime string output.                                                                          |
-| `TimeInput`                      | Time picker (`HH:mm`)      | Min/max time bounds.                                                                                 |
-| `SelectedOptions`                | Searchable dropdown        | Dynamic async fetch, local filtering, on-the-fly option creation.                                    |
-| `ToggleInput`                    | Switch toggle input        | Boolean state switch.                                                                                |
-| `TagInput`                       | Tag chips manager          | String array with min/max tag limits.                                                                |
-| `ColorInput`                     | Hex/RGB color selector     | Single and multi-color selection presets.                                                            |
-| `FileInput` / `FileArrayInput`   | Document file uploaders    | Size limit checks, MIME-type white-listing, multi-file arrays.                                       |
-| `ImageInput` / `ImageArrayInput` | Image upload with preview  | Aspect ratio enforcement, resolution constraints, canvas watermarking.                               |
-| `ArrayObjectInput`               | Nested form array manager  | Dynamic row additions, schema recursiveness, child deletion tracking.                                |
-| `ObjectInput`                    | Single nested object       | Scoped schema grouping within a parent form.                                                         |
-| `GroupRendererInput`             | Multi-column fieldset      | Grouped fields with responsive grid columns.                                                         |
+| Component Name                   | Description                | Key Features                                                                                                                                 |
+| :------------------------------- | :------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------- |
+| `TextInput`                      | Single-line text input     | Min/max length, duplicate checks, pattern regex.                                                                                             |
+| `NumberInput`                    | Numeric input              | Min/max bounds, integer-only constraint, duplicate checks.                                                                                   |
+| `CurrencyInput`                  | Currency formatted input   | Locale-aware auto formatting (IDR/USD) with numeric model value.                                                                             |
+| `RateInput`                      | Star rating input          | Customizable max stars and interactive hover rating.                                                                                         |
+| `EmailInput`                     | RFC-compliant email input  | Email syntax validation and duplicate verification.                                                                                          |
+| `TelInput`                       | Phone number input         | International format regex validation and phone icons.                                                                                       |
+| `UrlInput`                       | Web URL input              | Protocol-verified URL validation and link helper.                                                                                            |
+| `PasswordInput`                  | Secure password field      | Visibility toggling, uppercase, lowercase, numeric & symbol rules.                                                                           |
+| `TextAreaInput`                  | Multiline plain text       | Character limits and resizable rows.                                                                                                         |
+| `TextAreaQuillInput`             | Rich text editor (WYSIWYG) | Quill 2.0 integration, image resize module, custom font sizes, code view, AI generator hook.                                                 |
+| `MapPicker`                      | GIS Map Coordinates Picker | Leaflet integration, OSM tiles, Nominatim fallback search, one-click hardware GPS synchronization, custom geocoders, GeoJSON boundary check. |
+| `DateInput`                      | Date picker (`YYYY-MM-DD`) | Min and max date constraint bounds.                                                                                                          |
+| `DateTimeInput`                  | Date & Time picker         | ISO datetime string output.                                                                                                                  |
+| `TimeInput`                      | Time picker (`HH:mm`)      | Min/max time bounds.                                                                                                                         |
+| `SelectedOptions`                | Searchable dropdown        | Dynamic async fetch, local filtering, on-the-fly option creation.                                                                            |
+| `ToggleInput`                    | Switch toggle input        | Boolean state switch.                                                                                                                        |
+| `TagInput`                       | Tag chips manager          | String array with min/max tag limits.                                                                                                        |
+| `ColorInput`                     | Hex/RGB color selector     | Single and multi-color selection presets.                                                                                                    |
+| `FileInput` / `FileArrayInput`   | Document file uploaders    | Size limit checks, MIME-type white-listing, multi-file arrays.                                                                               |
+| `ImageInput` / `ImageArrayInput` | Image upload with preview  | Aspect ratio enforcement, resolution constraints, canvas watermarking.                                                                       |
+| `ArrayObjectInput`               | Nested form array manager  | Dynamic row additions, schema recursiveness, child deletion tracking.                                                                        |
+| `ObjectInput`                    | Single nested object       | Scoped schema grouping within a parent form.                                                                                                 |
+| `GroupRendererInput`             | Multi-column fieldset      | Grouped fields with responsive grid columns.                                                                                                 |
 
 ---
 
@@ -806,13 +854,14 @@ All inputs emit standard Vue 3 `v-model` (`update:modelValue`) events and valida
 
 Zyvnox Vue Pack provides enterprise-grade, theme-aware feedback components:
 
-| Component Name | Description | Key Features & Props |
-| :--- | :--- | :--- |
-| `LoaderSuccessError` (`Loader`) | Fullscreen or container status overlay | Smooth 60fps CSS spinner, supports `type: 'loading' \| 'success' \| 'warning' \| 'error'`. |
-| `WarningForm` | Confirmation modal dialog | Action confirmation dialog with unified `type: 'danger' \| 'warning' \| 'success' \| 'info'`, solid button states, and custom action callbacks. |
-| `AlertApp` | Inline contextual status banner | Supports `'info'`, `'success'`, `'warning'`, `'error'`, translucent dark surfaces, and auto-dismiss timer. |
+| Component Name                  | Description                            | Key Features & Props                                                                                                                            |
+| :------------------------------ | :------------------------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------- |
+| `LoaderSuccessError` (`Loader`) | Fullscreen or container status overlay | Smooth 60fps CSS spinner, supports `type: 'loading' \| 'success' \| 'warning' \| 'error'`.                                                      |
+| `WarningForm`                   | Confirmation modal dialog              | Action confirmation dialog with unified `type: 'danger' \| 'warning' \| 'success' \| 'info'`, solid button states, and custom action callbacks. |
+| `AlertApp`                      | Inline contextual status banner        | Supports `'info'`, `'success'`, `'warning'`, `'error'`, translucent dark surfaces, and auto-dismiss timer.                                      |
 
 ##### `WarningForm` Usage
+
 ```vue
 <template>
   <WarningForm
@@ -840,6 +889,7 @@ function handleDiscard() {
 ```
 
 ##### `Loader` Usage
+
 ```vue
 <template>
   <LoaderSuccessError ref="loaderRef" />
@@ -1337,7 +1387,7 @@ Have a suggestion or found an issue?
 - **Feature Request:** [Request a Feature](https://github.com/zyvnox/vue-pack/issues/new?template=feature_request.md)
 - **Discussions / Q&A:** [GitHub Discussions](https://github.com/zyvnox/vue-pack/discussions)
 
-Please include `@zyvnox/vue-pack` version (`0.1.2`), your Vue version, and a minimal reproduction.
+Please include `@zyvnox/vue-pack` version (`0.1.3`), your Vue version, and a minimal reproduction.
 
 ---
 
@@ -1345,6 +1395,7 @@ Please include `@zyvnox/vue-pack` version (`0.1.2`), your Vue version, and a min
 
 If `@zyvnox/vue-pack` streamlines your workflow and saves you engineering hours, consider supporting ongoing development:
 
+- **GitHub Sponsors:** [https://github.com/sponsors/zyvnox](https://github.com/sponsors/zyvnox)
 - **Ko-fi:** [https://ko-fi.com/zyvnox](https://ko-fi.com/zyvnox)
 - **Saweria (QRIS & E-Wallet):** [https://saweria.co/zyvnox](https://saweria.co/zyvnox)
 

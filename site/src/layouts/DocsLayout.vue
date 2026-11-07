@@ -1,16 +1,16 @@
 <template>
   <div
-    class="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 flex flex-col lg:flex-row"
+    class="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 flex flex-col lg:flex-row overflow-x-hidden"
   >
-    <!-- Sticky Mobile Top Bar (visible on < lg screens) -->
+    <!-- Sticky/Fixed Mobile Top Bar (visible on < lg screens) -->
     <header
-      class="lg:hidden sticky top-0 z-30 flex items-center justify-between px-4 py-3 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 shadow-sm"
+      class="lg:hidden fixed top-0 left-0 right-0 z-30 h-14 flex items-center justify-between px-3 sm:px-4 py-2 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 shadow-sm gap-2"
     >
-      <div class="flex items-center gap-3">
+      <div class="flex items-center gap-2 sm:gap-3 min-w-0">
         <button
           type="button"
           @click="mobileOpen = true"
-          class="p-2 rounded-lg border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+          class="p-1.5 sm:p-2 rounded-lg border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors shrink-0"
           aria-label="Open Navigation"
         >
           <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -23,43 +23,45 @@
           </svg>
         </button>
 
-        <RouterLink to="/" class="flex items-center gap-2.5">
-          <img src="/zyvnox-black.svg" class="w-7 h-7 dark:hidden shrink-0" alt="Zyvnox Logo" />
+        <RouterLink to="/" class="flex items-center gap-2 min-w-0">
+          <img src="/zyvnox-black.svg" class="w-6 h-6 sm:w-7 sm:h-7 dark:hidden shrink-0" alt="Zyvnox Logo" />
           <img
             src="/zyvnox-white.svg"
-            class="w-7 h-7 hidden dark:block shrink-0"
+            class="w-6 h-6 sm:w-7 sm:h-7 hidden dark:block shrink-0"
             alt="Zyvnox Logo"
           />
-          <div class="leading-tight">
+          <div class="leading-tight truncate">
             <span
-              class="font-bold text-xs sm:text-sm tracking-tight text-slate-900 dark:text-white"
+              class="font-bold text-xs sm:text-sm tracking-tight text-slate-900 dark:text-white block truncate"
             >
               @zyvnox
             </span>
             <span
-              class="block text-[9px] font-mono bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300 px-1 rounded"
+              class="inline-block text-[9px] font-mono bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300 px-1 rounded truncate"
             >
-              vue-pack v0.1.2 • Early
+              v0.1.3
             </span>
           </div>
         </RouterLink>
       </div>
 
-      <div class="flex items-center gap-2">
-        <SponsorButton variant="both" class="hidden sm:inline-flex" />
+      <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
+        <div class="hidden md:inline-flex">
+          <SponsorButton variant="both" />
+        </div>
         <RouterLink
           to="/playground"
-          class="px-2.5 py-1 text-xs font-semibold rounded-lg bg-emerald-600 text-white hover:bg-emerald-500 transition-colors flex items-center gap-1 shadow-sm"
+          class="px-2 sm:px-2.5 py-1 text-xs font-semibold rounded-lg bg-emerald-600 text-white hover:bg-emerald-500 transition-colors flex items-center gap-1 shadow-sm shrink-0"
           title="Open Live Playground"
         >
           <span>⚡</span>
-          <span>Playground</span>
+          <span class="hidden sm:inline">Playground</span>
         </RouterLink>
 
         <button
           type="button"
           @click="toggleDark"
-          class="p-1 rounded-lg border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+          class="p-1 sm:p-1.5 rounded-lg border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors shrink-0"
           title="Toggle Dark Mode"
         >
           <span v-if="isDark">🌙</span>
@@ -68,11 +70,14 @@
       </div>
     </header>
 
+    <!-- Mobile Top Bar Spacer (ensures content starts cleanly below the fixed header) -->
+    <div class="lg:hidden h-14 shrink-0" aria-hidden="true" />
+
     <!-- Sidebar (Desktop sticky, Mobile drawer) -->
     <SidebarNav :is-open="mobileOpen" @close="mobileOpen = false" />
 
     <!-- Main Content Area -->
-    <main class="flex-1 min-w-0 w-full p-4 sm:p-6 lg:p-10 mx-auto lg:mx-0 flex flex-col justify-between">
+    <main class="flex-1 min-w-0 w-full p-3 sm:p-6 lg:p-10 mx-auto lg:mx-0 flex flex-col justify-between overflow-x-hidden">
       <div>
         <RouterView />
       </div>
