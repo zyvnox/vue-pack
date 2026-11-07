@@ -1,8 +1,8 @@
 <template>
-  <div>
-    <!-- Desktop Static/Sticky Sidebar (Visible only on lg and above) -->
+  <div class="shrink-0 w-0 lg:w-72">
+    <!-- Desktop Fixed Sidebar (Permanently fixed to viewport, independent scroll) -->
     <aside
-      class="hidden lg:flex w-72 shrink-0 border-r border-slate-200 dark:border-slate-800 p-5 overflow-y-auto h-screen sticky top-0 bg-white dark:bg-slate-900 flex-col"
+      class="hidden lg:flex fixed top-0 left-0 bottom-0 w-72 z-20 border-r border-slate-200 dark:border-slate-800 p-5 overflow-y-auto bg-white dark:bg-slate-900 flex-col"
     >
       <!-- Brand & Controls -->
       <div
@@ -22,7 +22,7 @@
             >
             <span
               class="inline-block mt-0.5 text-[10px] font-mono whitespace-nowrap bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300 px-1.5 py-0.5 rounded"
-              >vue-pack v0.1.2 • Early</span
+              >vue-pack v0.1.3 • Early</span
             >
           </div>
         </RouterLink>
@@ -258,7 +258,7 @@
                 >
                 <span
                   class="inline-block mt-0.5 text-[10px] font-mono whitespace-nowrap bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300 px-1.5 py-0.5 rounded"
-                  >vue-pack v0.1.2</span
+                  >vue-pack v0.1.3</span
                 >
               </div>
             </RouterLink>
@@ -566,7 +566,7 @@ const guides: NavItem[] = [
   {
     name: "What's New?",
     path: '/doc/whats-new',
-    badge: 'v0.1.2',
+    badge: 'v0.1.3',
     badgeClass: 'bg-amber-100 dark:bg-amber-950/70 text-amber-700 dark:text-amber-300 font-bold',
   },
   { name: 'Installation', path: '/doc/installation' },

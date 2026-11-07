@@ -302,6 +302,7 @@ export interface TextEdiorQuillProps extends TooltipProps {
   modelValue?: string
   error?: string | string[]
   disabled?: boolean
+  required?: boolean
   lang?: SupportedLanguage
   validate?: {
     minLength?: number
@@ -394,6 +395,12 @@ export interface MapPickerProps extends TooltipProps {
   searchCountry?: string
   geoJson?: JSON
   lang?: SupportedLanguage
+  enableGps?: boolean
+  gpsOptions?: {
+    enableHighAccuracy?: boolean
+    maximumAge?: number
+    timeout?: number
+  }
 }
 
 export interface FileInputProps extends TooltipProps {

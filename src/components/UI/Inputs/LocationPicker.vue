@@ -62,6 +62,7 @@
             <button
               type="button"
               @click="toggleDarkMode"
+              :title="darkMode ? 'Light Mode' : 'Dark Mode'"
               class="zyvnox-p-2 zyvnox-rounded-md zyvnox-bg-white dark:zyvnox-bg-slate-800 zyvnox-border zyvnox-border-slate-300 dark:zyvnox-border-slate-600 zyvnox-text-xs zyvnox-shadow-sm hover:zyvnox-bg-slate-50 dark:hover:zyvnox-bg-slate-700 zyvnox-transition-colors"
             >
               {{ darkMode ? '🌙' : '☀️' }}
@@ -70,12 +71,59 @@
               type="button"
               @click="resetToDefault"
               :disabled="locked || isEffectivelyDisabled"
+              :title="t('map.stepResetHome')"
               class="zyvnox-p-2 zyvnox-rounded-md zyvnox-bg-white dark:zyvnox-bg-slate-800 zyvnox-border zyvnox-border-slate-300 dark:zyvnox-border-slate-600 zyvnox-text-xs zyvnox-shadow-sm hover:zyvnox-bg-slate-50 dark:hover:zyvnox-bg-slate-700 zyvnox-transition-colors"
               :class="
                 isEffectivelyDisabled || locked ? 'zyvnox-cursor-not-allowed zyvnox-opacity-50' : ''
               "
             >
               🏠
+            </button>
+            <button
+              v-if="enableGps"
+              type="button"
+              @click="syncCurrentLocation"
+              :disabled="locked || isEffectivelyDisabled || isLocating"
+              :title="t('map.syncGps')"
+              class="zyvnox-p-2 zyvnox-rounded-md zyvnox-bg-white dark:zyvnox-bg-slate-800 zyvnox-border zyvnox-border-slate-300 dark:zyvnox-border-slate-600 zyvnox-text-xs zyvnox-shadow-sm hover:zyvnox-bg-slate-50 dark:hover:zyvnox-bg-slate-700 zyvnox-transition-colors zyvnox-inline-flex zyvnox-items-center zyvnox-justify-center"
+              :class="
+                isEffectivelyDisabled || locked || isLocating
+                  ? 'zyvnox-cursor-not-allowed zyvnox-opacity-50'
+                  : ''
+              "
+            >
+              <svg
+                v-if="!isLocating"
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="zyvnox-text-slate-700 dark:zyvnox-text-slate-200"
+              >
+                <circle cx="12" cy="12" r="7" />
+                <line x1="12" y1="1" x2="12" y2="5" />
+                <line x1="12" y1="19" x2="12" y2="23" />
+                <line x1="1" y1="12" x2="5" y2="12" />
+                <line x1="19" y1="12" x2="23" y2="12" />
+                <circle cx="12" cy="12" r="2" fill="currentColor" />
+              </svg>
+              <svg
+                v-else
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.5"
+                class="zyvnox-animate-spin zyvnox-text-blue-500"
+              >
+                <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-opacity="0.25" />
+                <path d="M12 3a9 9 0 0 1 9 9" stroke="currentColor" stroke-linecap="round" />
+              </svg>
             </button>
           </div>
 
@@ -244,6 +292,7 @@
               <li>{{ t('map.stepSearch') }}</li>
               <li>{{ t('map.stepManualCoords') }}</li>
               <li>{{ t('map.stepResetHome') }}</li>
+              <li v-if="enableGps">{{ t('map.stepSyncGps') }}</li>
             </ul>
           </div>
           <div
@@ -292,6 +341,7 @@ const props = withDefaults(defineProps<MapPickerProps>(), {
   searchCountry: 'Indonesia',
   viewOnly: false,
   lang: 'en',
+  enableGps: true,
 })
 
 const emit = defineEmits<{
@@ -303,6 +353,9 @@ const emit = defineEmits<{
   (e: 'coordinates-selected', value: Record<string, string>): void
   (e: 'locked-coordinates', value: Record<string, string>): void
   (e: 'unlock-coordinates', value: Record<string, string>): void
+  (e: 'gps-synced', value: Record<string, string>, coords: GeolocationCoordinates): void
+  (e: 'gps-error', error: GeolocationPositionError | Error): void
+  (e: 'route-endpoints', endpoints: { start: [number, number]; end: [number, number] }): void
 }>()
 
 // ========== i18n & Labels ========== //
@@ -317,6 +370,7 @@ const darkMode = ref(false)
 const loader = ref<any>(null)
 const alert = ref<any>(null)
 const searchText = ref('')
+const isLocating = ref(false)
 
 // State Modal Info
 const showInfoModal = ref(false)
@@ -337,7 +391,11 @@ const createPayload = (lat: string | number, lng: string | number) => {
 
 const tableComponents = inject<any>('TableComponents', {})
 
-const ShowAlert = (status: 'error' | 'success', title: string, message: string[]) => {
+const ShowAlert = (
+  status: 'error' | 'success' | 'warning' | 'info',
+  title: string,
+  message: string[],
+) => {
   if (tableComponents.ShowAlert) {
     tableComponents.ShowAlert(status, title, message)
   } else {
@@ -534,6 +592,16 @@ watch(
   { deep: true, immediate: true },
 )
 
+watch(
+  () => props.geoJson,
+  () => {
+    if (map.value && L) {
+      renderGeoJsonRoute()
+    }
+  },
+  { deep: true },
+)
+
 const setNewLocation = (lat: number, lng: number) => {
   latDisplay.value = lat.toFixed(6)
   lngDisplay.value = lng.toFixed(6)
@@ -565,6 +633,233 @@ const formatDuration = (s: number) => {
 }
 
 // ========== Leaflet Logic ========== //
+let displayGeoJsonLayer: any = null
+const routeMarkers: any[] = []
+
+const clearRouteLayers = () => {
+  if (displayGeoJsonLayer && map.value) {
+    try {
+      map.value.removeLayer(displayGeoJsonLayer)
+    } catch (_) {}
+    displayGeoJsonLayer = null
+  }
+  routeMarkers.forEach((m) => {
+    try {
+      m.remove()
+    } catch (_) {}
+  })
+  routeMarkers.length = 0
+}
+
+function extractEndpoints(
+  geoData: any,
+  rawData: any,
+): { start: [number, number]; end: [number, number] } | null {
+  // 1. Waypoints check in properties (ORS, GraphHopper, OSRM, custom)
+  const waypoints =
+    rawData?.waypoints ||
+    rawData?.properties?.waypoints ||
+    rawData?.features?.[0]?.properties?.waypoints
+
+  if (Array.isArray(waypoints) && waypoints.length >= 2) {
+    const firstWp = waypoints[0]
+    const lastWp = waypoints[waypoints.length - 1]
+
+    const getPoint = (wp: any): [number, number] | null => {
+      if (Array.isArray(wp.location) && wp.location.length >= 2) {
+        return [wp.location[1], wp.location[0]]
+      }
+      if (typeof wp.lat === 'number' && (typeof wp.lng === 'number' || typeof wp.lon === 'number')) {
+        return [wp.lat, wp.lng ?? wp.lon]
+      }
+      if (Array.isArray(wp) && wp.length >= 2) {
+        return [wp[1], wp[0]]
+      }
+      return null
+    }
+
+    const start = getPoint(firstWp)
+    const end = getPoint(lastWp)
+    if (start && end) return { start, end }
+  }
+
+  // 2. Geometry coordinates check
+  const geom = geoData?.geometry || geoData
+  if (geom) {
+    if (geom.type === 'LineString' && Array.isArray(geom.coordinates) && geom.coordinates.length >= 2) {
+      const c = geom.coordinates
+      return {
+        start: [c[0][1], c[0][0]],
+        end: [c[c.length - 1][1], c[c.length - 1][0]],
+      }
+    }
+    if (geom.type === 'MultiLineString' && Array.isArray(geom.coordinates) && geom.coordinates.length > 0) {
+      const firstLine = geom.coordinates[0]
+      const lastLine = geom.coordinates[geom.coordinates.length - 1]
+      if (firstLine && firstLine.length > 0 && lastLine && lastLine.length > 0) {
+        return {
+          start: [firstLine[0][1], firstLine[0][0]],
+          end: [lastLine[lastLine.length - 1][1], lastLine[lastLine.length - 1][0]],
+        }
+      }
+    }
+  }
+
+  // 3. Fallback: scan features in FeatureCollection
+  if (rawData?.features && Array.isArray(rawData.features)) {
+    for (const feat of rawData.features) {
+      const res = extractEndpoints(feat.geometry || feat, feat)
+      if (res) return res
+    }
+  }
+
+  return null
+}
+
+const renderGeoJsonRoute = () => {
+  if (!map.value || !L) return
+
+  clearRouteLayers()
+
+  if (!props.geoJson) {
+    routeSummary.value = null
+    return
+  }
+
+  let rawData: any = null
+  try {
+    rawData = typeof props.geoJson === 'string' ? JSON.parse(props.geoJson) : props.geoJson
+  } catch (e) {
+    console.warn('Gagal memproses props.geoJson:', e)
+    return
+  }
+
+  if (!rawData) return
+
+  let mapDisplayGeoData: any = null
+
+  // ===== SMART PARSER: Deteksi Otomatis Format API Rute =====
+  if (rawData.routes && rawData.routes.length > 0) {
+    // 1. Jika data dari OSRM
+    mapDisplayGeoData = rawData.routes[0].geometry
+    routeSummary.value = {
+      distance: rawData.routes[0].distance,
+      duration: rawData.routes[0].duration,
+    }
+  } else if (rawData.features && rawData.features.length > 0) {
+    // 2. Jika data dari ORS / GeoJSON FeatureCollection
+    mapDisplayGeoData = rawData.features[0].geometry || rawData
+    if (rawData.features[0].properties?.summary) {
+      routeSummary.value = rawData.features[0].properties.summary
+    } else if (rawData.features[0].properties?.distance !== undefined) {
+      routeSummary.value = {
+        distance: rawData.features[0].properties.distance,
+        duration:
+          rawData.features[0].properties.time ?? rawData.features[0].properties.duration ?? 0,
+      }
+    }
+  } else if (rawData.coordinates) {
+    // 3. Jika data murni LineString / MultiLineString
+    mapDisplayGeoData = rawData
+  } else {
+    // 4. Fallback GeoJSON default
+    mapDisplayGeoData = rawData
+  }
+
+  if (!mapDisplayGeoData) return
+
+  // 1. Gambar layer polyline rute
+  displayGeoJsonLayer = L.geoJSON(mapDisplayGeoData, {
+    style: { color: '#00FFFF', weight: 5, opacity: 0.85 },
+  }).addTo(map.value)
+
+  // 2. Ekstrak Titik Awal (Start) dan Titik Akhir (Finish)
+  const endpoints = extractEndpoints(mapDisplayGeoData, rawData)
+
+  if (endpoints) {
+    const startIcon = L.divIcon({
+      className: 'zyvnox-custom-div-icon',
+      html: `
+        <div style="display: flex; flex-direction: column; align-items: center; width: 50px; cursor: pointer; user-select: none;">
+          <div style="background: #10b981; color: #ffffff; font-size: 9px; font-weight: 800; padding: 1.5px 6px; border-radius: 4px; box-shadow: 0 2px 6px rgba(0,0,0,0.4); border: 1.5px solid rgba(255,255,255,0.85); white-space: nowrap; margin-bottom: 2px; text-transform: uppercase; letter-spacing: 0.5px; font-family: system-ui, -apple-system, sans-serif;">
+            START
+          </div>
+          <div style="background: #10b981; width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #ffffff; font-weight: 800; font-size: 13px; border: 2.5px solid #ffffff; box-shadow: 0 3px 8px rgba(0,0,0,0.45); font-family: system-ui, -apple-system, sans-serif;">
+            A
+          </div>
+          <div style="width: 0; height: 0; border-left: 5px solid transparent; border-right: 5px solid transparent; border-top: 6px solid #10b981; margin-top: -1px; filter: drop-shadow(0 2px 2px rgba(0,0,0,0.3));"></div>
+        </div>
+      `,
+      iconSize: [50, 48],
+      iconAnchor: [25, 47],
+      popupAnchor: [0, -48],
+    })
+
+    const endIcon = L.divIcon({
+      className: 'zyvnox-custom-div-icon',
+      html: `
+        <div style="display: flex; flex-direction: column; align-items: center; width: 50px; cursor: pointer; user-select: none;">
+          <div style="background: #ef4444; color: #ffffff; font-size: 9px; font-weight: 800; padding: 1.5px 6px; border-radius: 4px; box-shadow: 0 2px 6px rgba(0,0,0,0.4); border: 1.5px solid rgba(255,255,255,0.85); white-space: nowrap; margin-bottom: 2px; text-transform: uppercase; letter-spacing: 0.5px; font-family: system-ui, -apple-system, sans-serif;">
+            FINISH
+          </div>
+          <div style="background: #ef4444; width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #ffffff; font-weight: 800; font-size: 13px; border: 2.5px solid #ffffff; box-shadow: 0 3px 8px rgba(0,0,0,0.45); font-family: system-ui, -apple-system, sans-serif;">
+            B
+          </div>
+          <div style="width: 0; height: 0; border-left: 5px solid transparent; border-right: 5px solid transparent; border-top: 6px solid #ef4444; margin-top: -1px; filter: drop-shadow(0 2px 2px rgba(0,0,0,0.3));"></div>
+        </div>
+      `,
+      iconSize: [50, 48],
+      iconAnchor: [25, 47],
+      popupAnchor: [0, -48],
+    })
+
+    const startMarker = L.marker([endpoints.start[0], endpoints.start[1]], {
+      icon: startIcon,
+      zIndexOffset: 1500,
+    })
+      .bindPopup(`
+        <div style="font-family: system-ui, -apple-system, sans-serif; padding: 4px; min-width: 140px; text-align: center;">
+          <div style="display: inline-block; background: #10b981; color: white; font-size: 10px; font-weight: 800; padding: 2px 8px; border-radius: 4px; margin-bottom: 4px; letter-spacing: 0.5px;">
+            🚩 Titik Mulai (Start)
+          </div>
+          <div style="font-size: 11px; color: #475569; font-family: monospace;">
+            ${endpoints.start[0].toFixed(6)}, ${endpoints.start[1].toFixed(6)}
+          </div>
+        </div>
+      `)
+      .addTo(map.value)
+
+    const endMarker = L.marker([endpoints.end[0], endpoints.end[1]], {
+      icon: endIcon,
+      zIndexOffset: 1500,
+    })
+      .bindPopup(`
+        <div style="font-family: system-ui, -apple-system, sans-serif; padding: 4px; min-width: 140px; text-align: center;">
+          <div style="display: inline-block; background: #ef4444; color: white; font-size: 10px; font-weight: 800; padding: 2px 8px; border-radius: 4px; margin-bottom: 4px; letter-spacing: 0.5px;">
+            🏁 Titik Selesai (Finish)
+          </div>
+          <div style="font-size: 11px; color: #475569; font-family: monospace;">
+            ${endpoints.end[0].toFixed(6)}, ${endpoints.end[1].toFixed(6)}
+          </div>
+        </div>
+      `)
+      .addTo(map.value)
+
+    routeMarkers.push(startMarker, endMarker)
+    emit('route-endpoints', { start: endpoints.start, end: endpoints.end })
+  }
+
+  // 3. Zoom fit bounds ke seluruh rute
+  if (!props.modelValue || !props.modelValue[props.latKey]) {
+    try {
+      const bounds = displayGeoJsonLayer.getBounds()
+      if (bounds && bounds.isValid()) {
+        map.value.fitBounds(bounds, { padding: [35, 35] })
+      }
+    } catch (_) {}
+  }
+}
+
 const initMap = async () => {
   if (!L) return // Pastikan Leaflet ter-load
 
@@ -609,87 +904,22 @@ const initMap = async () => {
     }
   }
 
-  let mapDisplayGeoData = null
-
-  if (props.geoJson) {
-    try {
-      const rawData = typeof props.geoJson === 'string' ? JSON.parse(props.geoJson) : props.geoJson
-
-      // ===== SMART PARSER: Deteksi Otomatis Format API Rute =====
-      if (rawData.routes && rawData.routes.length > 0) {
-        // 1. Jika data dari OSRM
-        mapDisplayGeoData = rawData.routes[0].geometry
-        routeSummary.value = {
-          distance: rawData.routes[0].distance,
-          duration: rawData.routes[0].duration,
-        }
-      } else if (rawData.features && rawData.features.length > 0) {
-        // 2. Jika data dari ORS
-        mapDisplayGeoData = rawData.features[0].geometry
-        if (rawData.features[0].properties?.summary) {
-          routeSummary.value = rawData.features[0].properties.summary
-        }
-      } else if (rawData.coordinates) {
-        // 3. Jika data murni LineString (tanpa summary)
-        mapDisplayGeoData = rawData
-      } else {
-        // 4. Fallback GeoJSON default
-        mapDisplayGeoData = rawData
-      }
-    } catch (e) {
-      console.warn('Gagal memproses props.geoJson:', e)
-    }
-  }
-
   if (mapValidateGeoData && !props.geoJson) {
     L.geoJSON(mapValidateGeoData, {
       style: { color: '#3b82f6', weight: 4, fillOpacity: 0.1 },
     }).addTo(map.value)
     loadedGeoJsonData.value = mapValidateGeoData
-  }
-
-  if (mapDisplayGeoData) {
-    const startIcon = L.divIcon({
-      className: 'custom-div-icon',
-      html: "<div style='background-color:#22c55e; width:24px; height:24px; border-radius:50%; display:flex; justify-content:center; align-items:center; color:white; font-weight:bold; border: 2px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.5);'>A</div>",
-      iconSize: [24, 24],
-      iconAnchor: [12, 12],
-    })
-
-    const endIcon = L.divIcon({
-      className: 'custom-div-icon',
-      html: "<div style='background-color:#ef4444; width:24px; height:24px; border-radius:50%; display:flex; justify-content:center; align-items:center; color:white; font-weight:bold; border: 2px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.5);'>B</div>",
-      iconSize: [24, 24],
-      iconAnchor: [12, 12],
-    })
-
-    const displayLayer = L.geoJSON(mapDisplayGeoData, {
-      style: { color: '#00FFFF', weight: 5, opacity: 0.8 },
-      onEachFeature: (feature: any, layer: any) => {
-        if (feature.geometry && feature.geometry.type === 'LineString') {
-          const coords = feature.geometry.coordinates
-          if (coords && coords.length > 0) {
-            const startPoint = coords[0]
-            const endPoint = coords[coords.length - 1]
-
-            L.marker([startPoint[1], startPoint[0]], { icon: startIcon }).addTo(map.value)
-            L.marker([endPoint[1], endPoint[0]], { icon: endIcon }).addTo(map.value)
-          }
-        }
-      },
-    }).addTo(map.value)
-
     if (!props.modelValue || !props.modelValue[props.latKey]) {
-      map.value.fitBounds(displayLayer.getBounds())
+      const validateLayer = L.geoJSON(mapValidateGeoData)
+      map.value.fitBounds(validateLayer.getBounds())
     }
-  } else if (mapValidateGeoData && (!props.modelValue || !props.modelValue[props.latKey])) {
-    const validateLayer = L.geoJSON(mapValidateGeoData)
-    map.value.fitBounds(validateLayer.getBounds())
-  } else {
+  } else if (!props.geoJson) {
     map.value.setView([startLat, startLng], 15)
   }
 
-  if (!props.geoJson || Object.keys(props.geoJson).length === 0) {
+  if (props.geoJson && Object.keys(props.geoJson).length > 0) {
+    renderGeoJsonRoute()
+  } else {
     updateMarker(startLat, startLng)
   }
 
@@ -826,6 +1056,92 @@ const resetToDefault = () => {
   }
 }
 
+const syncCurrentLocation = () => {
+  if (locked.value || isEffectivelyDisabled.value) {
+    let titleAlert: string = 'Akses Dibatasi'
+    let messageAlert: string = ''
+
+    if (props.viewOnly) {
+      titleAlert = 'Mode Lihat Saja'
+      messageAlert = 'Koordinat tidak dapat diubah karena sedang dalam mode lihat saja.'
+    } else if (props.disabled) {
+      titleAlert = 'Input Nonaktif'
+      messageAlert =
+        'Input lokasi saat ini sedang dinonaktifkan dan tidak dapat menerima perubahan.'
+    } else if (props.geoJson && Object.keys(props.geoJson).length > 0) {
+      titleAlert = 'Wilayah Terkunci'
+      messageAlert = 'Lokasi telah ditetapkan berdasarkan data wilayah (GeoJSON) yang tersedia.'
+    } else {
+      titleAlert = 'Peta Terkunci'
+      messageAlert =
+        'Klik tombol "Unlock" terlebih dahulu untuk mengubah koordinat atau menyinkronkan GPS.'
+    }
+
+    ShowAlert('error', titleAlert, [messageAlert])
+    return
+  }
+
+  if (typeof window === 'undefined' || typeof navigator === 'undefined' || !navigator.geolocation) {
+    ShowAlert('error', t('map.gpsError'), [t('map.gpsNotSupported')])
+    return
+  }
+
+  isLocating.value = true
+  loader.value?.show('loading', t('map.gpsLocating'))
+
+  const options: PositionOptions = {
+    enableHighAccuracy: props.gpsOptions?.enableHighAccuracy ?? true,
+    timeout: props.gpsOptions?.timeout ?? 10000,
+    maximumAge: props.gpsOptions?.maximumAge ?? 0,
+  }
+
+  navigator.geolocation.getCurrentPosition(
+    (position) => {
+      isLocating.value = false
+      loader.value?.hide()
+
+      const lat = position.coords.latitude
+      const lng = position.coords.longitude
+
+      setNewLocation(lat, lng)
+      map.value?.setView([lat, lng], 16)
+
+      if (errorMessage.value.length > 0) {
+        ShowAlert('warning', t('map.gpsSuccess'), [
+          t('map.gpsSuccessMsg'),
+          ...errorMessage.value,
+        ])
+      } else {
+        ShowAlert('success', t('map.gpsSuccess'), [t('map.gpsSuccessMsg')])
+      }
+
+      emit('coordinates-selected', createPayload(lat, lng))
+      emit('gps-synced', createPayload(lat, lng), position.coords)
+    },
+    (err: GeolocationPositionError) => {
+      isLocating.value = false
+      loader.value?.hide()
+
+      let msg = t('map.gpsFailed')
+      switch (err.code) {
+        case err.PERMISSION_DENIED:
+          msg = t('map.gpsPermissionDenied')
+          break
+        case err.POSITION_UNAVAILABLE:
+          msg = t('map.gpsUnavailable')
+          break
+        case err.TIMEOUT:
+          msg = t('map.gpsTimeout')
+          break
+      }
+
+      ShowAlert('error', t('map.gpsError'), [msg])
+      emit('gps-error', err)
+    },
+    options,
+  )
+}
+
 onMounted(async () => {
   try {
     const leafletModule = await import('leaflet')
@@ -845,6 +1161,7 @@ onMounted(async () => {
 })
 
 onUnmounted(() => {
+  clearRouteLayers()
   if (map.value) {
     map.value.remove()
     map.value = null
@@ -854,6 +1171,7 @@ onUnmounted(() => {
 
 defineExpose({
   setCoordinates: (lat: number, lng: number) => setNewLocation(lat, lng),
+  syncCurrentLocation,
   refresh: () => map.value?.invalidateSize(),
 })
 </script>

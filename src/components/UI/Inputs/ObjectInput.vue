@@ -37,10 +37,10 @@
             $emit('create:Options', props.id + '.schema.' + k, o, v)
         "
         @multi-selected-change="
-          (val, key) => $emit('multi-selected-change', val, props.id + '.' + key)
+          (val: any, key: any) => $emit('multi-selected-change', val, props.id + '.' + key)
         "
         @selected-option-change="
-          (val, key) => $emit('selected-option-change', val, props.id + '.' + key)
+          (val: any, key: any) => $emit('selected-option-change', val, props.id + '.' + key)
         "
       />
     </div>
@@ -49,9 +49,9 @@
 
 <script setup lang="ts">
 import { ref, watch } from 'vue'
-import { FormFieldRenderer } from '../../Form'
 import type { SingleObjectProps } from '../../../configs/types'
 import { setUID } from '../../../untils'
+import { FormFieldRenderer } from '../../Form'
 import { Tooltip } from '../Display'
 
 const props = withDefaults(defineProps<SingleObjectProps>(), {

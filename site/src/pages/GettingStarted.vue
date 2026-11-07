@@ -1,28 +1,28 @@
 <template>
-  <div class="max-w-4xl mx-auto space-y-10 py-6">
+  <div class="max-w-4xl mx-auto space-y-8 sm:space-y-10 py-4 sm:py-6 overflow-x-hidden min-w-0 w-full">
     <!-- Header -->
     <header class="border-b border-slate-200 dark:border-slate-800 pb-6">
-      <div class="flex items-center gap-2 mb-2">
-        <h1 class="text-3xl font-bold text-slate-900 dark:text-white">Getting Started</h1>
+      <div class="flex flex-wrap items-center gap-2 mb-2">
+        <h1 class="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white">Getting Started</h1>
         <span
-          class="px-2 py-0.5 rounded text-[11px] font-mono font-semibold bg-amber-100 dark:bg-amber-950/70 text-amber-700 dark:text-amber-400 border border-amber-300/60 dark:border-amber-800/60"
+          class="px-2 py-0.5 rounded text-[11px] font-mono font-semibold bg-amber-100 dark:bg-amber-950/70 text-amber-700 dark:text-amber-400 border border-amber-300/60 dark:border-amber-800/60 shrink-0"
         >
           v{{ version }} Early Release
         </span>
       </div>
-      <p class="text-sm text-slate-600 dark:text-slate-400">
+      <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400">
         Choose your preferred integration method to start building schema-driven interfaces with
         <code>@zyvnox/vue-pack</code>.
       </p>
 
       <!-- Tab Switcher -->
       <div
-        class="mt-6 flex items-center p-1 bg-slate-100 dark:bg-slate-800 rounded-lg w-fit border border-slate-200 dark:border-slate-700/60"
+        class="mt-6 grid grid-cols-2 sm:flex sm:items-center p-1 bg-slate-100 dark:bg-slate-800 rounded-lg w-full sm:w-fit border border-slate-200 dark:border-slate-700/60 gap-1"
       >
         <button
           type="button"
           @click="activeTab = 'npm'"
-          class="flex items-center gap-2 px-4 py-2 rounded-md text-xs font-semibold transition-all cursor-pointer"
+          class="flex items-center justify-center gap-1.5 px-2.5 sm:px-4 py-2 rounded-md text-xs font-semibold transition-all cursor-pointer text-center"
           :class="
             activeTab === 'npm'
               ? 'bg-white dark:bg-slate-900 text-blue-600 dark:text-blue-400 shadow-sm'
@@ -30,12 +30,15 @@
           "
         >
           <span>📦</span>
-          <span>NPM / Package Manager</span>
+          <span>
+            <span class="sm:hidden">NPM</span>
+            <span class="hidden sm:inline">NPM / Package Manager</span>
+          </span>
         </button>
         <button
           type="button"
           @click="activeTab = 'cdn'"
-          class="flex items-center gap-2 px-4 py-2 rounded-md text-xs font-semibold transition-all cursor-pointer"
+          class="flex items-center justify-center gap-1.5 px-2.5 sm:px-4 py-2 rounded-md text-xs font-semibold transition-all cursor-pointer text-center"
           :class="
             activeTab === 'cdn'
               ? 'bg-white dark:bg-slate-900 text-blue-600 dark:text-blue-400 shadow-sm'
@@ -43,7 +46,10 @@
           "
         >
           <span>🌐</span>
-          <span>CDN / Standalone Browser</span>
+          <span>
+            <span class="sm:hidden">CDN</span>
+            <span class="hidden sm:inline">CDN / Standalone Browser</span>
+          </span>
         </button>
       </div>
     </header>
@@ -332,7 +338,7 @@ import { ref } from 'vue'
 import CodeBlock from '@/components/CodeBlock.vue'
 import pkg from '../../../package.json'
 
-const version = pkg.version || '0.1.2'
+const version = pkg.version || '0.1.3'
 const activeTab = ref<'npm' | 'cdn'>('npm')
 
 const npmUsageCode = `<template>

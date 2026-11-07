@@ -258,6 +258,17 @@ export interface GlobalDefaultText {
     stepSearch: string
     stepManualCoords: string
     stepResetHome: string
+    stepSyncGps: string
+    syncGps: string
+    gpsLocating: string
+    gpsSuccess: string
+    gpsSuccessMsg: string
+    gpsError: string
+    gpsNotSupported: string
+    gpsPermissionDenied: string
+    gpsUnavailable: string
+    gpsTimeout: string
+    gpsFailed: string
     locked: string
     unlock: string
     understood: string

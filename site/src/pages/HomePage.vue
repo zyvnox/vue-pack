@@ -1,18 +1,21 @@
 <template>
-  <div class="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 flex flex-col font-sans transition-colors duration-200">
+  <div class="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 flex flex-col font-sans transition-colors duration-200 overflow-x-hidden">
     <!-- Standalone Landing Page Header -->
     <header
-      class="sticky top-0 z-40 w-full border-b border-slate-200/80 dark:border-slate-800/80 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md px-4 sm:px-8 py-3.5 transition-colors duration-200"
+      class="fixed top-0 left-0 right-0 z-40 border-b border-slate-200/80 dark:border-slate-800/80 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md px-3 sm:px-8 py-2.5 sm:py-3.5 transition-colors duration-200"
     >
-      <div class="max-w-7xl mx-auto flex items-center justify-between">
+      <div class="max-w-7xl mx-auto flex items-center justify-between gap-2">
         <!-- Left: Logo & Brand -->
-        <RouterLink to="/" class="flex items-center gap-3 group">
-          <img src="/zyvnox-black.svg" class="w-8 h-8 dark:hidden shrink-0 transition-transform group-hover:scale-105" alt="Zyvnox Logo" />
-          <img src="/zyvnox-white.svg" class="w-8 h-8 hidden dark:block shrink-0 transition-transform group-hover:scale-105" alt="Zyvnox Logo" />
-          <div class="flex items-center gap-2">
-            <span class="font-bold text-base tracking-tight text-slate-900 dark:text-white">@zyvnox/vue-pack</span>
+        <RouterLink to="/" class="flex items-center gap-2 group shrink-0 min-w-0">
+          <img src="/zyvnox-black.svg" class="w-7 h-7 sm:w-8 sm:h-8 dark:hidden shrink-0 transition-transform group-hover:scale-105" alt="Zyvnox Logo" />
+          <img src="/zyvnox-white.svg" class="w-7 h-7 sm:w-8 sm:h-8 hidden dark:block shrink-0 transition-transform group-hover:scale-105" alt="Zyvnox Logo" />
+          <div class="flex items-center gap-1.5 sm:gap-2 min-w-0">
+            <span class="font-bold text-sm sm:text-base tracking-tight text-slate-900 dark:text-white truncate">
+              <span class="hidden sm:inline">@zyvnox/vue-pack</span>
+              <span class="sm:hidden">@zyvnox</span>
+            </span>
             <span
-              class="px-2 py-0.5 rounded-full text-[10px] font-mono font-semibold bg-amber-100 dark:bg-amber-950/70 text-amber-700 dark:text-amber-400 border border-amber-300/60 dark:border-amber-800/60"
+              class="px-1.5 py-0.2 sm:px-2 sm:py-0.5 rounded-full text-[9px] sm:text-[10px] font-mono font-semibold bg-amber-100 dark:bg-amber-950/70 text-amber-700 dark:text-amber-400 border border-amber-300/60 dark:border-amber-800/60 shrink-0"
             >
               v{{ version }}
             </span>
@@ -20,10 +23,10 @@
         </RouterLink>
 
         <!-- Right: Nav Links & Actions -->
-        <div class="flex items-center gap-2 sm:gap-4">
+        <div class="flex items-center gap-1.5 sm:gap-3 shrink-0">
           <RouterLink
             to="/doc/whats-new"
-            class="px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors hidden md:inline-flex items-center gap-1"
+            class="px-2.5 py-1.5 rounded-lg text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors hidden md:inline-flex items-center gap-1"
           >
             <span>✨</span>
             <span>What's New</span>
@@ -31,32 +34,34 @@
 
           <RouterLink
             to="/doc"
-            class="px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+            class="px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-lg text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
           >
-            Documentation
+            <span>Docs</span>
           </RouterLink>
 
           <RouterLink
             to="/playground"
-            class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white shadow-sm transition-all"
+            class="flex items-center gap-1 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-lg text-xs font-semibold bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white shadow-sm transition-all"
           >
             <span>⚡</span>
-            <span>Playground</span>
+            <span class="hidden sm:inline">Playground</span>
           </RouterLink>
 
-          <RouterLink
-            to="/doc/sponsor"
-            class="hidden sm:inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-semibold text-pink-600 dark:text-pink-400 hover:bg-pink-50 dark:hover:bg-pink-950/40 transition-colors"
-          >
-            <span>💖</span>
-            <span>Sponsor</span>
-          </RouterLink>
+          <div class="hidden lg:inline-flex">
+            <RouterLink
+              to="/doc/sponsor"
+              class="items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-semibold text-pink-600 dark:text-pink-400 hover:bg-pink-50 dark:hover:bg-pink-950/40 transition-colors"
+            >
+              <span>💖</span>
+              <span>Sponsor</span>
+            </RouterLink>
+          </div>
 
           <a
             href="https://github.com/zyvnox/vue-pack"
             target="_blank"
             rel="noopener noreferrer"
-            class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+            class="hidden md:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
           >
             <span>GitHub ↗</span>
           </a>
@@ -64,7 +69,7 @@
           <button
             type="button"
             @click="toggleDark"
-            class="p-2 rounded-lg border border-slate-200 dark:border-slate-700/80 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors text-xs flex items-center justify-center cursor-pointer"
+            class="p-1.5 sm:p-2 rounded-lg border border-slate-200 dark:border-slate-700/80 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors text-xs flex items-center justify-center cursor-pointer"
             title="Toggle Dark Mode"
           >
             <span v-if="isDark">🌙</span>
@@ -74,9 +79,12 @@
       </div>
     </header>
 
+    <!-- Header Spacer -->
+    <div class="h-14 sm:h-16 shrink-0" aria-hidden="true" />
+
     <!-- Hero Section -->
     <main class="flex-1">
-      <section class="relative overflow-hidden pt-12 pb-20 sm:pt-20 sm:pb-28 px-4 sm:px-6">
+      <section class="relative overflow-hidden pt-10 pb-16 sm:pt-20 sm:pb-28 px-4 sm:px-6">
         <!-- Subtle Glow Background -->
         <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[350px] bg-gradient-to-tr from-blue-500/10 via-indigo-500/10 to-teal-500/10 blur-3xl pointer-events-none -z-10 rounded-full"></div>
 
@@ -84,16 +92,16 @@
           <!-- Release Status Pill -->
           <RouterLink
             to="/doc/whats-new"
-            class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-amber-50 dark:bg-amber-950/60 border border-amber-200 dark:border-amber-800 text-amber-700 dark:text-amber-300 text-xs font-semibold shadow-xs hover:border-amber-400 dark:hover:border-amber-600 transition-colors group cursor-pointer"
+            class="inline-flex items-center gap-2 px-3 py-1 sm:px-3.5 rounded-full bg-amber-50 dark:bg-amber-950/60 border border-amber-200 dark:border-amber-800 text-amber-700 dark:text-amber-300 text-xs font-semibold shadow-xs hover:border-amber-400 dark:hover:border-amber-600 transition-colors group cursor-pointer"
           >
-            <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
+            <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse shrink-0"></span>
             <span>What's New in v{{ version }}</span>
-            <span class="text-amber-400 dark:text-amber-600">•</span>
-            <span class="group-hover:underline">Changelog & Updates ↗</span>
+            <span class="hidden sm:inline text-amber-400 dark:text-amber-600">•</span>
+            <span class="hidden sm:inline group-hover:underline">Changelog & Updates ↗</span>
           </RouterLink>
 
           <!-- Main Hero Headline -->
-          <h1 class="text-4xl sm:text-6xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-[1.15]">
+          <h1 class="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-[1.15]">
             The Enterprise Schema-Driven<br />
             <span class="bg-gradient-to-r from-blue-600 via-indigo-600 to-cyan-500 bg-clip-text text-transparent">
               Vue 3 Component Library
@@ -101,12 +109,12 @@
           </h1>
 
           <!-- Tagline -->
-          <p class="text-base sm:text-xl text-slate-600 dark:text-slate-300 max-w-2xl mx-auto leading-relaxed">
+          <p class="text-sm sm:text-lg lg:text-xl text-slate-600 dark:text-slate-300 max-w-2xl mx-auto leading-relaxed px-2">
             Engineered for high-velocity administration dashboards, complex CRUD platforms, and offline-first data platforms. Powered by Zod schemas, autonomous IndexedDB, and zero CSS collisions.
           </p>
 
           <!-- Primary CTA Buttons -->
-          <div class="flex flex-col sm:flex-row gap-3.5 justify-center pt-2 items-center">
+          <div class="flex flex-col sm:flex-row gap-3 justify-center pt-2 items-stretch sm:items-center max-w-xs sm:max-w-none mx-auto w-full">
             <RouterLink
               to="/doc"
               class="w-full sm:w-auto text-center px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-semibold text-sm shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2"
@@ -139,7 +147,7 @@
           </div>
 
           <!-- Interactive Package Manager Install Tabs -->
-          <div class="max-w-md mx-auto pt-6 text-left">
+          <div class="max-w-md mx-auto pt-6 text-left w-full px-2 sm:px-0">
             <div class="flex items-center justify-between pb-2 px-1 text-xs text-slate-500 dark:text-slate-400 font-medium">
               <span>Quick Install</span>
               <div class="flex gap-2">
@@ -157,9 +165,9 @@
             </div>
 
             <div
-              class="flex items-center justify-between p-3 rounded-xl bg-slate-900 border border-slate-800 text-slate-200 font-mono text-xs shadow-inner"
+              class="flex items-center justify-between p-2.5 sm:p-3 rounded-xl bg-slate-900 border border-slate-800 text-slate-200 font-mono text-xs shadow-inner min-w-0 max-w-full"
             >
-              <div class="truncate mr-3">
+              <div class="truncate mr-2 min-w-0">
                 <span class="text-blue-400 select-none">$ </span>
                 <span>{{ installCommands[selectedPm] }}</span>
               </div>
@@ -277,7 +285,7 @@ import { SponsorButton, SponsorCard } from '@zyvnox/vue-pack/components'
 import { useDark } from '@/composables/useDark'
 import pkg from '../../../package.json'
 
-const version = pkg.version || '0.1.2'
+const version = pkg.version || '0.1.3'
 const { isDark, toggleDark } = useDark()
 
 const selectedPm = ref<'npm' | 'pnpm' | 'yarn' | 'bun'>('npm')
