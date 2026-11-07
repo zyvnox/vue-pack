@@ -15,17 +15,18 @@
           Vue SFC
         </span>
       </div>
-      <div class="flex items-center gap-2 text-[11px] text-slate-400 dark:text-slate-500 font-mono">
+      <div class="flex items-center gap-2 text-[11px] text-slate-400 dark:text-slate-500 font-mono shrink-0">
         <span v-if="isMonacoReady" class="text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
           <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-          <span>VS Code Engine</span>
+          <span class="hidden sm:inline">VS Code Engine</span>
+          <span class="sm:hidden">Monaco</span>
         </span>
         <span v-else class="text-amber-500 flex items-center gap-1">
           <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
-          <span>Loading Editor...</span>
+          <span>Loading...</span>
         </span>
-        <span>•</span>
-        <span class="hidden sm:inline">Ctrl+Space: Autocomplete</span>
+        <span class="hidden md:inline">•</span>
+        <span class="hidden md:inline">Ctrl+Space: Autocomplete</span>
       </div>
     </div>
 
@@ -454,8 +455,8 @@ function registerAutocomplete(monaco: any) {
         {
           label: 'SponsorButton',
           kind: monaco.languages.CompletionItemKind.Class,
-          documentation: 'Zyvnox Saweria & Ko-fi Sponsor Button Group',
-          insertText: '<SponsorButton variant="${1|both,saweria,kofi|}" />',
+          documentation: 'Zyvnox GitHub, Saweria & Ko-fi Sponsor Button Group',
+          insertText: '<SponsorButton variant="${1|both,all,github,saweria,kofi|}" />',
           insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
           range,
         },
