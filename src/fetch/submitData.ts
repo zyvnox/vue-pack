@@ -99,7 +99,6 @@ export const submitData = async <
   if (mode === 'delete' || mode === 'deleteMany') {
     const bodyToSend =
       Object.keys(filteredParsed).length > 0 ? JSON.stringify(filteredParsed) : undefined
-    console.log(data![idsKey ?? 'ids'] || data![idKey ?? 'id'] || filteredParsed._id)
     const response = await secureFetch(finalEndpoint, {
       method,
       headers: bodyToSend ? { 'Content-Type': 'application/json' } : undefined,

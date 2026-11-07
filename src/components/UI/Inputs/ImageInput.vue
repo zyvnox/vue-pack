@@ -72,11 +72,32 @@
     </div>
 
     <div
-      class="zyvnox-bg-slate-50 zyvnox-border-1 zyvnox-border-solid zyvnox-border-slate-200 zyvnox-rounded-xl zyvnox-shadow-sm zyvnox-mb-4 zyvnox-transition-colors zyvnox-duration-200 dark:zyvnox-bg-slate-800/50 dark:zyvnox-border-slate-700"
+      class="zyvnox-group zyvnox-relative zyvnox-bg-slate-50 zyvnox-border-1 zyvnox-border-solid zyvnox-border-slate-200 zyvnox-rounded-xl zyvnox-shadow-sm zyvnox-mb-4 zyvnox-transition-all zyvnox-duration-200 dark:zyvnox-bg-slate-800/50 dark:zyvnox-border-slate-700"
       :class="{
         'zyvnox-border-red-400 dark:zyvnox-border-red-500': errorMessage.length !== 0 || error,
+        'zyvnox-border-blue-500 zyvnox-bg-blue-50/70 dark:zyvnox-bg-blue-900/30 zyvnox-scale-[1.008] zyvnox-shadow-lg': isDragging && !props.disabled && !isProcessing,
       }"
+      @dragenter.prevent.stop="onDragEnter"
+      @dragover.prevent.stop="onDragOver"
+      @dragleave.prevent.stop="onDragLeave"
+      @drop.prevent.stop="onDrop"
     >
+      <!-- Drag Over Visual Overlay -->
+      <div
+        v-if="isDragging && !props.disabled && !isProcessing"
+        class="zyvnox-absolute zyvnox-inset-0 zyvnox-z-20 zyvnox-flex zyvnox-flex-col zyvnox-items-center zyvnox-justify-center zyvnox-bg-blue-500/10 zyvnox-backdrop-blur-[2px] zyvnox-rounded-xl zyvnox-border-2 zyvnox-border-dashed zyvnox-border-blue-500 zyvnox-pointer-events-none"
+      >
+        <div class="zyvnox-w-12 zyvnox-h-12 zyvnox-rounded-full zyvnox-bg-blue-600 zyvnox-text-white zyvnox-flex zyvnox-items-center zyvnox-justify-center zyvnox-shadow-lg zyvnox-animate-bounce">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+            <circle cx="8.5" cy="8.5" r="1.5"></circle>
+            <polyline points="21 15 16 10 5 21"></polyline>
+          </svg>
+        </div>
+        <span class="zyvnox-mt-2 zyvnox-text-sm zyvnox-font-semibold zyvnox-text-blue-600 dark:zyvnox-text-blue-400">
+          {{ t('upload.dragDrop') || 'Drop image here' }}
+        </span>
+      </div>
       <div
         class="zyvnox-p-3 zyvnox-flex zyvnox-flex-col zyvnox-gap-3 md:zyvnox-p-4 md:zyvnox-grid md:zyvnox-grid-cols-2 md:zyvnox-gap-x-6 md:zyvnox-gap-y-4 md:zyvnox-items-start"
         style="grid-template-areas: 'preview info' 'preview buttons'"
@@ -262,6 +283,40 @@ const fileRatio = ref('')
 const pixelImage = ref<{ width: number; height: number } | null>(null)
 const sizeImage = ref<number | null>(null)
 const isProcessing = ref(false)
+const isDragging = ref(false)
+let dragCounter = 0
+
+function onDragEnter(e: DragEvent) {
+  if (props.disabled || isProcessing.value) return
+  dragCounter++
+  isDragging.value = true
+}
+
+function onDragOver(e: DragEvent) {
+  if (props.disabled || isProcessing.value) return
+  if (e.dataTransfer) {
+    e.dataTransfer.dropEffect = 'copy'
+  }
+}
+
+function onDragLeave(e: DragEvent) {
+  if (props.disabled || isProcessing.value) return
+  dragCounter--
+  if (dragCounter <= 0) {
+    dragCounter = 0
+    isDragging.value = false
+  }
+}
+
+async function onDrop(e: DragEvent) {
+  if (props.disabled || isProcessing.value) return
+  dragCounter = 0
+  isDragging.value = false
+  const files = e.dataTransfer?.files
+  if (files && files.length > 0) {
+    await processFile(files[0])
+  }
+}
 
 // Refs for inputs
 const fileInputRef = ref<HTMLInputElement | null>(null)
@@ -590,59 +645,65 @@ async function applyWatermark(file: File): Promise<File> {
   }
 }
 
+async function processFile(file: File) {
+  if (props.disabled || isProcessing.value) return
+  if (!file) return
+
+  // 1. Validation
+  const allowedTypes = props.validate?.allowedTypes ?? [
+    'png',
+    'jpg',
+    'jpeg',
+    'gif',
+    'bmp',
+    'webp',
+    'heif',
+    'heic',
+    'tiff',
+    'tif',
+    'svg',
+    'avif',
+    'ico',
+    'jfif',
+  ]
+  const ext = file.name.split('.').pop()?.toLowerCase()
+  if (!ext || !allowedTypes.map((t) => t.toLowerCase()).includes(ext)) {
+    ShowAlert?.('error', t('upload.invalidFileType'), [
+      getMessage('imageType', {}, props.lang ?? 'en') + ` (${allowedTypes.join(', ')})`,
+    ])
+    if (fileInputRef.value) fileInputRef.value.value = ''
+    return
+  }
+
+  // 2. Processing
+  isProcessing.value = true
+  let finalFile = file
+
+  try {
+    if (props.watermark && customWatermarkUrl.value) {
+      finalFile = await applyWatermark(file)
+    }
+    emit('update:modelValue', finalFile, props.id)
+  } catch (e: any) {
+    console.error(e)
+    if (e.message === 'Please upload a watermark image first.') {
+      ShowAlert?.('error', t('upload.watermarkMissing'), [t('upload.watermarkMissingHint')])
+    } else {
+      ShowAlert?.('error', t('status.error'), [t('upload.processingError')])
+    }
+    if (fileInputRef.value) fileInputRef.value.value = ''
+    emit('update:modelValue', null, props.id)
+  } finally {
+    isProcessing.value = false
+  }
+}
+
 async function handleFileUpload(event: Event) {
   if (props.disabled) return
   const target = event.target as HTMLInputElement
   const file = target.files?.[0]
-
   if (file) {
-    // 1. Validation
-    const allowedTypes = props.validate?.allowedTypes ?? [
-      'png',
-      'jpg',
-      'jpeg',
-      'gif',
-      'bmp',
-      'webp',
-      'heif',
-      'heic',
-      'tiff',
-      'tif',
-      'svg',
-      'avif',
-      'ico',
-      'jfif',
-    ]
-    const ext = file.name.split('.').pop()?.toLowerCase()
-    if (!ext || !allowedTypes.map((t) => t.toLowerCase()).includes(ext)) {
-      ShowAlert?.('error', t('upload.invalidFileType'), [
-        getMessage('imageType', {}, props.lang ?? 'en') + ` (${allowedTypes.join(', ')})`,
-      ])
-      if (fileInputRef.value) fileInputRef.value.value = ''
-      return
-    }
-
-    // 2. Processing
-    isProcessing.value = true
-    let finalFile = file
-
-    try {
-      if (props.watermark && customWatermarkUrl.value) {
-        finalFile = await applyWatermark(file)
-      }
-      emit('update:modelValue', finalFile, props.id)
-    } catch (e: any) {
-      console.error(e)
-      if (e.message === 'Please upload a watermark image first.') {
-        ShowAlert?.('error', t('upload.watermarkMissing'), [t('upload.watermarkMissingHint')])
-      } else {
-        ShowAlert?.('error', t('status.error'), [t('upload.processingError')])
-      }
-      if (fileInputRef.value) fileInputRef.value.value = ''
-      emit('update:modelValue', null, props.id)
-    } finally {
-      isProcessing.value = false
-    }
+    await processFile(file)
   }
 }
 

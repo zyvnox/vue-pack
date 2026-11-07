@@ -1,21 +1,21 @@
 <template>
   <div class="h-full flex flex-col bg-slate-50 dark:bg-slate-900 transition-colors duration-200">
     <div
-      class="px-4 py-2 border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/90 flex items-center justify-between text-xs text-slate-500 dark:text-slate-400 select-none transition-colors duration-200"
+      class="px-4 py-2 border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/90 flex items-center justify-between text-xs text-slate-500 dark:text-slate-400 select-none transition-colors duration-200 gap-2 min-w-0"
     >
-      <div class="flex items-center gap-2 font-mono">
-        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-        <span class="font-semibold text-slate-800 dark:text-slate-200">Live Preview</span>
+      <div class="flex items-center gap-2 font-mono min-w-0">
+        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shrink-0"></span>
+        <span class="font-semibold text-slate-800 dark:text-slate-200 shrink-0">Live Preview</span>
         <span
-          class="text-[10px] text-emerald-700 dark:text-emerald-400 bg-emerald-100 dark:bg-emerald-950/80 border border-emerald-300 dark:border-emerald-800/60 px-1.5 py-0.5 rounded font-mono"
+          class="text-[10px] text-emerald-700 dark:text-emerald-400 bg-emerald-100 dark:bg-emerald-950/80 border border-emerald-300 dark:border-emerald-800/60 px-1.5 py-0.5 rounded font-mono hidden sm:inline"
         >
-          CDN Mode (Isolated iframe)
+          CDN Mode
         </span>
       </div>
-      <div class="flex items-center gap-3 text-[11px] text-slate-400 dark:text-slate-500">
-        <span>Vue 3.5+</span>
-        <span>•</span>
-        <span>@zyvnox/vue-pack {{ version }}</span>
+      <div class="flex items-center gap-2 text-[11px] text-slate-400 dark:text-slate-500 shrink-0">
+        <span class="hidden sm:inline">Vue 3.5+</span>
+        <span class="hidden sm:inline">•</span>
+        <span>v{{ version }}</span>
       </div>
     </div>
 
@@ -42,7 +42,7 @@ const props = withDefaults(
   }>(),
   {
     isDark: false,
-    version: '0.1.2',
+    version: '0.1.3',
   },
 )
 

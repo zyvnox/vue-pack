@@ -4,17 +4,17 @@
   >
     <!-- Top Bar Header -->
     <header
-      class="h-14 border-b border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/90 backdrop-blur-md px-4 sm:px-5 flex items-center justify-between shrink-0 select-none z-10 transition-colors duration-200"
+      class="h-14 border-b border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/90 backdrop-blur-md px-3 sm:px-5 flex items-center justify-between shrink-0 select-none z-10 transition-colors duration-200 gap-2 overflow-x-auto sm:overflow-x-visible no-scrollbar"
     >
       <!-- Left: Logo & Back to Docs -->
-      <div class="flex items-center gap-3 sm:gap-4">
-        <RouterLink to="/" class="flex items-center gap-2 group">
-          <img src="/zyvnox-black.svg" class="w-7 h-7 dark:hidden shrink-0" alt="Logo" />
-          <img src="/zyvnox-white.svg" class="w-7 h-7 hidden dark:block shrink-0" alt="Logo" />
-          <div class="flex items-center gap-1.5 font-bold text-sm tracking-tight text-slate-900 dark:text-white">
+      <div class="flex items-center gap-2 sm:gap-3 shrink-0">
+        <RouterLink to="/" class="flex items-center gap-1.5 group shrink-0">
+          <img src="/zyvnox-black.svg" class="w-6 h-6 sm:w-7 sm:h-7 dark:hidden shrink-0" alt="Logo" />
+          <img src="/zyvnox-white.svg" class="w-6 h-6 sm:w-7 sm:h-7 hidden dark:block shrink-0" alt="Logo" />
+          <div class="flex items-center gap-1 font-bold text-xs sm:text-sm tracking-tight text-slate-900 dark:text-white whitespace-nowrap">
             <span>@zyvnox</span>
             <span class="text-blue-600 dark:text-blue-400">/vue-pack</span>
-            <span class="text-xs text-slate-500 font-normal ml-1 hidden sm:inline">Playground</span>
+            <span class="text-xs text-slate-500 font-normal ml-1 hidden lg:inline">Playground</span>
           </div>
         </RouterLink>
 
@@ -22,26 +22,26 @@
 
         <RouterLink
           to="/"
-          class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white bg-slate-100 hover:bg-slate-200 dark:bg-slate-800/80 dark:hover:bg-slate-700 transition-colors border border-slate-200 dark:border-slate-700/60"
+          class="flex items-center gap-1 px-2 py-1 sm:px-2.5 sm:py-1.5 rounded-lg text-xs font-medium text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white bg-slate-100 hover:bg-slate-200 dark:bg-slate-800/80 dark:hover:bg-slate-700 transition-colors border border-slate-200 dark:border-slate-700/60 shrink-0"
           title="Back to Home Page"
         >
           <span>🏠</span>
-          <span class="hidden sm:inline">Home</span>
+          <span class="hidden md:inline">Home</span>
         </RouterLink>
 
         <RouterLink
           to="/doc"
-          class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white bg-slate-100 hover:bg-slate-200 dark:bg-slate-800/80 dark:hover:bg-slate-700 transition-colors border border-slate-200 dark:border-slate-700/60"
+          class="flex items-center gap-1 px-2 py-1 sm:px-2.5 sm:py-1.5 rounded-lg text-xs font-medium text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white bg-slate-100 hover:bg-slate-200 dark:bg-slate-800/80 dark:hover:bg-slate-700 transition-colors border border-slate-200 dark:border-slate-700/60 shrink-0"
           title="Go to Documentation"
         >
           <span>📖</span>
-          <span>Docs</span>
+          <span class="hidden md:inline">Docs</span>
         </RouterLink>
       </div>
 
-      <!-- Center: CDN Status Badge -->
+      <!-- Center: CDN Status Badge (Only on wide screens to prevent header cramming) -->
       <div
-        class="hidden md:flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/70 border border-emerald-200 dark:border-emerald-800/80 text-[11px] font-mono font-medium text-emerald-700 dark:text-emerald-400"
+        class="hidden xl:flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/70 border border-emerald-200 dark:border-emerald-800/80 text-[11px] font-mono font-medium text-emerald-700 dark:text-emerald-400 shrink-0 whitespace-nowrap"
       >
         <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
         <span>Vue CDN: 3.5</span>
@@ -50,11 +50,11 @@
       </div>
 
       <!-- Right: Action Buttons -->
-      <div class="flex items-center gap-2">
+      <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
         <button
           type="button"
           @click="resetCode"
-          class="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 transition-colors cursor-pointer border border-slate-200 dark:border-slate-700/60"
+          class="flex items-center gap-1 px-2 py-1 sm:px-3 sm:py-1.5 rounded-lg text-xs font-medium bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 transition-colors cursor-pointer border border-slate-200 dark:border-slate-700/60 shrink-0"
           title="Reset code to default example"
         >
           <span>🔄</span>
@@ -64,7 +64,7 @@
         <button
           type="button"
           @click="copyCode"
-          class="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 transition-colors cursor-pointer border border-slate-200 dark:border-slate-700/60"
+          class="flex items-center gap-1 px-2 py-1 sm:px-3 sm:py-1.5 rounded-lg text-xs font-medium bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 transition-colors cursor-pointer border border-slate-200 dark:border-slate-700/60 shrink-0"
           title="Copy current code to clipboard"
         >
           <span v-if="copied" class="text-emerald-600 dark:text-emerald-400 font-semibold">✓ Copied!</span>
@@ -74,12 +74,14 @@
           </span>
         </button>
 
-        <SponsorButton variant="both" class="hidden lg:inline-flex" />
+        <div class="hidden 2xl:inline-flex">
+          <SponsorButton variant="both" />
+        </div>
 
         <button
           type="button"
           @click="toggleDark"
-          class="p-1.5 sm:px-2.5 sm:py-1.5 rounded-lg border border-slate-200 dark:border-slate-700/60 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors text-xs flex items-center justify-center cursor-pointer"
+          class="p-1 sm:px-2.5 sm:py-1.5 rounded-lg border border-slate-200 dark:border-slate-700/60 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors text-xs flex items-center justify-center cursor-pointer shrink-0"
           title="Toggle Dark Mode"
         >
           <span v-if="isDark">🌙</span>
@@ -90,7 +92,7 @@
           href="https://github.com/zyvnox/vue-pack"
           target="_blank"
           rel="noopener noreferrer"
-          class="hidden sm:flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 transition-colors border border-slate-200 dark:border-slate-700/60"
+          class="hidden lg:flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 transition-colors border border-slate-200 dark:border-slate-700/60 shrink-0"
           title="View on GitHub"
         >
           <span>GitHub ↗</span>
@@ -123,7 +125,7 @@ import { useDark } from '@/composables/useDark'
 import { SponsorButton } from '@zyvnox/vue-pack/components'
 import pkg from '../../../package.json'
 
-const version = pkg.version || '0.1.2'
+const version = pkg.version || '0.1.3'
 const { isDark, toggleDark } = useDark()
 
 const defaultCode = `<script setup>

@@ -7,7 +7,7 @@
         <span
           class="px-2.5 py-0.5 rounded text-[11px] font-mono font-semibold bg-amber-100 dark:bg-amber-950/70 text-amber-700 dark:text-amber-400 border border-amber-300/60 dark:border-amber-800/60"
         >
-          v0.1.2 Early Release
+          v0.1.3 Early Release
         </span>
       </div>
       <p class="text-sm text-slate-600 dark:text-slate-400 max-w-2xl">
@@ -16,12 +16,54 @@
       </p>
 
       <div class="mt-4 flex flex-wrap items-center gap-3">
-        <SponsorButton variant="both" />
+        <SponsorButton variant="all" />
       </div>
     </header>
 
     <!-- Support Options Cards -->
-    <section class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-5">
+    <section class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-5">
+      <!-- GitHub Sponsors (Official / Global) -->
+      <div
+        class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 shadow-sm flex flex-col justify-between gap-6 space-y-4 hover:border-pink-400/50 transition-colors"
+      >
+        <div class="flex flex-col gap-3 space-y-3">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="w-3 h-3 rounded-full" style="background-color: #EA4AAA;"></span>
+              <h2 class="font-bold text-lg text-slate-900 dark:text-white">GitHub Sponsors</h2>
+            </div>
+            <span
+              class="text-[10px] font-bold font-mono px-2 py-0.5 rounded-full bg-pink-100 dark:bg-pink-950/60 text-pink-700 dark:text-pink-400 border border-pink-200 dark:border-pink-800/60 uppercase"
+            >
+              Official
+            </span>
+          </div>
+
+          <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+            Support directly through your GitHub account. Receive an official GitHub Sponsor badge on your GitHub profile and issues.
+          </p>
+
+          <ul class="text-xs text-slate-500 dark:text-slate-400 space-y-1 list-disc list-inside">
+            <li>Supports monthly tiers or custom one-time donations</li>
+            <li>Earn a verified Sponsor badge on GitHub</li>
+            <li>Zero platform processing fees</li>
+          </ul>
+        </div>
+
+        <div class="pt-2">
+          <a
+            href="https://github.com/sponsors/zyvnox"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-white font-semibold text-xs shadow-sm transition-all hover:opacity-90 active:scale-[0.99]"
+            style="background-color: #EA4AAA;"
+          >
+            <span>Sponsor on GitHub</span>
+            <span>↗</span>
+          </a>
+        </div>
+      </div>
+
       <!-- Saweria (Indonesia / QRIS) -->
       <div
         class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 shadow-sm flex flex-col justify-between gap-6 space-y-4 hover:border-amber-400/50 transition-colors"

@@ -98,8 +98,8 @@
             (k: string, o: string | number, v: string) =>
               $emit('create:Options', `${id}.options['${selectedOption}'].${k}`, o, v)
           "
-          @multi-selected-change="(val, key) => $emit('multi-selected-change', val, key)"
-          @selected-option-change="(val, key) => $emit('selected-option-change', val, key)"
+          @multi-selected-change="(val: any, key: any) => $emit('multi-selected-change', val, key)"
+          @selected-option-change="(val: any, key: any) => $emit('selected-option-change', val, key)"
           :key="key"
           :field="field"
           :field-key="key"
@@ -151,8 +151,8 @@
                 (k: string, o: string | number, v: string) =>
                   $emit('create:Options', `${id}.options['${key}'].${k}`, o, v)
               "
-              @multi-selected-change="(val, key) => $emit('multi-selected-change', val, key)"
-              @selected-option-change="(val, key) => $emit('selected-option-change', val, key)"
+              @multi-selected-change="(val: any, key: any) => $emit('multi-selected-change', val, key)"
+              @selected-option-change="(val: any, key: any) => $emit('selected-option-change', val, key)"
             />
           </div>
         </div>

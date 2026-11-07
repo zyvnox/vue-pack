@@ -177,7 +177,7 @@
                     :errors="errors"
                     :lang="(lang as SupportedLanguage) ?? 'en'"
                     @update:model-value="
-                      (val, key) => {
+                      (val: any, key: any) => {
                         if (getNested(formData, key) !== val) {
                           setNested(formData, key, val)
                         }
@@ -186,12 +186,12 @@
                     @push:errors="pushInputValidateErrorMessage"
                     @remove:errors="deleteInputValidateErrorMessage"
                     @multi-selected-change="
-                      (val, key) => {
+                      (val: any, key: any) => {
                         setNested(multiSelected, key, val)
                       }
                     "
                     @selected-option-change="
-                      (val, key) => {
+                      (val: any, key: any) => {
                         setNested(seletedOption, key, val)
                       }
                     "

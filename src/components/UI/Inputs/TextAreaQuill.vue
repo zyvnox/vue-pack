@@ -1,6 +1,10 @@
 <template>
   <Teleport to="body" :disabled="!isMaximized">
-    <div class="rich-text-editor-wrapper" :class="{ 'editor-maximized': isMaximized }">
+    <div
+      class="rich-text-editor-wrapper"
+      v-bind="$attrs"
+      :class="{ 'editor-maximized': isMaximized }"
+    >
       <div class="editor-header">
         <label
           :for="id"
@@ -9,7 +13,8 @@
             'zyvnox-text-red-500 dark:zyvnox-text-red-400': errorMessage.length > 0 || error,
           }"
         >
-          {{ label }}
+          <span>{{ label }}</span>
+          <span v-if="required" class="zyvnox-text-red-500 dark:zyvnox-text-red-400 font-bold">*</span>
           <Tooltip v-if="tooltip" :text="tooltip" :position="tooltipPosition ?? 'top'">
             <span class="zyvnox-text-slate-400 dark:zyvnox-text-slate-500 zyvnox-text-xs">
               {{ tooltipIcon ?? '❓' }}
@@ -20,7 +25,7 @@
 
       <div
         :id="`toolbar-container-${id}`"
-        class="quill-toolbar zyvnox-flex zyvnox-flex-wrap zyvnox-items-center zyvnox-gap-1 zyvnox-p-2"
+        class="quill-toolbar zyvnox-flex zyvnox-flex-wrap zyvnox-items-center zyvnox-p-2"
       >
         <!-- 1. HISTORY (UNDO & REDO) -->
         <span class="ql-formats">
@@ -118,44 +123,15 @@
             <option value="36px" label="36px">36px</option>
             <option value="48px" label="48px">48px</option>
           </select>
-        </span>
-
-        <!-- 4. HEADINGS DROPDOWN (H1 - H6) & QUICK BUTTONS (H1 - H5) -->
-        <span class="ql-formats">
           <select class="ql-header" :title="t('editor.headingLevel')">
-            <option value="1">{{ t('editor.headingLevel') }} 1</option>
-            <option value="2">{{ t('editor.headingLevel') }} 2</option>
-            <option value="3">{{ t('editor.headingLevel') }} 3</option>
-            <option value="4">{{ t('editor.headingLevel') }} 4</option>
-            <option value="5">{{ t('editor.headingLevel') }} 5</option>
-            <option value="6">{{ t('editor.headingLevel') }} 6</option>
+            <option value="1">Heading 1</option>
+            <option value="2">Heading 2</option>
+            <option value="3">Heading 3</option>
+            <option value="4">Heading 4</option>
+            <option value="5">Heading 5</option>
+            <option value="6">Heading 6</option>
             <option selected>{{ t('editor.normal') }}</option>
           </select>
-          <button
-            class="ql-header"
-            value="1"
-            :title="`${t('editor.headingLevel')} 1 (H1)`"
-          ></button>
-          <button
-            class="ql-header"
-            value="2"
-            :title="`${t('editor.headingLevel')} 2 (H2)`"
-          ></button>
-          <button
-            class="ql-header"
-            value="3"
-            :title="`${t('editor.headingLevel')} 3 (H3)`"
-          ></button>
-          <button
-            class="ql-header"
-            value="4"
-            :title="`${t('editor.headingLevel')} 4 (H4)`"
-          ></button>
-          <button
-            class="ql-header"
-            value="5"
-            :title="`${t('editor.headingLevel')} 5 (H5)`"
-          ></button>
         </span>
 
         <!-- 5. INLINE FORMATTING & SCRIPTS -->
@@ -281,7 +257,7 @@
 
       <!-- WORD & CHARACTER COUNTER FOOTER -->
       <div
-        class="zyvnox-flex zyvnox-items-center zyvnox-justify-between zyvnox-px-4 zyvnox-py-2 zyvnox-bg-slate-50 dark:zyvnox-bg-slate-800/80 zyvnox-border zyvnox-border-t-0 zyvnox-border-slate-200 dark:zyvnox-border-slate-700 zyvnox-rounded-b-xl zyvnox-text-xs zyvnox-text-slate-500 dark:zyvnox-text-slate-400 zyvnox-transition-colors"
+        class="zyvnox-flex zyvnox-items-center zyvnox-justify-between zyvnox-px-4 zyvnox-py-2 zyvnox-bg-slate-50 dark:zyvnox-bg-slate-900 zyvnox-border zyvnox-border-t-0 zyvnox-border-slate-200 dark:zyvnox-border-slate-700 zyvnox-rounded-b-xl zyvnox-text-xs zyvnox-text-slate-500 dark:zyvnox-text-slate-400 zyvnox-transition-colors"
       >
         <div class="zyvnox-flex zyvnox-items-center zyvnox-gap-4">
           <span
@@ -386,10 +362,15 @@ import { useI18n } from '../../composables/useI18n'
 import 'quill/dist/quill.snow.css'
 import 'quill-resize-module/dist/resize.css'
 
+defineOptions({
+  inheritAttrs: false,
+})
+
 const props = withDefaults(defineProps<TextEdiorQuillProps>(), {
   id: () => setUID(),
   tooltipPosition: 'top',
   tooltipIcon: '❓',
+  required: false,
 })
 
 const { t } = useI18n(computed(() => props.lang))
@@ -603,7 +584,14 @@ onMounted(async () => {
     modules: {
       toolbar: {
         container: `#toolbar-container-${props.id}`,
-        handlers: { image: imageHandler, video: videoHandler, link: linkHandler },
+        handlers: {
+          image: imageHandler,
+          video: videoHandler,
+          link: linkHandler,
+          undo: handleUndo,
+          redo: handleRedo,
+          divider: insertHorizontalRule,
+        },
       },
       history: {
         delay: 1000,
@@ -679,6 +667,12 @@ const handleAltSubmit = (val: string) => {
   showAltModal.value = false
 }
 
+watch(placeholder, (newVal) => {
+  if (quillInstance?.root) {
+    quillInstance.root.setAttribute('data-placeholder', newVal || '')
+  }
+})
+
 watch(
   () => props.disabled,
   (v) => quillInstance?.enable(!v),
@@ -702,3 +696,294 @@ onUnmounted(() => {
   }
 })
 </script>
+
+<style>
+/* Quill Theme-Aware Placeholder & Reset */
+.rich-text-editor-wrapper .ql-editor.ql-blank::before,
+.ql-snow .ql-editor.ql-blank::before {
+  color: #94a3b8 !important;
+  font-style: normal !important;
+  font-weight: 400 !important;
+  left: 16px !important;
+  right: 16px !important;
+  opacity: 0.85 !important;
+  pointer-events: none;
+}
+
+html.dark .rich-text-editor-wrapper .ql-editor.ql-blank::before,
+.dark .rich-text-editor-wrapper .ql-editor.ql-blank::before,
+:root.dark .rich-text-editor-wrapper .ql-editor.ql-blank::before,
+html.dark .ql-snow .ql-editor.ql-blank::before,
+.dark .ql-snow .ql-editor.ql-blank::before,
+:root.dark .ql-snow .ql-editor.ql-blank::before {
+  color: #f8fafc !important;
+  opacity: 0.7 !important;
+}
+
+/* Hide placeholder when disabled */
+.rich-text-editor-wrapper .ql-disabled .ql-editor.ql-blank::before,
+.rich-text-editor-wrapper .ql-container.ql-disabled::before {
+  display: none !important;
+}
+
+/* Pickers layout, alignment & arrow positioning */
+.rich-text-editor-wrapper .ql-snow .ql-picker.ql-font,
+.rich-text-editor-wrapper .ql-snow .ql-picker.ql-size,
+.rich-text-editor-wrapper .ql-snow .ql-picker.ql-header {
+  width: auto !important;
+  height: 28px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  vertical-align: middle !important;
+  float: none !important;
+}
+
+.rich-text-editor-wrapper .ql-toolbar.ql-snow .ql-picker.ql-font .ql-picker-label,
+.rich-text-editor-wrapper .ql-toolbar.ql-snow .ql-picker.ql-size .ql-picker-label,
+.rich-text-editor-wrapper .ql-toolbar.ql-snow .ql-picker.ql-header .ql-picker-label {
+  height: 28px !important;
+  width: auto !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  padding: 0 6px 0 8px !important;
+  border-radius: 6px !important;
+  border: 1px solid transparent !important;
+  color: #475569 !important;
+  font-size: 13px !important;
+  white-space: nowrap !important;
+  cursor: pointer !important;
+  position: relative !important;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease !important;
+}
+
+.rich-text-editor-wrapper .ql-snow .ql-picker.ql-font .ql-picker-label::before,
+.rich-text-editor-wrapper .ql-snow .ql-picker.ql-size .ql-picker-label::before,
+.rich-text-editor-wrapper .ql-snow .ql-picker.ql-header .ql-picker-label::before {
+  display: inline-block !important;
+  line-height: 26px !important;
+  vertical-align: middle !important;
+}
+
+.rich-text-editor-wrapper .ql-snow .ql-picker.ql-font .ql-picker-label svg,
+.rich-text-editor-wrapper .ql-snow .ql-picker.ql-size .ql-picker-label svg,
+.rich-text-editor-wrapper .ql-snow .ql-picker.ql-header .ql-picker-label svg,
+.rich-text-editor-wrapper .ql-snow .ql-picker:not(.ql-color-picker):not(.ql-icon-picker) svg {
+  position: static !important;
+  right: auto !important;
+  top: auto !important;
+  margin: 0 0 0 5px !important;
+  transform: none !important;
+  width: 13px !important;
+  height: 13px !important;
+  pointer-events: none !important;
+  flex-shrink: 0 !important;
+  align-self: center !important;
+}
+
+.rich-text-editor-wrapper .ql-toolbar.ql-snow .ql-picker.ql-font .ql-picker-label:hover,
+.rich-text-editor-wrapper .ql-toolbar.ql-snow .ql-picker.ql-size .ql-picker-label:hover,
+.rich-text-editor-wrapper .ql-toolbar.ql-snow .ql-picker.ql-header .ql-picker-label:hover,
+.rich-text-editor-wrapper .ql-toolbar.ql-snow .ql-picker.ql-expanded .ql-picker-label {
+  background-color: #e2e8f0 !important;
+  border-color: #cbd5e1 !important;
+  color: #0f172a !important;
+}
+
+.rich-text-editor-wrapper .ql-snow .ql-picker-options {
+  top: 100% !important;
+  margin-top: 4px !important;
+  min-width: 100% !important;
+  width: max-content !important;
+  max-width: 240px !important;
+  max-height: 280px !important;
+  overflow-y: auto !important;
+  z-index: 50 !important;
+  border-radius: 8px !important;
+}
+
+.rich-text-editor-wrapper .ql-snow .ql-picker.ql-header .ql-picker-label[data-value="1"]::before,
+.rich-text-editor-wrapper .ql-snow .ql-picker.ql-header .ql-picker-item[data-value="1"]::before { content: 'Heading 1'; font-size: 15px; font-weight: 700; }
+.rich-text-editor-wrapper .ql-snow .ql-picker.ql-header .ql-picker-label[data-value="2"]::before,
+.rich-text-editor-wrapper .ql-snow .ql-picker.ql-header .ql-picker-item[data-value="2"]::before { content: 'Heading 2'; font-size: 14px; font-weight: 700; }
+.rich-text-editor-wrapper .ql-snow .ql-picker.ql-header .ql-picker-label[data-value="3"]::before,
+.rich-text-editor-wrapper .ql-snow .ql-picker.ql-header .ql-picker-item[data-value="3"]::before { content: 'Heading 3'; font-size: 13px; font-weight: 600; }
+.rich-text-editor-wrapper .ql-snow .ql-picker.ql-header .ql-picker-label[data-value="4"]::before,
+.rich-text-editor-wrapper .ql-snow .ql-picker.ql-header .ql-picker-item[data-value="4"]::before { content: 'Heading 4'; font-size: 12px; font-weight: 600; }
+.rich-text-editor-wrapper .ql-snow .ql-picker.ql-header .ql-picker-label[data-value="5"]::before,
+.rich-text-editor-wrapper .ql-snow .ql-picker.ql-header .ql-picker-item[data-value="5"]::before { content: 'Heading 5'; font-size: 12px; font-weight: 600; }
+.rich-text-editor-wrapper .ql-snow .ql-picker.ql-header .ql-picker-label[data-value="6"]::before,
+.rich-text-editor-wrapper .ql-snow .ql-picker.ql-header .ql-picker-item[data-value="6"]::before { content: 'Heading 6'; font-size: 11px; font-weight: 600; }
+.rich-text-editor-wrapper .ql-snow .ql-picker.ql-header .ql-picker-label:not([data-value])::before,
+.rich-text-editor-wrapper .ql-snow .ql-picker.ql-header .ql-picker-item:not([data-value])::before { content: 'Normal'; font-size: 13px; font-weight: 400; }
+
+html.dark .rich-text-editor-wrapper .ql-toolbar.ql-snow .ql-picker-label,
+.dark .rich-text-editor-wrapper .ql-toolbar.ql-snow .ql-picker-label,
+:root.dark .rich-text-editor-wrapper .ql-toolbar.ql-snow .ql-picker-label {
+  color: #cbd5e1;
+}
+
+html.dark .rich-text-editor-wrapper .ql-toolbar.ql-snow .ql-picker-label:hover,
+.dark .rich-text-editor-wrapper .ql-toolbar.ql-snow .ql-picker-label:hover,
+:root.dark .rich-text-editor-wrapper .ql-toolbar.ql-snow .ql-picker-label:hover {
+  background-color: #1e293b;
+  border-color: #334155;
+  color: #ffffff;
+}
+
+/* Quill Image Resize Toolbar Styling */
+.ql-resize-overlay {
+  border: 1.5px dashed #6366f1 !important;
+  box-sizing: border-box !important;
+}
+
+.ql-resize-toolbar {
+  position: absolute !important;
+  top: -14px !important;
+  left: 50% !important;
+  right: auto !important;
+  transform: translateX(-50%) !important;
+  margin: 0 !important;
+  height: auto !important;
+  min-width: auto !important;
+  display: inline-flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  gap: 3px !important;
+  padding: 4px !important;
+  border-radius: 8px !important;
+  background-color: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12) !important;
+  z-index: 9999 !important;
+  white-space: nowrap !important;
+  box-sizing: border-box !important;
+  pointer-events: auto !important;
+}
+
+html.dark .ql-resize-toolbar,
+.dark .ql-resize-toolbar,
+:root.dark .ql-resize-toolbar {
+  background-color: #1e293b !important;
+  border-color: #334155 !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45) !important;
+}
+
+.ql-resize-toolbar button {
+  border: none !important;
+  border-radius: 6px !important;
+  padding: 4px 7px !important;
+  min-width: 28px !important;
+  height: 28px !important;
+  cursor: pointer !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  box-sizing: border-box !important;
+  background-color: transparent !important;
+  color: #475569 !important;
+  transition: background-color 0.15s ease, color 0.15s ease !important;
+  outline: none !important;
+  box-shadow: none !important;
+  vertical-align: middle !important;
+}
+
+html.dark .ql-resize-toolbar button,
+.dark .ql-resize-toolbar button,
+:root.dark .ql-resize-toolbar button {
+  color: #cbd5e1 !important;
+}
+
+.ql-resize-toolbar button:hover {
+  background-color: #f1f5f9 !important;
+  color: #0f172a !important;
+}
+
+html.dark .ql-resize-toolbar button:hover,
+.dark .ql-resize-toolbar button:hover,
+:root.dark .ql-resize-toolbar button:hover {
+  background-color: #334155 !important;
+  color: #ffffff !important;
+}
+
+.ql-resize-toolbar button.active,
+.ql-resize-toolbar button.ql-active,
+.ql-resize-toolbar button[aria-pressed="true"] {
+  background-color: #4f46e5 !important;
+  color: #ffffff !important;
+  font-weight: 600 !important;
+  filter: none !important;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2) !important;
+}
+
+html.dark .ql-resize-toolbar button.active,
+html.dark .ql-resize-toolbar button.ql-active,
+html.dark .ql-resize-toolbar button[aria-pressed="true"],
+.dark .ql-resize-toolbar button.active,
+.dark .ql-resize-toolbar button.ql-active,
+.dark .ql-resize-toolbar button[aria-pressed="true"],
+:root.dark .ql-resize-toolbar button.active,
+:root.dark .ql-resize-toolbar button.ql-active,
+:root.dark .ql-resize-toolbar button[aria-pressed="true"] {
+  background-color: #4f46e5 !important;
+  color: #ffffff !important;
+}
+
+.ql-resize-toolbar button.active:hover,
+.ql-resize-toolbar button.ql-active:hover {
+  background-color: #4338ca !important;
+  color: #ffffff !important;
+}
+
+.ql-resize-toolbar svg {
+  width: 16px !important;
+  height: 16px !important;
+  fill: currentColor !important;
+  color: currentColor !important;
+  pointer-events: none !important;
+  display: inline-block !important;
+  vertical-align: middle !important;
+}
+
+.ql-resize-toolbar svg path,
+.ql-resize-toolbar svg rect,
+.ql-resize-toolbar svg polygon,
+.ql-resize-toolbar svg polyline,
+.ql-resize-toolbar svg line,
+.ql-resize-toolbar svg circle,
+.ql-resize-toolbar .ql-fill {
+  fill: currentColor !important;
+}
+
+.ql-resize-handle {
+  width: 10px !important;
+  height: 10px !important;
+  border-radius: 2px !important;
+  background-color: #4f46e5 !important;
+  border: 1.5px solid #ffffff !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3) !important;
+  box-sizing: border-box !important;
+  opacity: 1 !important;
+}
+
+.ql-resize-display {
+  background-color: #1e293b !important;
+  color: #ffffff !important;
+  border: 1px solid #334155 !important;
+  border-radius: 4px !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  padding: 3px 6px !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25) !important;
+  box-sizing: border-box !important;
+  opacity: 0.95 !important;
+}
+
+html:not(.dark) .ql-resize-display,
+:root:not(.dark) .ql-resize-display {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+  border: 1px solid #cbd5e1 !important;
+}
+</style>
