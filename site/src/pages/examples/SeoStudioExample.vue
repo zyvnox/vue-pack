@@ -12,12 +12,12 @@
             Subpath: @zyvnox/vue-pack (SEO Optimization Engine)
           </span>
           <h2 class="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white mt-1">
-            Real-Time SEO Studio & On-Page Auditor
+            {{ isIndonesian ? 'Studio SEO Realtime & Auditor On-Page' : 'Real-Time SEO Studio & On-Page Auditor' }}
           </h2>
           <p class="text-sm text-slate-600 dark:text-slate-300 mt-1 max-w-2xl">
-            Test and verify real-time on-page SEO algorithm calculations: Meta Title/Description
-            limits, Focus Keyword relevance (Headings, Lead paragraph, Alt Text, Links),
-            false-positive density elimination, and live Google SERP snippet preview.
+            {{ isIndonesian
+              ? 'Uji dan verifikasi perhitungan algoritma SEO on-page realtime: batas Meta Title/Description, relevansi Focus Keyword (Judul H1-H6, paragraf pembuka, Alt Gambar, Tautan), eliminasi false-positive, dan pratinjau cuplikan Google SERP langsung.'
+              : 'Test and verify real-time on-page SEO algorithm calculations: Meta Title/Description limits, Focus Keyword relevance (Headings, Lead paragraph, Alt Text, Links), false-positive density elimination, and live Google SERP snippet preview.' }}
           </p>
         </div>
 
@@ -26,28 +26,28 @@
             type="button"
             @click="loadSample('optimal')"
             class="px-3.5 py-2 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 hover:bg-emerald-100 dark:hover:bg-emerald-900/60 text-xs sm:text-sm font-semibold transition-all flex items-center gap-1.5"
-            title="Load sample article with optimal SEO (score 90-100%)"
+            :title="isIndonesian ? 'Muat contoh artikel dengan SEO optimal (skor 90-100%)' : 'Load sample article with optimal SEO (score 90-100%)'"
           >
             <span>🌟</span>
-            <span>Load Optimal Article</span>
+            <span>{{ isIndonesian ? 'Muat Artikel Optimal' : 'Load Optimal Article' }}</span>
           </button>
           <button
             type="button"
             @click="loadSample('suboptimal')"
             class="px-3.5 py-2 rounded-xl bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-800 hover:bg-amber-100 dark:hover:bg-amber-900/60 text-xs sm:text-sm font-semibold transition-all flex items-center gap-1.5"
-            title="Load suboptimal draft sample"
+            :title="isIndonesian ? 'Muat draf sampel suboptimal' : 'Load suboptimal draft sample'"
           >
             <span>⚠️</span>
-            <span>Load Suboptimal</span>
+            <span>{{ isIndonesian ? 'Muat Sampel Suboptimal' : 'Load Suboptimal' }}</span>
           </button>
           <button
             type="button"
             @click="openModalTest"
             class="px-3.5 py-2 rounded-xl bg-indigo-600 text-white hover:bg-indigo-700 text-xs sm:text-sm font-semibold shadow-sm transition-all flex items-center gap-1.5"
-            title="Test SEO pill interaction directly inside FormModal"
+            :title="isIndonesian ? 'Uji interaksi pill SEO langsung di FormModal' : 'Test SEO pill interaction directly inside FormModal'"
           >
             <span>🪟</span>
-            <span>Test in FormModal</span>
+            <span>{{ isIndonesian ? 'Uji di FormModal' : 'Test in FormModal' }}</span>
           </button>
         </div>
       </div>
@@ -65,7 +65,7 @@
           {{ seoAnalysis.score }}
         </div>
         <div>
-          <span class="text-xs font-semibold text-slate-500 dark:text-slate-400"> SEO Score </span>
+          <span class="text-xs font-semibold text-slate-500 dark:text-slate-400"> {{ isIndonesian ? 'Skor SEO' : 'SEO Score' }} </span>
           <div class="text-sm font-bold mt-0.5" :class="scoreTextClass">
             {{ scoreVerdict }}
           </div>
@@ -75,10 +75,10 @@
       <div
         class="p-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm"
       >
-        <span class="text-xs font-semibold text-slate-500 dark:text-slate-400"> Word Count </span>
+        <span class="text-xs font-semibold text-slate-500 dark:text-slate-400"> {{ isIndonesian ? 'Jumlah Kata' : 'Word Count' }} </span>
         <div class="text-xl font-bold text-slate-900 dark:text-white mt-0.5">
           {{ wordCount }}
-          <span class="text-xs font-normal text-slate-400">words</span>
+          <span class="text-xs font-normal text-slate-400">{{ isIndonesian ? 'kata' : 'words' }}</span>
         </div>
       </div>
 
@@ -86,7 +86,7 @@
         class="p-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm"
       >
         <span class="text-xs font-semibold text-slate-500 dark:text-slate-400">
-          Keyword Density
+          {{ isIndonesian ? 'Kepadatan Keyword' : 'Keyword Density' }}
         </span>
         <div class="text-xl font-bold text-slate-900 dark:text-white mt-0.5">
           {{ keywordDensity }}%
@@ -98,7 +98,7 @@
         class="p-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm"
       >
         <span class="text-xs font-semibold text-slate-500 dark:text-slate-400">
-          Passed Checks
+          {{ isIndonesian ? 'Kriteria Terpenuhi' : 'Passed Checks' }}
         </span>
         <div class="text-xl font-bold text-slate-900 dark:text-white mt-0.5">
           <span class="text-emerald-600 dark:text-emerald-400">{{ passedChecksCount }}</span>
@@ -114,141 +114,155 @@
       <!-- Left Column: Content & SEO Inputs -->
       <div class="lg:col-span-7 space-y-6">
         <div
-          class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-5"
+          class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-6"
         >
+          <!-- Card Header -->
           <div
-            class="border-b border-slate-100 dark:border-slate-800 pb-4 flex items-center justify-between"
+            class="border-b border-slate-100 dark:border-slate-800 pb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2"
           >
-            <h3 class="font-bold text-slate-900 dark:text-white text-base">
-              Metadata & Article Content
-            </h3>
-            <div class="flex items-center gap-2">
-              <label class="text-xs text-slate-500 dark:text-slate-400">Type:</label>
-              <select
-                v-model="seoForm.contentType"
-                class="text-xs px-2.5 py-1 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-slate-200"
-              >
-                <option value="article">Article (Min 300 words)</option>
-                <option value="product">Product (Min 100 words)</option>
-                <option value="page">Page (Min 150 words)</option>
-                <option value="promo">Promo (Min 50 words)</option>
-              </select>
-            </div>
-          </div>
-
-          <!-- Focus Keyword -->
-          <div>
-            <div class="flex items-center justify-between mb-1.5">
-              <label class="block text-xs font-semibold text-slate-700 dark:text-slate-200">
-                🎯 Focus Keyword *
-              </label>
-              <span class="text-[11px] text-slate-400">Primary Google search target</span>
-            </div>
-            <input
-              v-model="seoForm.focusKeyword"
-              type="text"
-              placeholder="e.g. vue 3 component library"
-              class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 text-slate-900 dark:text-white focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none text-sm"
-            />
-          </div>
-
-          <!-- Meta Title -->
-          <div>
-            <div class="flex items-center justify-between mb-1.5">
-              <label class="block text-xs font-semibold text-slate-700 dark:text-slate-200">
-                🏷️ Meta Title *
-              </label>
-              <span
-                class="text-[11px] font-mono"
-                :class="
-                  seoForm.metaTitle.length >= 30 && seoForm.metaTitle.length <= 60
-                    ? 'text-emerald-500'
-                    : 'text-amber-500'
-                "
-              >
-                {{ seoForm.metaTitle.length }} / 60 characters (Ideal: 30-60)
-              </span>
-            </div>
-            <input
-              v-model="seoForm.metaTitle"
-              type="text"
-              placeholder="Page title for search engines..."
-              class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 text-slate-900 dark:text-white focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none text-sm"
-            />
-          </div>
-
-          <!-- Meta Description -->
-          <div>
-            <div class="flex items-center justify-between mb-1.5">
-              <label class="block text-xs font-semibold text-slate-700 dark:text-slate-200">
-                📄 Meta Description *
-              </label>
-              <span
-                class="text-[11px] font-mono"
-                :class="
-                  seoForm.metaDescription.length >= 120 && seoForm.metaDescription.length <= 160
-                    ? 'text-emerald-500'
-                    : 'text-amber-500'
-                "
-              >
-                {{ seoForm.metaDescription.length }} / 160 characters (Ideal: 120-160)
-              </span>
-            </div>
-            <textarea
-              v-model="seoForm.metaDescription"
-              rows="3"
-              placeholder="Concise, compelling snippet for search engine users..."
-              class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 text-slate-900 dark:text-white focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none text-sm"
-            ></textarea>
-          </div>
-
-          <!-- URL Slug & Content Title -->
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <div class="flex items-center justify-between mb-1.5">
-                <label class="block text-xs font-semibold text-slate-700 dark:text-slate-200">
-                  🔗 URL Slug
-                </label>
-                <button
-                  type="button"
-                  @click="generateSlug"
-                  class="text-[11px] text-emerald-600 dark:text-emerald-400 hover:underline"
-                >
-                  Auto from Title
-                </button>
+              <h3 class="font-bold text-slate-900 dark:text-white text-base flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                {{ isIndonesian ? 'Editor Metadata & Konten' : 'Metadata & Content Editor' }}
+              </h3>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                {{ isIndonesian
+                  ? 'Sesuaikan parameter SEO, cuplikan SERP, dan isi konten untuk audit realtime.'
+                  : 'Tune SEO parameters, SERP snippets, and article body for real-time audit.' }}
+              </p>
+            </div>
+          </div>
+
+          <!-- Section 1: Konfigurasi Target & Kata Kunci -->
+          <div class="space-y-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <SelectedOptions
+                  v-model="seoForm.contentType"
+                  :label="isIndonesian ? 'Tipe Konten' : 'Content Type'"
+                  :options="contentTypeOptions"
+                  :options-view="contentTypeOptionsView"
+                  :lang="currentLocale"
+                />
               </div>
-              <input
-                v-model="seoForm.slug"
-                type="text"
-                placeholder="example-url-slug"
-                class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 text-slate-900 dark:text-white focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none text-sm font-mono"
+              <div>
+                <TextInput
+                  v-model="seoForm.focusKeyword"
+                  :label="isIndonesian ? 'Kata Kunci Utama (Focus Keyword)' : 'Focus Keyword'"
+                  required
+                  :placeholder="isIndonesian ? 'cth. pustaka komponen vue 3' : 'e.g. vue 3 component library'"
+                  :lang="currentLocale"
+                />
+              </div>
+            </div>
+
+            <!-- Judul Konten (H1) & Slug URL -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <TextInput
+                  v-model="seoForm.contentTitle"
+                  :label="isIndonesian ? 'Judul Konten (H1)' : 'Content Title (H1)'"
+                  required
+                  :placeholder="isIndonesian ? 'Judul artikel utama...' : 'Main article headline...'"
+                  :lang="currentLocale"
+                />
+              </div>
+
+              <div class="relative">
+                <div class="absolute right-0 top-0 z-10">
+                  <button
+                    type="button"
+                    @click="generateSlug"
+                    class="text-[11px] font-semibold text-emerald-600 dark:text-emerald-400 hover:text-emerald-500 hover:underline cursor-pointer flex items-center gap-1 transition-colors"
+                  >
+                    <span>⚡</span>
+                    <span>{{ isIndonesian ? 'Otomatis dari Judul' : 'Auto from Title' }}</span>
+                  </button>
+                </div>
+                <TextInput
+                  v-model="seoForm.slug"
+                  :label="isIndonesian ? 'Slug URL' : 'URL Slug'"
+                  required
+                  placeholder="contoh-slug-url"
+                  :lang="currentLocale"
+                />
+              </div>
+            </div>
+          </div>
+
+          <!-- Section 2: Metadata Cuplikan SERP Google -->
+          <div class="pt-4 border-t border-slate-100 dark:border-slate-800 space-y-4">
+            <div class="flex items-center justify-between">
+              <h4 class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                {{ isIndonesian ? 'Metadata Cuplikan Google SERP' : 'Google SERP Snippet Metadata' }}
+              </h4>
+            </div>
+
+            <!-- Meta Title -->
+            <div class="relative">
+              <div class="absolute right-0 top-0 text-[11px] font-mono flex items-center gap-1.5 z-10">
+                <span
+                  class="px-2 py-0.5 rounded text-[10px] font-semibold"
+                  :class="
+                    seoForm.metaTitle.length >= 30 && seoForm.metaTitle.length <= 60
+                      ? 'bg-emerald-100 dark:bg-emerald-950/80 text-emerald-700 dark:text-emerald-300'
+                      : 'bg-amber-100 dark:bg-amber-950/80 text-amber-700 dark:text-amber-300'
+                  "
+                >
+                  {{ seoForm.metaTitle.length }} / 60 {{ isIndonesian ? 'karakter' : 'chars' }}
+                </span>
+                <span class="text-[10px] text-slate-400 hidden sm:inline">
+                  ({{ isIndonesian ? 'Ideal 30–60' : 'Ideal 30–60' }})
+                </span>
+              </div>
+              <TextInput
+                v-model="seoForm.metaTitle"
+                :label="isIndonesian ? 'Judul Meta (Meta Title)' : 'Meta Title'"
+                required
+                :placeholder="isIndonesian ? 'Judul halaman untuk mesin pencari...' : 'Page title for search engines...'"
+                :lang="currentLocale"
               />
             </div>
 
-            <div>
-              <label class="block text-xs font-semibold text-slate-700 dark:text-slate-200 mb-1.5">
-                📰 Content Title (H1)
-              </label>
-              <input
-                v-model="seoForm.contentTitle"
-                type="text"
-                placeholder="Main article headline..."
-                class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 text-slate-900 dark:text-white focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none text-sm"
+            <!-- Meta Description -->
+            <div class="relative">
+              <div class="absolute right-0 top-0 text-[11px] font-mono flex items-center gap-1.5 z-10">
+                <span
+                  class="px-2 py-0.5 rounded text-[10px] font-semibold"
+                  :class="
+                    seoForm.metaDescription.length >= 120 && seoForm.metaDescription.length <= 160
+                      ? 'bg-emerald-100 dark:bg-emerald-950/80 text-emerald-700 dark:text-emerald-300'
+                      : 'bg-amber-100 dark:bg-amber-950/80 text-amber-700 dark:text-amber-300'
+                  "
+                >
+                  {{ seoForm.metaDescription.length }} / 160 {{ isIndonesian ? 'karakter' : 'chars' }}
+                </span>
+                <span class="text-[10px] text-slate-400 hidden sm:inline">
+                  ({{ isIndonesian ? 'Ideal 120–160' : 'Ideal 120–160' }})
+                </span>
+              </div>
+              <TextAreaInput
+                v-model="seoForm.metaDescription"
+                :label="isIndonesian ? 'Deskripsi Meta (Meta Description)' : 'Meta Description'"
+                required
+                :rows="3"
+                :placeholder="isIndonesian ? 'Ringkasan singkat dan menarik untuk calon pembaca di mesin pencari...' : 'Concise, compelling snippet for search engine users...'"
+                :lang="currentLocale"
               />
             </div>
           </div>
 
-          <!-- Body Content (HTML / Rich Text) -->
-          <div>
-            <div class="flex items-center justify-between mb-1.5">
-              <label class="block text-xs font-semibold text-slate-700 dark:text-slate-200">
-                📝 Body Content (HTML / Markdown)
-              </label>
-              <div class="flex items-center gap-1.5">
+          <!-- Section 3: Isi Konten Artikel (Rich HTML) -->
+          <div class="pt-4 border-t border-slate-100 dark:border-slate-800 space-y-2">
+            <div class="relative">
+              <div class="absolute right-0 top-0 flex items-center gap-1.5 z-10">
+                <span class="text-[11px] text-slate-400 mr-1 hidden sm:inline">
+                  {{ isIndonesian ? 'Sisipkan format:' : 'Quick insert:' }}
+                </span>
                 <button
                   type="button"
                   @click="insertHeading"
-                  class="px-2 py-0.5 text-[11px] rounded bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300"
+                  class="px-2 py-0.5 text-[11px] rounded-md font-medium bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 cursor-pointer transition-colors shadow-xs"
                   title="Insert H2 tag"
                 >
                   + H2
@@ -256,7 +270,7 @@
                 <button
                   type="button"
                   @click="insertImageAlt"
-                  class="px-2 py-0.5 text-[11px] rounded bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300"
+                  class="px-2 py-0.5 text-[11px] rounded-md font-medium bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 cursor-pointer transition-colors shadow-xs"
                   title="Insert image with alt text"
                 >
                   + Img Alt
@@ -264,55 +278,56 @@
                 <button
                   type="button"
                   @click="insertLink"
-                  class="px-2 py-0.5 text-[11px] rounded bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300"
+                  class="px-2 py-0.5 text-[11px] rounded-md font-medium bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 cursor-pointer transition-colors shadow-xs"
                   title="Insert hyperlink"
                 >
                   + Link
                 </button>
               </div>
+              <TextAreaInput
+                v-model="seoForm.bodyContent"
+                :label="isIndonesian ? 'Isi Konten Artikel (HTML / Markdown)' : 'Body Content (HTML / Markdown)'"
+                :rows="8"
+                :placeholder="isIndonesian ? 'Tulis artikel menggunakan tag HTML seperti <h2>, <p>, <img>, <a>...' : 'Write article using HTML tags like <h2>, <p>, <img>, <a>...'"
+                :lang="currentLocale"
+              />
             </div>
-            <textarea
-              v-model="seoForm.bodyContent"
-              rows="9"
-              placeholder="Write article using HTML tags like <h2>, <p>, <img>, <a>..."
-              class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 text-slate-900 dark:text-white focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none text-xs sm:text-sm font-mono"
-            ></textarea>
           </div>
 
-          <!-- Extra Fields: Image, Author, Tags -->
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <!-- Section 4: Gambar, Penulis & Taksonomi -->
+          <div class="pt-4 border-t border-slate-100 dark:border-slate-800 space-y-4">
+            <div class="flex items-center justify-between">
+              <h4 class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                {{ isIndonesian ? 'Publikasi, Media & Taksonomi' : 'Publishing, Media & Taxonomy' }}
+              </h4>
+            </div>
+
             <div>
-              <label class="block text-xs font-semibold text-slate-700 dark:text-slate-200 mb-1.5">
-                🖼️ Featured Image URL
-              </label>
-              <input
+              <ImageInput
                 v-model="seoForm.featuredImage"
-                type="text"
-                placeholder="https://example.com/banner.jpg"
-                class="w-full px-3.5 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 text-slate-900 dark:text-white focus:ring-2 focus:ring-emerald-500/20 outline-none text-xs"
+                :label="isIndonesian ? 'Gambar Utama (Featured Image)' : 'Featured Image'"
+                :lang="currentLocale"
               />
             </div>
-            <div>
-              <label class="block text-xs font-semibold text-slate-700 dark:text-slate-200 mb-1.5">
-                ✍️ Author (E-E-A-T)
-              </label>
-              <input
-                v-model="seoForm.author"
-                type="text"
-                placeholder="Author name..."
-                class="w-full px-3.5 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 text-slate-900 dark:text-white focus:ring-2 focus:ring-emerald-500/20 outline-none text-xs"
-              />
-            </div>
-            <div>
-              <label class="block text-xs font-semibold text-slate-700 dark:text-slate-200 mb-1.5">
-                🏷️ Tags (Comma-separated)
-              </label>
-              <input
-                v-model="seoForm.tags"
-                type="text"
-                placeholder="vue, typescript, seo"
-                class="w-full px-3.5 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 text-slate-900 dark:text-white focus:ring-2 focus:ring-emerald-500/20 outline-none text-xs"
-              />
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <TextInput
+                  v-model="seoForm.author"
+                  :label="isIndonesian ? 'Penulis Konten (E-E-A-T)' : 'Author (E-E-A-T)'"
+                  :placeholder="isIndonesian ? 'Nama penulis artikel...' : 'Author name...'"
+                  :lang="currentLocale"
+                />
+              </div>
+
+              <div>
+                <TagInput
+                  v-model="tagsArray"
+                  :label="isIndonesian ? 'Tag Taksonomi & Kategori' : 'Taxonomy Tags & Categories'"
+                  :placeholder="isIndonesian ? 'Ketik tag lalu tekan Enter...' : 'Type tag & press Enter...'"
+                  :lang="currentLocale"
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -326,21 +341,33 @@
         >
           <div class="flex items-center justify-between">
             <span class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider">
-              Google SERP Preview
+              {{ isIndonesian ? 'Pratinjau SERP Google' : 'Google SERP Preview' }}
             </span>
-            <span class="text-[11px] text-slate-400">Desktop Snippet</span>
+            <span class="text-[11px] text-slate-400">{{ isIndonesian ? 'Cuplikan Desktop' : 'Desktop Snippet' }}</span>
           </div>
 
           <div
             class="p-4 rounded-xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200/80 dark:border-slate-800/80 space-y-1"
           >
             <!-- URL / Breadcrumb -->
-            <div class="flex items-center gap-1.5 text-xs text-slate-600 dark:text-slate-400">
-              <img
-                src="/favicon.ico"
-                alt="favicon"
-                class="w-4 h-4 rounded-full object-contain"
-              />
+            <div class="flex items-center gap-2 text-xs text-slate-600 dark:text-slate-400">
+              <div class="w-4 h-4 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center shrink-0 p-0.5 overflow-hidden shadow-xs">
+                <svg
+                  viewBox="0 0 500 500"
+                  class="w-full h-full text-slate-800 dark:text-white"
+                  fill="currentColor"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path fill="currentColor" d="m39.54647,355.96261l198.04917,0.84097l-20.60384,-40.7872l-100.91678,0l-76.52856,39.94622z"/>
+                  <path fill="currentColor" d="m330.94366,236.12394l-60.97055,118.57721l60.97055,-76.94904l0,-41.62817z"/>
+                  <path fill="currentColor" d="m353.64993,189.87041l-20.60384,41.62817l101.75775,124.88451l27.33163,0l-46.25352,-92.92753l-62.23201,-73.58515z"/>
+                  <path fill="currentColor" d="m152.65735,189.87041l-19.76287,11.77362l-97.1324,150.53419l79.47196,-42.04866l54.24277,-85.77926l-16.81946,-34.4799z"/>
+                  <path fill="currentColor" d="m421.76876,154.54954l-0.42049,108.90602l43.31012,83.25634l0.84097,-190.48042l-43.7306,-1.68195z"/>
+                  <path fill="currentColor" d="m149.71395,154.12906l102.17824,199.73112l-1.26146,-99.65532l-52.56082,-100.0758l-48.35596,0z"/>
+                  <path fill="currentColor" d="m34.50063,154.12906l32.79795,41.62817l65.17542,-0.42049l17.66044,-10.51216l-15.558,-30.69552l-100.0758,0z"/>
+                  <path fill="currentColor" d="m317.0676,143.19641l-60.55007,113.53137l0.42049,97.55288l88.72267,-174.08144l-28.59309,-37.00282z"/>
+                </svg>
+              </div>
               <span class="truncate"
                 >https://example.com › {{ seoForm.slug || 'article-slug' }}</span
               >
@@ -350,7 +377,7 @@
             <h4
               class="text-base sm:text-lg font-medium text-blue-700 dark:text-blue-400 hover:underline cursor-pointer leading-snug line-clamp-2"
             >
-              {{ seoForm.metaTitle || 'Page Title Not Provided' }}
+              {{ seoForm.metaTitle || (isIndonesian ? 'Judul Halaman Belum Diisi' : 'Page Title Not Provided') }}
             </h4>
 
             <!-- SERP Snippet Description -->
@@ -359,7 +386,9 @@
             >
               {{
                 seoForm.metaDescription ||
-                'Page description not provided. Google will extract a snippet from the content when left blank.'
+                (isIndonesian
+                  ? 'Deskripsi halaman belum diisi. Google akan mengambil cuplikan otomatis dari isi konten jika dikosongkan.'
+                  : 'Page description not provided. Google will extract a snippet from the content when left blank.')
               }}
             </p>
           </div>
@@ -374,10 +403,10 @@
           >
             <div>
               <h3 class="font-bold text-slate-900 dark:text-white text-sm">
-                Audit Analysis Checklist
+                {{ isIndonesian ? 'Daftar Audit Analisis SEO' : 'Audit Analysis Checklist' }}
               </h3>
               <p class="text-xs text-slate-500 dark:text-slate-400">
-                Real-time updates from <code>calculateSeo</code> engine
+                {{ isIndonesian ? 'Pembaruan realtime dari engine calculateSeo' : 'Real-time updates from calculateSeo engine' }}
               </p>
             </div>
 
@@ -450,7 +479,7 @@
               v-if="filteredDetails.length === 0"
               class="py-8 text-center text-xs text-slate-400"
             >
-              No criteria found in this group.
+              {{ isIndonesian ? 'Tidak ada kriteria pada grup ini.' : 'No criteria found in this group.' }}
             </div>
           </div>
         </div>
@@ -463,7 +492,7 @@
       :schema="modalSchema"
       :initial-data="modalFormData"
       :is-update="false"
-      lang="en"
+      :lang="currentLocale"
       :seo="seoMapping"
       @cancel="showModal = false"
       @submit="handleModalSubmit"
@@ -474,10 +503,27 @@
 <script setup lang="ts">
 import { ref, computed, reactive } from 'vue'
 import { calculateSeo } from '@zyvnox/vue-pack'
-import { FormModal } from '@zyvnox/vue-pack/components'
+import {
+  FormModal,
+  TextInput,
+  TextAreaInput,
+  ImageInput,
+  TagInput,
+  SelectedOptions,
+} from '@zyvnox/vue-pack/components'
 import type { SeoFieldMapping, Schema } from '@zyvnox/vue-pack/type'
+import { useSiteI18n } from '@/i18n'
 
-const origin = window.location.origin;
+const { isIndonesian, currentLocale } = useSiteI18n()
+const origin = window.location.origin
+
+const contentTypeOptions = ['article', 'product', 'page', 'promo']
+const contentTypeOptionsView = computed(() => [
+  isIndonesian.value ? 'Artikel (Min 300 kata)' : 'Article (Min 300 words)',
+  isIndonesian.value ? 'Produk (Min 100 kata)' : 'Product (Min 100 words)',
+  isIndonesian.value ? 'Halaman (Min 150 kata)' : 'Page (Min 150 words)',
+  isIndonesian.value ? 'Promo (Min 50 kata)' : 'Promo (Min 50 words)',
+])
 // 1. Reactive Input Form State
 const seoForm = reactive({
   contentType: 'article' as 'article' | 'product' | 'page' | 'promo',
@@ -501,6 +547,21 @@ const seoForm = reactive({
   featuredImage: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c',
   author: 'Zyvnox Development Team',
   tags: 'vue3, typescript, component-library, unocss',
+})
+
+// Reactive Tag Array for TagInput Component
+const tagsArray = computed<string[]>({
+  get() {
+    if (!seoForm.tags) return []
+    if (Array.isArray(seoForm.tags)) return seoForm.tags
+    return String(seoForm.tags)
+      .split(',')
+      .map((s) => s.trim())
+      .filter(Boolean)
+  },
+  set(val) {
+    seoForm.tags = Array.isArray(val) ? val.join(', ') : val
+  },
 })
 
 // 2. SEO Mapping Configuration
@@ -562,10 +623,10 @@ const passedChecksCount = computed(() => {
 
 const scoreVerdict = computed(() => {
   const score = seoAnalysis.value.score
-  if (score >= 85) return 'Optimal (Excellent)'
-  if (score >= 70) return 'Good (Meets Standards)'
-  if (score >= 50) return 'Average (Needs Optimization)'
-  return 'Low (Needs Improvement)'
+  if (score >= 85) return isIndonesian.value ? 'Optimal (Sangat Baik)' : 'Optimal (Excellent)'
+  if (score >= 70) return isIndonesian.value ? 'Baik (Memenuhi Standar)' : 'Good (Meets Standards)'
+  if (score >= 50) return isIndonesian.value ? 'Cukup (Perlu Optimasi)' : 'Average (Needs Optimization)'
+  return isIndonesian.value ? 'Rendah (Butuh Perbaikan)' : 'Low (Needs Improvement)'
 })
 
 const scoreBadgeClass = computed(() => {
@@ -586,13 +647,13 @@ const scoreTextClass = computed(() => {
 // 5. Checklist Filtering
 const activeGroupFilter = ref<'all' | 'meta' | 'keyword' | 'content' | 'social'>('all')
 
-const groupFilters = [
-  { id: 'all' as const, label: 'All' },
+const groupFilters = computed(() => [
+  { id: 'all' as const, label: isIndonesian.value ? 'Semua' : 'All' },
   { id: 'meta' as const, label: 'Meta' },
-  { id: 'keyword' as const, label: 'Keyword' },
-  { id: 'content' as const, label: 'Content' },
-  { id: 'social' as const, label: 'Social' },
-]
+  { id: 'keyword' as const, label: isIndonesian.value ? 'Kata Kunci' : 'Keyword' },
+  { id: 'content' as const, label: isIndonesian.value ? 'Konten' : 'Content' },
+  { id: 'social' as const, label: isIndonesian.value ? 'Sosial' : 'Social' },
+])
 
 const filteredDetails = computed(() => {
   if (activeGroupFilter.value === 'all') return seoAnalysis.value.details
@@ -680,59 +741,92 @@ const loadSample = (type: 'optimal' | 'suboptimal') => {
 const showModal = ref(false)
 const modalFormData = ref<Record<string, any>>({})
 
-const modalSchema: Schema = {
-  contentTitle: {
-    type: 'text',
-    label: 'Content Title (H1)',
-    required: true,
-  },
-  author: {
-    type: 'text',
-    label: 'Author',
-    tooltip: 'Author name for E-E-A-T credentials',
-  },
-  metaTitle: {
-    type: 'text',
-    label: 'Meta Title',
-    required: true,
-  },
-  metaDescription: {
-    type: 'textArea',
-    label: 'Meta Description',
-    required: true,
-  },
-  slug: {
-    type: 'text',
-    label: 'URL Slug',
+const modalSchema = computed<Schema>(() => ({
+  contentType: {
+    type: 'select',
+    label: isIndonesian.value ? 'Tipe Konten' : 'Content Type',
+    options: ['article', 'product', 'page', 'promo'],
+    optionsView: [
+      isIndonesian.value ? 'Artikel (Min 300 kata)' : 'Article (Min 300 words)',
+      isIndonesian.value ? 'Produk (Min 100 kata)' : 'Product (Min 100 words)',
+      isIndonesian.value ? 'Halaman (Min 150 kata)' : 'Page (Min 150 words)',
+      isIndonesian.value ? 'Promo (Min 50 kata)' : 'Promo (Min 50 words)',
+    ],
     required: true,
   },
   focusKeyword: {
     type: 'text',
-    label: 'Focus Keyword',
+    label: isIndonesian.value ? 'Kata Kunci Utama (Focus Keyword)' : 'Focus Keyword',
     required: true,
+    placeholder: isIndonesian.value ? 'cth. pustaka komponen vue 3' : 'e.g. vue 3 component library',
+  },
+  contentTitle: {
+    type: 'text',
+    label: isIndonesian.value ? 'Judul Konten (H1)' : 'Content Title (H1)',
+    required: true,
+    placeholder: isIndonesian.value ? 'Judul artikel utama...' : 'Main article headline...',
+  },
+  metaTitle: {
+    type: 'text',
+    label: isIndonesian.value ? 'Judul Meta (Meta Title)' : 'Meta Title',
+    required: true,
+    placeholder: isIndonesian.value ? 'Judul halaman untuk mesin pencari...' : 'Page title for search engines...',
+  },
+  metaDescription: {
+    type: 'textArea',
+    label: isIndonesian.value ? 'Deskripsi Meta (Meta Description)' : 'Meta Description',
+    required: true,
+    placeholder: isIndonesian.value ? 'Ringkasan singkat untuk hasil pencarian...' : 'Brief summary for search engine snippet...',
+  },
+  slug: {
+    type: 'text',
+    label: isIndonesian.value ? 'Slug URL' : 'URL Slug',
+    required: true,
+    placeholder: 'contoh-slug-url',
   },
   bodyContent: {
     type: 'quillEditor',
-    label: 'Article Body Content',
+    label: isIndonesian.value ? 'Isi Konten Artikel (Rich Text)' : 'Article Body Content (Rich Text)',
   },
   featuredImage: {
     type: 'image',
-    label: 'Upload Image',
+    label: isIndonesian.value ? 'Gambar Utama (Featured Image)' : 'Featured Image',
   },
-  tags:{
+  author: {
+    type: 'text',
+    label: isIndonesian.value ? 'Penulis Konten (E-E-A-T)' : 'Author (E-E-A-T)',
+    placeholder: 'Zyvnox Development Team',
+  },
+  tags: {
     type: 'tag',
-    value:['vue3', 'typescript', 'component-library', 'unocss'],
-    label: 'Tags (Comma-separated)',
-  }
-}
+    label: isIndonesian.value ? 'Tag Taksonomi & Kategori' : 'Taxonomy Tags & Categories',
+    placeholder: isIndonesian.value ? 'Ketik tag lalu tekan Enter...' : 'Type tag and press Enter...',
+  },
+}))
 
 const openModalTest = () => {
-  modalFormData.value = { ...seoForm, tags:['vue3', 'typescript', 'component-library', 'unocss'] }
+  const currentTags = Array.isArray(seoForm.tags)
+    ? [...seoForm.tags]
+    : typeof seoForm.tags === 'string'
+      ? seoForm.tags.split(',').map((s) => s.trim()).filter(Boolean)
+      : ['vue3', 'typescript', 'component-library', 'unocss']
+
+  modalFormData.value = {
+    ...seoForm,
+    tags: currentTags,
+  }
   showModal.value = true
 }
 
 const handleModalSubmit = (payload: Record<string, any>) => {
-  Object.assign(seoForm, payload)
+  const formattedTags = Array.isArray(payload.tags)
+    ? payload.tags.join(', ')
+    : payload.tags || ''
+
+  Object.assign(seoForm, {
+    ...payload,
+    tags: formattedTags,
+  })
   showModal.value = false
 }
 </script>

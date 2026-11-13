@@ -1,23 +1,17 @@
 <template>
   <div class="space-y-8">
-    <header class="border-b border-slate-200 dark:border-slate-800 pb-4">
-      <h1 class="text-3xl font-bold text-slate-900 dark:text-white mb-2">
-        ToggleInput (Switch)
-      </h1>
-      <p class="text-sm text-slate-600 dark:text-slate-400">
-        Accessible boolean switch toggle component with smooth sliding animation, tooltip support, i18n support, and disabled state styling.
-      </p>
-    </header>
+    <DocHeader />
 
     <!-- Demo 1: Basic Toggle -->
     <DemoSection title="Basic Boolean Switch" description="Toggles a true/false boolean state.">
       <div class="flex items-center justify-between max-w-md">
         <ToggleInput
           v-model="basic"
-          label="Enable Push Notifications"
+          :label="isIndonesian ? 'Aktifkan Notifikasi Push' : 'Enable Push Notifications'"
+          :lang="currentLocale"
         />
-        <span class="text-xs font-mono" :class="basic ? 'text-emerald-500' : 'text-slate-400'">
-          {{ basic ? 'ACTIVE' : 'DISABLED' }}
+        <span class="text-xs font-mono font-semibold" :class="basic ? 'text-emerald-500' : 'text-slate-400'">
+          {{ basic ? (isIndonesian ? 'AKTIF' : 'ACTIVE') : (isIndonesian ? 'NONAKTIF' : 'DISABLED') }}
         </span>
       </div>
 
@@ -30,9 +24,10 @@
     <DemoSection title="With Schema Tooltip" description="Explains feature implications beside the toggle switch.">
       <ToggleInput
         v-model="withTooltip"
-        label="Strict Two-Factor Authentication (2FA)"
-        tooltip="Requires hardware security key or TOTP app on every new browser session"
+        :label="isIndonesian ? 'Autentikasi Dua Faktor Ketat (2FA)' : 'Strict Two-Factor Authentication (2FA)'"
+        :tooltip="isIndonesian ? 'Memerlukan kunci keamanan perangkat keras atau aplikasi TOTP pada setiap sesi browser baru' : 'Requires hardware security key or TOTP app on every new browser session'"
         tooltip-position="right"
+        :lang="currentLocale"
       />
 
       <template #code>
@@ -45,13 +40,15 @@
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <ToggleInput
           v-model="disabledOn"
-          label="Mandatory SSL Enforcement"
+          :label="isIndonesian ? 'Penerapan Wajib SSL' : 'Mandatory SSL Enforcement'"
           disabled
+          :lang="currentLocale"
         />
         <ToggleInput
           v-model="disabledOff"
-          label="Beta Feature Flag (Locked)"
+          :label="isIndonesian ? 'Fitur Eksperimental Beta (Terkunci)' : 'Beta Feature Flag (Locked)'"
           disabled
+          :lang="currentLocale"
         />
       </div>
 
@@ -62,25 +59,26 @@
 
     <!-- Props Table -->
     <section class="space-y-4">
-      <h2 class="text-xl font-bold text-slate-900 dark:text-slate-100">Props</h2>
       <PropsTable :props="propsList" />
     </section>
 
     <!-- Events Table -->
     <section class="space-y-4">
-      <h2 class="text-xl font-bold text-slate-900 dark:text-slate-100">Events</h2>
       <EventsTable :events="eventsList" />
     </section>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import { ToggleInput } from '@zyvnox/vue-pack/components'
-import DemoSection from '@/components/DemoSection.vue'
 import CodeBlock from '@/components/CodeBlock.vue'
-import PropsTable, { type PropDef } from '@/components/PropsTable.vue'
+import DemoSection from '@/components/DemoSection.vue'
 import EventsTable, { type EventDef } from '@/components/EventsTable.vue'
+import PropsTable, { type PropDef } from '@/components/PropsTable.vue'
+import { useSiteI18n } from '@/i18n'
+import { ToggleInput } from '@zyvnox/vue-pack/components'
+import { ref } from 'vue'
+
+const { isIndonesian, currentLocale } = useSiteI18n()
 
 const basic = ref(true)
 const withTooltip = ref(false)

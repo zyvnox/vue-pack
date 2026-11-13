@@ -1,13 +1,6 @@
 <template>
   <div class="space-y-8">
-    <header class="border-b border-slate-200 dark:border-slate-800 pb-4">
-      <h1 class="text-3xl font-bold text-slate-900 dark:text-white mb-2">
-        ModalDetailData
-      </h1>
-      <p class="text-sm text-slate-600 dark:text-slate-400">
-        Schema-driven read-only data detail dialog component for inspecting complete record contents formatted cleanly.
-      </p>
-    </header>
+    <DocHeader />
 
     <!-- Demo 1: Basic Modal Detail -->
     <DemoSection title="Read-Only Record Detail Dialog" description="Click the button to open a detailed view of a customer account.">
@@ -17,7 +10,7 @@
           @click="showModal = true"
           class="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold transition-colors"
         >
-          Inspect Customer Details
+          {{ isIndonesian ? 'Lihat Detail Pelanggan' : 'Inspect Customer Details' }}
         </button>
       </div>
 
@@ -26,7 +19,9 @@
         :schema="detailSchema"
         :form-data="customerRecord"
         :value-null-view="true"
-        title="Customer Record #CUST-982"
+        :title="isIndonesian ? 'Data Rekam Pelanggan #CUST-982' : 'Customer Record #CUST-982'"
+        :close-text="isIndonesian ? 'Tutup' : 'Close'"
+        :lang="currentLocale"
         @close="showModal = false"
       />
 
@@ -37,27 +32,27 @@
 
     <!-- Props Table -->
     <section class="space-y-4">
-      <h2 class="text-xl font-bold text-slate-900 dark:text-slate-100">Props</h2>
       <PropsTable :props="propsList" />
     </section>
 
     <!-- Events Table -->
     <section class="space-y-4">
-      <h2 class="text-xl font-bold text-slate-900 dark:text-slate-100">Events</h2>
       <EventsTable :events="eventsList" />
     </section>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import CodeBlock from '@/components/CodeBlock.vue'
+import DemoSection from '@/components/DemoSection.vue'
+import EventsTable from '@/components/EventsTable.vue'
+import PropsTable from '@/components/PropsTable.vue'
+import { useSiteI18n } from '@/i18n'
 import { ModalDetailData } from '@zyvnox/vue-pack/components'
 import type { Schema } from '@zyvnox/vue-pack/type'
-import DemoSection from '@/components/DemoSection.vue'
-import CodeBlock from '@/components/CodeBlock.vue'
-import PropsTable from '@/components/PropsTable.vue'
-import EventsTable from '@/components/EventsTable.vue'
+import { computed, ref } from 'vue'
 
+const { isIndonesian, currentLocale } = useSiteI18n()
 const showModal = ref(false)
 
 const customerRecord = {
@@ -68,13 +63,13 @@ const customerRecord = {
   registeredAt: '2025-04-12',
 }
 
-const detailSchema: Schema = {
-  name: { type: 'text', label: 'Full Legal Name' },
-  company: { type: 'text', label: 'Organization / Company' },
-  email: { type: 'text', label: 'Primary Contact Email' },
-  tier: { type: 'text', label: 'Subscription Plan' },
-  registeredAt: { type: 'date', label: 'Member Since' },
-}
+const detailSchema = computed<Schema>(() => ({
+  name: { type: 'text', label: isIndonesian.value ? 'Nama Lengkap Sah' : 'Full Legal Name' },
+  company: { type: 'text', label: isIndonesian.value ? 'Organisasi / Perusahaan' : 'Organization / Company' },
+  email: { type: 'text', label: isIndonesian.value ? 'Email Kontak Utama' : 'Primary Contact Email' },
+  tier: { type: 'text', label: isIndonesian.value ? 'Paket Langganan' : 'Subscription Plan' },
+  registeredAt: { type: 'date', label: isIndonesian.value ? 'Terdaftar Sejak' : 'Member Since' },
+}))
 
 const basicCode = `<template>
   <button @click="show = true">Inspect Details</button>

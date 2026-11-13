@@ -5,47 +5,51 @@
       class="hidden lg:flex fixed top-0 left-0 bottom-0 w-72 z-20 border-r border-slate-200 dark:border-slate-800 p-5 overflow-y-auto bg-white dark:bg-slate-900 flex-col"
     >
       <!-- Brand & Controls -->
-      <div
-        class="flex items-center justify-between mb-6 pb-4 border-b border-slate-200 dark:border-slate-800"
-      >
-        <RouterLink to="/" class="flex items-center gap-2.5">
-          <img src="/zyvnox-black.svg" class="w-8 h-8 dark:hidden shrink-0" alt="Zyvnox Logo" />
-          <img
-            src="/zyvnox-white.svg"
-            class="w-8 h-8 hidden dark:block shrink-0"
-            alt="Zyvnox Logo"
-          />
-          <div class="flex flex-col items-start justify-center">
-            <span
-              class="font-bold text-sm tracking-tight text-slate-900 dark:text-white leading-tight"
-              >@zyvnox</span
-            >
-            <span
-              class="inline-block mt-0.5 text-[10px] font-mono whitespace-nowrap bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300 px-1.5 py-0.5 rounded"
-              >vue-pack v0.1.3 • Early</span
-            >
+      <div class="mb-5 pb-4 border-b border-slate-200 dark:border-slate-800 space-y-3">
+        <!-- Row 1: Brand & Theme Toggle -->
+        <div class="flex items-center justify-between">
+          <RouterLink to="/" class="flex items-center gap-2.5 min-w-0">
+            <img src="/zyvnox-black.svg" class="w-7 h-7 dark:hidden shrink-0" alt="Zyvnox Logo" />
+            <img
+              src="/zyvnox-white.svg"
+              class="w-7 h-7 hidden dark:block shrink-0"
+              alt="Zyvnox Logo"
+            />
+            <div class="flex items-center gap-1.5 min-w-0">
+              <span
+                class="font-bold text-sm tracking-tight text-slate-900 dark:text-white truncate"
+                >@zyvnox</span
+              >
+              <span
+                class="text-[10px] font-mono bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300 px-1.5 py-0.5 rounded font-semibold shrink-0"
+                >v0.1.4</span
+              >
+            </div>
+          </RouterLink>
+
+          <button
+            type="button"
+            @click="toggleDark"
+            class="p-1.5 rounded-lg border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors shrink-0"
+            :title="t('nav.toggleTheme')"
+          >
+            <span v-if="isDark">🌙</span>
+            <span v-else>☀️</span>
+          </button>
+        </div>
+
+        <!-- Row 2: Quick Search & Language Switcher -->
+        <div class="flex items-center gap-2">
+          <div class="relative flex-1 min-w-0">
+            <input
+              v-model="searchQuery"
+              type="text"
+              :placeholder="t('sidebar.filterPlaceholder')"
+              class="w-full pl-2.5 pr-2 py-1.5 text-xs rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/80 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder:text-slate-400 dark:placeholder:text-slate-500"
+            />
           </div>
-        </RouterLink>
-
-        <button
-          type="button"
-          @click="toggleDark"
-          class="p-1 rounded-lg border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
-          title="Toggle Dark Mode"
-        >
-          <span v-if="isDark">🌙</span>
-          <span v-else>☀️</span>
-        </button>
-      </div>
-
-      <!-- Quick Search Filter -->
-      <div class="mb-4">
-        <input
-          v-model="searchQuery"
-          type="text"
-          placeholder="Filter components..."
-          class="w-full px-3 py-1.5 text-xs rounded-md border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/80 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
+          <LanguageSwitcher />
+        </div>
       </div>
 
       <!-- Navigation Lists -->
@@ -57,7 +61,7 @@
         >
           <div class="flex items-center gap-2">
             <span>⚡</span>
-            <span>Live Playground</span>
+            <span>{{ t('nav.livePlayground') }}</span>
           </div>
           <span
             class="text-[10px] font-mono bg-emerald-950/40 px-1.5 py-0.5 rounded text-emerald-100"
@@ -70,7 +74,7 @@
           <h4
             class="text-[11px] font-bold tracking-wider text-slate-400 dark:text-slate-500 uppercase mb-2"
           >
-            Getting Started
+            {{ t('sidebar.gettingStarted') }}
           </h4>
           <div class="space-y-0.5">
             <RouterLink
@@ -101,7 +105,7 @@
           <h4
             class="text-[11px] font-bold tracking-wider text-slate-400 dark:text-slate-500 uppercase mb-2"
           >
-            Core Engines
+            {{ t('sidebar.coreEngines') }}
           </h4>
           <div class="space-y-0.5">
             <RouterLink
@@ -129,7 +133,7 @@
           <h4
             class="text-[11px] font-bold tracking-wider text-slate-400 dark:text-slate-500 uppercase mb-2"
           >
-            Inputs ({{ inputs.length }})
+            {{ t('sidebar.inputs') }} ({{ inputs.length }})
           </h4>
           <div class="space-y-0.5">
             <RouterLink
@@ -153,7 +157,7 @@
           <h4
             class="text-[11px] font-bold tracking-wider text-slate-400 dark:text-slate-500 uppercase mb-2"
           >
-            Display ({{ displays.length }})
+            {{ t('sidebar.display') }} ({{ displays.length }})
           </h4>
           <div class="space-y-0.5">
             <RouterLink
@@ -177,7 +181,7 @@
           <h4
             class="text-[11px] font-bold tracking-wider text-slate-400 dark:text-slate-500 uppercase mb-2"
           >
-            Feedback ({{ feedbacks.length }})
+            {{ t('sidebar.feedback') }} ({{ feedbacks.length }})
           </h4>
           <div class="space-y-0.5">
             <RouterLink
@@ -201,7 +205,7 @@
           <h4
             class="text-[11px] font-bold tracking-wider text-slate-400 dark:text-slate-500 uppercase mb-2"
           >
-            Utilities
+            {{ t('sidebar.utilities') }}
           </h4>
           <div class="space-y-0.5">
             <RouterLink
@@ -241,65 +245,69 @@
           class="relative w-72 max-w-[85vw] bg-white dark:bg-slate-900 h-full p-5 overflow-y-auto flex flex-col z-10 shadow-2xl border-r border-slate-200 dark:border-slate-800"
         >
           <!-- Drawer Header -->
-          <div
-            class="flex items-center justify-between mb-6 pb-4 border-b border-slate-200 dark:border-slate-800"
-          >
-            <RouterLink to="/" @click="emit('close')" class="flex items-center gap-2.5">
-              <img src="/zyvnox-black.svg" class="w-8 h-8 dark:hidden shrink-0" alt="Zyvnox Logo" />
-              <img
-                src="/zyvnox-white.svg"
-                class="w-8 h-8 hidden dark:block shrink-0"
-                alt="Zyvnox Logo"
-              />
-              <div class="flex flex-col items-start justify-center">
-                <span
-                  class="font-bold text-sm tracking-tight text-slate-900 dark:text-white leading-tight"
-                  >@zyvnox</span
+          <div class="mb-5 pb-4 border-b border-slate-200 dark:border-slate-800 space-y-3">
+            <!-- Row 1: Brand & Actions -->
+            <div class="flex items-center justify-between">
+              <RouterLink to="/" @click="emit('close')" class="flex items-center gap-2.5 min-w-0">
+                <img src="/zyvnox-black.svg" class="w-7 h-7 dark:hidden shrink-0" alt="Zyvnox Logo" />
+                <img
+                  src="/zyvnox-white.svg"
+                  class="w-7 h-7 hidden dark:block shrink-0"
+                  alt="Zyvnox Logo"
+                />
+                <div class="flex items-center gap-1.5 min-w-0">
+                  <span
+                    class="font-bold text-sm tracking-tight text-slate-900 dark:text-white truncate"
+                    >@zyvnox</span
+                  >
+                  <span
+                    class="text-[10px] font-mono bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300 px-1.5 py-0.5 rounded font-semibold shrink-0"
+                    >v0.1.4</span
+                  >
+                </div>
+              </RouterLink>
+
+              <div class="flex items-center gap-1.5 shrink-0">
+                <button
+                  type="button"
+                  @click="toggleDark"
+                  class="p-1.5 rounded-lg border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                  :title="t('nav.toggleTheme')"
                 >
-                <span
-                  class="inline-block mt-0.5 text-[10px] font-mono whitespace-nowrap bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300 px-1.5 py-0.5 rounded"
-                  >vue-pack v0.1.3</span
+                  <span v-if="isDark">🌙</span>
+                  <span v-else>☀️</span>
+                </button>
+
+                <button
+                  type="button"
+                  @click="emit('close')"
+                  class="p-1.5 rounded-lg border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                  :aria-label="t('nav.closeNav')"
                 >
+                  <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M6 18L18 6M6 6l12 12"
+                    />
+                  </svg>
+                </button>
               </div>
-            </RouterLink>
-
-            <div class="flex items-center gap-1.5">
-              <button
-                type="button"
-                @click="toggleDark"
-                class="p-1 rounded-lg border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
-                title="Toggle Dark Mode"
-              >
-                <span v-if="isDark">🌙</span>
-                <span v-else>☀️</span>
-              </button>
-
-              <button
-                type="button"
-                @click="emit('close')"
-                class="p-1 rounded-lg border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
-                aria-label="Close navigation"
-              >
-                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                </svg>
-              </button>
             </div>
-          </div>
 
-          <!-- Quick Search Filter -->
-          <div class="mb-4">
-            <input
-              v-model="searchQuery"
-              type="text"
-              placeholder="Filter components..."
-              class="w-full px-3 py-1.5 text-xs rounded-md border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/80 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
+            <!-- Row 2: Search & Language Switcher -->
+            <div class="flex items-center gap-2">
+              <div class="relative flex-1 min-w-0">
+                <input
+                  v-model="searchQuery"
+                  type="text"
+                  :placeholder="t('sidebar.filterPlaceholder')"
+                  class="w-full pl-2.5 pr-2 py-1.5 text-xs rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/80 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder:text-slate-400 dark:placeholder:text-slate-500"
+                />
+              </div>
+              <LanguageSwitcher />
+            </div>
           </div>
 
           <!-- Navigation Lists -->
@@ -312,7 +320,7 @@
             >
               <div class="flex items-center gap-2">
                 <span>⚡</span>
-                <span>Live Playground</span>
+                <span>{{ t('nav.livePlayground') }}</span>
               </div>
               <span
                 class="text-[10px] font-mono bg-emerald-950/40 px-1.5 py-0.5 rounded text-emerald-100"
@@ -324,7 +332,7 @@
               <h4
                 class="text-[11px] font-bold tracking-wider text-slate-400 dark:text-slate-500 uppercase mb-2"
               >
-                Getting Started
+                {{ t('sidebar.gettingStarted') }}
               </h4>
               <div class="space-y-0.5">
                 <RouterLink
@@ -355,7 +363,7 @@
               <h4
                 class="text-[11px] font-bold tracking-wider text-slate-400 dark:text-slate-500 uppercase mb-2"
               >
-                Core Engines
+                {{ t('sidebar.coreEngines') }}
               </h4>
               <div class="space-y-0.5">
                 <RouterLink
@@ -383,7 +391,7 @@
               <h4
                 class="text-[11px] font-bold tracking-wider text-slate-400 dark:text-slate-500 uppercase mb-2"
               >
-                Inputs ({{ inputs.length }})
+                {{ t('sidebar.inputs') }} ({{ inputs.length }})
               </h4>
               <div class="space-y-0.5">
                 <RouterLink
@@ -407,7 +415,7 @@
               <h4
                 class="text-[11px] font-bold tracking-wider text-slate-400 dark:text-slate-500 uppercase mb-2"
               >
-                Display ({{ displays.length }})
+                {{ t('sidebar.display') }} ({{ displays.length }})
               </h4>
               <div class="space-y-0.5">
                 <RouterLink
@@ -431,7 +439,7 @@
               <h4
                 class="text-[11px] font-bold tracking-wider text-slate-400 dark:text-slate-500 uppercase mb-2"
               >
-                Feedback ({{ feedbacks.length }})
+                {{ t('sidebar.feedback') }} ({{ feedbacks.length }})
               </h4>
               <div class="space-y-0.5">
                 <RouterLink
@@ -455,7 +463,7 @@
               <h4
                 class="text-[11px] font-bold tracking-wider text-slate-400 dark:text-slate-500 uppercase mb-2"
               >
-                Utilities
+                {{ t('sidebar.utilities') }}
               </h4>
               <div class="space-y-0.5">
                 <RouterLink
@@ -486,9 +494,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount, watch } from 'vue'
+import { ref, computed, onMounted, onBeforeUnmount, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { useDark } from '@/composables/useDark'
+import { useSiteI18n } from '@/i18n'
+import LanguageSwitcher from '@/components/LanguageSwitcher.vue'
 
 const props = withDefaults(
   defineProps<{
@@ -506,6 +516,7 @@ const emit = defineEmits<{
 const route = useRoute()
 const searchQuery = ref('')
 const { isDark, toggleDark } = useDark()
+const { t } = useSiteI18n()
 
 const isActive = (path: string) => route.path === path
 
@@ -561,19 +572,19 @@ const filterItems = (items: NavItem[]) => {
   return items.filter((item) => item.name.toLowerCase().includes(searchQuery.value.toLowerCase()))
 }
 
-const guides: NavItem[] = [
-  { name: 'Getting Started', path: '/doc/getting-started' },
+const guides = computed<NavItem[]>(() => [
+  { name: t('sidebar.items.gettingStarted'), path: '/doc/getting-started' },
   {
-    name: "What's New?",
+    name: t('sidebar.items.whatsNew'),
     path: '/doc/whats-new',
-    badge: 'v0.1.3',
+    badge: 'v0.1.4',
     badgeClass: 'bg-amber-100 dark:bg-amber-950/70 text-amber-700 dark:text-amber-300 font-bold',
   },
-  { name: 'Installation', path: '/doc/installation' },
-  { name: 'Configuration', path: '/doc/config' },
-  { name: 'i18n Localization', path: '/doc/i18n' },
-  { name: '💖 Sponsor & Support', path: '/doc/sponsor' },
-]
+  { name: t('sidebar.items.installation'), path: '/doc/installation' },
+  { name: t('sidebar.items.configuration'), path: '/doc/config' },
+  { name: t('sidebar.items.i18n'), path: '/doc/i18n' },
+  { name: t('sidebar.items.sponsor'), path: '/doc/sponsor' },
+])
 
 const engines: NavItem[] = [
   { name: 'FormModal', path: '/doc/examples/form-modal' },

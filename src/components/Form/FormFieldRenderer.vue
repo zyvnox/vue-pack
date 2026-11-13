@@ -42,6 +42,10 @@
       :id="fieldKey"
       :label="label"
       :model-value="getValue() ?? null"
+      :currency="field.currency"
+      :currency-position="field.currencyPosition"
+      :currencies="field.currencies"
+      :allow-currency-select="field.allowCurrencySelect"
       :error="getNested(errors, fieldKey)"
       :disabled="field.disabled"
       :validate="field.validate"
@@ -355,6 +359,7 @@
       :tooltip="field.tooltip"
       :tooltip-position="field.tooltipPosition"
       :tooltip-icon="field.tooltipIcon"
+      :display="field.display"
       @create:Options="
         (k: string, o: string | number, v: string) => $emit('create:Options', k, o, v)
       "

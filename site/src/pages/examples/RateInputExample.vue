@@ -1,22 +1,16 @@
 <template>
   <div class="space-y-8">
-    <header class="border-b border-slate-200 dark:border-slate-800 pb-4">
-      <h1 class="text-3xl font-bold text-slate-900 dark:text-white mb-2">
-        RateInput
-      </h1>
-      <p class="text-sm text-slate-600 dark:text-slate-400">
-        Interactive star rating component with hover previews, customizable max scale via `validate.max`, custom tooltips, and responsive sizing.
-      </p>
-    </header>
+    <DocHeader />
 
     <!-- Demo 1: Basic 5-Star Rating -->
     <DemoSection title="Standard 5-Star Rating" description="Interactive 5-star rating widget with toggle reset.">
       <RateInput
         v-model="basic"
-        label="Product Satisfaction"
+        :label="isIndonesian ? 'Kepuasan Produk' : 'Product Satisfaction'"
+        :lang="currentLocale"
       />
       <div class="text-xs text-slate-500">
-        Rating Score: <code class="font-mono font-bold">{{ basic }} / 5 stars</code>
+        {{ isIndonesian ? 'Skor Penilaian:' : 'Rating Score:' }} <code class="font-mono font-bold">{{ basic }} / 5 {{ isIndonesian ? 'bintang' : 'stars' }}</code>
       </div>
 
       <template #code>
@@ -31,15 +25,16 @@
     >
       <RateInput
         v-model="tenStar"
-        label="Net Promoter Score (NPS)"
-        tooltip="Rate likelihood to recommend on a scale from 1 to 10"
+        :label="isIndonesian ? 'Skor Rekomendasi (NPS)' : 'Net Promoter Score (NPS)'"
+        :tooltip="isIndonesian ? 'Nilai kemungkinan untuk merekomendasikan pada skala 1 hingga 10' : 'Rate likelihood to recommend on a scale from 1 to 10'"
         tooltip-position="right"
+        :lang="currentLocale"
         :validate="{
           max: 10,
         }"
       />
       <div class="text-xs text-slate-500">
-        Selected Score: <code class="font-mono font-bold">{{ tenStar }} / 10 stars</code>
+        {{ isIndonesian ? 'Skor Terpilih:' : 'Selected Score:' }} <code class="font-mono font-bold">{{ tenStar }} / 10 {{ isIndonesian ? 'bintang' : 'stars' }}</code>
       </div>
 
       <template #code>
@@ -52,14 +47,16 @@
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <RateInput
           v-model="errorVal"
-          label="Required Vendor Assessment"
+          :label="isIndonesian ? 'Penilaian Vendor Wajib' : 'Required Vendor Assessment'"
           required
-          :error="'Assessment rating is mandatory before finalizing contract'"
+          :error="isIndonesian ? 'Penilaian kepuasan wajib diisi sebelum finalisasi kontrak' : 'Assessment rating is mandatory before finalizing contract'"
+          :lang="currentLocale"
         />
         <RateInput
           v-model="disabledVal"
-          label="Historical Average Rating (Read-Only)"
+          :label="isIndonesian ? 'Rata-rata Rating Historis (Hanya-Baca)' : 'Historical Average Rating (Read-Only)'"
           disabled
+          :lang="currentLocale"
         />
       </div>
 
@@ -70,13 +67,11 @@
 
     <!-- Props Table -->
     <section class="space-y-4">
-      <h2 class="text-xl font-bold text-slate-900 dark:text-slate-100">Props</h2>
       <PropsTable :props="propsList" />
     </section>
 
     <!-- Events Table -->
     <section class="space-y-4">
-      <h2 class="text-xl font-bold text-slate-900 dark:text-slate-100">Events</h2>
       <EventsTable :events="eventsList" />
     </section>
   </div>
@@ -85,10 +80,13 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { RateInput } from '@zyvnox/vue-pack/components'
+import { useSiteI18n } from '@/i18n'
 import DemoSection from '@/components/DemoSection.vue'
 import CodeBlock from '@/components/CodeBlock.vue'
 import PropsTable, { type PropDef } from '@/components/PropsTable.vue'
 import EventsTable, { type EventDef } from '@/components/EventsTable.vue'
+
+const { isIndonesian, currentLocale } = useSiteI18n()
 
 const basic = ref(4)
 const tenStar = ref(8)

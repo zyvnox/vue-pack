@@ -14,23 +14,24 @@
         <div class="zyvnox-sponsor-badge-wrapper">
           <div class="zyvnox-sponsor-badge">
             <span class="zyvnox-badge-pulse-icon" aria-hidden="true">💖</span>
-            <span class="zyvnox-badge-highlight">Support Open Source</span>
+            <span class="zyvnox-badge-highlight">{{ isId ? 'Dukung Open Source' : 'Support Open Source' }}</span>
             <span class="zyvnox-badge-separator" aria-hidden="true">•</span>
-            <span class="zyvnox-badge-subtext">100% Free &amp; Independent</span>
+            <span class="zyvnox-badge-subtext">{{ isId ? '100% Gratis & Mandiri' : '100% Free & Independent' }}</span>
           </div>
         </div>
 
         <h3
           class="zyvnox-text-lg sm:zyvnox-text-xl zyvnox-font-bold zyvnox-text-slate-900 dark:zyvnox-text-white zyvnox-tracking-tight"
         >
-          Support Early Release v0.1.3 &rarr; v1.0.0
+          {{ isId ? 'Dukung Rilis Awal v0.1.4 → v1.0.0' : 'Support Early Release v0.1.4 → v1.0.0' }}
         </h3>
 
         <p
           class="zyvnox-text-sm zyvnox-text-slate-600 dark:zyvnox-text-slate-300 zyvnox-leading-relaxed"
         >
-          Help maintain free open-source docs, global CDN infrastructure, and expand 30+
-          schema-driven Vue 3 components on our journey to v1.0.0 stable.
+          {{ isId
+            ? 'Bantu pemeliharaan dokumentasi gratis, infrastruktur CDN global, dan pengembangan 30+ komponen Vue 3 berbasis skema menuju rilis stabil v1.0.0.'
+            : 'Help maintain free open-source docs, global CDN infrastructure, and expand 30+ schema-driven Vue 3 components on our journey to v1.0.0 stable.' }}
         </p>
       </div>
 
@@ -105,7 +106,20 @@
 </template>
 
 <script setup lang="ts">
-// SponsorCard component for site footer and sponsor documentation
+import { computed } from 'vue'
+import { useI18n } from '../composables/useI18n'
+
+const props = withDefaults(
+  defineProps<{
+    lang?: 'en' | 'id'
+  }>(),
+  {
+    lang: undefined,
+  },
+)
+
+const { lang: currentLang } = useI18n(props.lang)
+const isId = computed(() => currentLang.value === 'id')
 </script>
 
 <style scoped>
@@ -201,4 +215,3 @@ html.dark .zyvnox-badge-subtext {
   color: #94a3b8;
 }
 </style>
-

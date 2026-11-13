@@ -3,3 +3,4 @@
 export * from './clientInfo'
 export * from './locale'
 export * from './message'
+export * from './currency'

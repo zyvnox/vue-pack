@@ -1,23 +1,17 @@
 <template>
   <div class="space-y-8">
-    <header class="border-b border-slate-200 dark:border-slate-800 pb-4">
-      <h1 class="text-3xl font-bold text-slate-900 dark:text-white mb-2">
-        NumberInput
-      </h1>
-      <p class="text-sm text-slate-600 dark:text-slate-400">
-        Numeric input component with type safety, integer enforcement, min/max range validation, duplicate checks, and custom tooltip support.
-      </p>
-    </header>
+    <DocHeader />
 
     <!-- Demo 1: Basic Usage -->
     <DemoSection title="Basic Numeric Input" description="Binds a numerical value with automatic number type casting.">
       <NumberInput
         v-model="basic"
-        label="Quantity / Units"
-        placeholder="Enter quantity"
+        :label="isIndonesian ? 'Jumlah / Kuantitas' : 'Quantity / Units'"
+        :placeholder="isIndonesian ? 'Masukkan jumlah kuantitas' : 'Enter quantity'"
+        :lang="currentLocale"
       />
       <div class="text-xs text-slate-500">
-        Bound Value: <code class="font-mono font-bold">{{ basic ?? '(empty)' }}</code> (Type: {{ typeof basic }})
+        {{ isIndonesian ? 'Nilai Terikat:' : 'Bound Value:' }} <code class="font-mono font-bold">{{ basic ?? (isIndonesian ? '(kosong)' : '(empty)') }}</code> ({{ isIndonesian ? 'Tipe:' : 'Type:' }} {{ typeof basic }})
       </div>
 
       <template #code>
@@ -32,21 +26,22 @@
     >
       <NumberInput
         v-model="validatedVal"
-        label="Discount Percentage (%)"
-        tooltip="Enter an integer percentage between 0 and 100 (13 and 42 are reserved)"
+        :label="isIndonesian ? 'Persentase Diskon (%)' : 'Discount Percentage (%)'"
+        :tooltip="isIndonesian ? 'Masukkan persentase bilangan bulat antara 0 dan 100 (13 dan 42 dicadangkan)' : 'Enter an integer percentage between 0 and 100 (13 and 42 are reserved)'"
         tooltip-position="right"
+        :lang="currentLocale"
         :validate="{
           min: 0,
           max: 100,
           integer: true,
           duplicate: [13, 42],
         }"
-        placeholder="e.g. 25"
+        :placeholder="isIndonesian ? 'cth. 25' : 'e.g. 25'"
       />
       <div class="text-xs text-slate-500 space-y-1">
-        <div>Current Value: <code class="font-mono font-bold">{{ validatedVal ?? '(empty)' }}</code></div>
+        <div>{{ isIndonesian ? 'Nilai Saat Ini:' : 'Current Value:' }} <code class="font-mono font-bold">{{ validatedVal ?? (isIndonesian ? '(kosong)' : '(empty)') }}</code></div>
         <div class="text-slate-400 dark:text-slate-500">
-          Rules: Min 0, Max 100, Integer only, Blacklist: <code class="font-mono">[13, 42]</code>.
+          {{ isIndonesian ? 'Aturan: Min 0, Max 100, Hanya bilangan bulat, Daftar hitam:' : 'Rules: Min 0, Max 100, Integer only, Blacklist:' }} <code class="font-mono">[13, 42]</code>.
         </div>
       </div>
 
@@ -60,14 +55,16 @@
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <NumberInput
           v-model="errorVal"
-          label="Inventory Stock Level"
+          :label="isIndonesian ? 'Tingkat Stok Inventaris' : 'Inventory Stock Level'"
           required
-          :error="'Stock quantity cannot fall below safety threshold (10)'"
+          :error="isIndonesian ? 'Jumlah stok tidak boleh berada di bawah batas aman (10)' : 'Stock quantity cannot fall below safety threshold (10)'"
+          :lang="currentLocale"
         />
         <NumberInput
           v-model="disabledVal"
-          label="Fixed Minimum Order (Read-Only)"
+          :label="isIndonesian ? 'Pesanan Minimal Tetap (Hanya-Baca)' : 'Fixed Minimum Order (Read-Only)'"
           disabled
+          :lang="currentLocale"
         />
       </div>
 
@@ -78,13 +75,11 @@
 
     <!-- Props Table -->
     <section class="space-y-4">
-      <h2 class="text-xl font-bold text-slate-900 dark:text-slate-100">Props</h2>
       <PropsTable :props="propsList" />
     </section>
 
     <!-- Events Table -->
     <section class="space-y-4">
-      <h2 class="text-xl font-bold text-slate-900 dark:text-slate-100">Events</h2>
       <EventsTable :events="eventsList" />
     </section>
   </div>
@@ -93,10 +88,13 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { NumberInput } from '@zyvnox/vue-pack/components'
+import { useSiteI18n } from '@/i18n'
 import DemoSection from '@/components/DemoSection.vue'
 import CodeBlock from '@/components/CodeBlock.vue'
 import PropsTable, { type PropDef } from '@/components/PropsTable.vue'
 import EventsTable, { type EventDef } from '@/components/EventsTable.vue'
+
+const { isIndonesian, currentLocale } = useSiteI18n()
 
 const basic = ref<number>(5)
 const validatedVal = ref<number>(13)

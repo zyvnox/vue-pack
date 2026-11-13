@@ -1,25 +1,19 @@
 <template>
   <div class="space-y-8">
-    <header class="border-b border-slate-200 dark:border-slate-800 pb-4">
-      <h1 class="text-3xl font-bold text-slate-900 dark:text-white mb-2">
-        SelectedOptions (Searchable Combobox)
-      </h1>
-      <p class="text-sm text-slate-600 dark:text-slate-400">
-        Searchable dropdown selection component with custom key/label option mapping, dynamic inline modal item creation (`withCreate`), custom tooltips, and i18n support.
-      </p>
-    </header>
+    <DocHeader />
 
     <!-- Demo 1: Basic Combobox -->
     <DemoSection title="Basic Searchable Select" description="Select from a list of predefined options with instant filtering.">
       <SelectedOptions
         v-model="basic"
-        label="Department"
+        :label="isIndonesian ? 'Departemen' : 'Department'"
         :options="departments"
         :options-view="departments"
-        placeholder="Select department..."
+        :placeholder="isIndonesian ? 'Pilih departemen...' : 'Select department...'"
+        :lang="currentLocale"
       />
       <div class="text-xs text-slate-500">
-        Selected Value: <code class="font-mono font-bold">{{ basic || '(none)' }}</code>
+        {{ isIndonesian ? 'Nilai Terpilih:' : 'Selected Value:' }} <code class="font-mono font-bold">{{ basic || (isIndonesian ? '(tidak ada)' : '(none)') }}</code>
       </div>
 
       <template #code>
@@ -31,15 +25,16 @@
     <DemoSection title="With Tooltip & Custom Key/Label Mappings" description="Maps internal keys to user-friendly display labels with tooltip guidance.">
       <SelectedOptions
         v-model="withTooltip"
-        label="Access Level"
-        tooltip="Select minimum security clearance required for this role"
+        :label="isIndonesian ? 'Tingkat Akses' : 'Access Level'"
+        :tooltip="isIndonesian ? 'Pilih izin keamanan minimal yang diperlukan untuk peran ini' : 'Select minimum security clearance required for this role'"
         tooltip-position="right"
         :options="['read', 'write', 'admin', 'owner']"
-        :options-view="['Read-Only (Viewer)', 'Standard Write (Editor)', 'Administrator', 'Organization Owner']"
-        placeholder="Choose clearance..."
+        :options-view="isIndonesian ? ['Hanya-Baca (Viewer)', 'Tulis Standar (Editor)', 'Administrator', 'Pemilik Organisasi'] : ['Read-Only (Viewer)', 'Standard Write (Editor)', 'Administrator', 'Organization Owner']"
+        :placeholder="isIndonesian ? 'Pilih izin akses...' : 'Choose clearance...'"
+        :lang="currentLocale"
       />
       <div class="text-xs text-slate-500">
-        Selected Key: <code class="font-mono font-bold">{{ withTooltip || '(none)' }}</code>
+        {{ isIndonesian ? 'Kunci Terpilih:' : 'Selected Key:' }} <code class="font-mono font-bold">{{ withTooltip || (isIndonesian ? '(tidak ada)' : '(none)') }}</code>
       </div>
 
       <template #code>
@@ -52,18 +47,20 @@
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <SelectedOptions
           v-model="errorVal"
-          label="Server Region"
+          :label="isIndonesian ? 'Wilayah Server' : 'Server Region'"
           :options="['us-east-1', 'eu-west-1', 'ap-southeast-1']"
           :options-view="['us-east-1', 'eu-west-1', 'ap-southeast-1']"
           required
-          :error="'Please select a hosting region'"
+          :error="isIndonesian ? 'Silakan pilih wilayah hosting' : 'Please select a hosting region'"
+          :lang="currentLocale"
         />
         <SelectedOptions
           v-model="disabledVal"
-          label="Default Billing Currency (Read-Only)"
+          :label="isIndonesian ? 'Mata Uang Penagihan Default (Hanya-Baca)' : 'Default Billing Currency (Read-Only)'"
           :options="['USD', 'EUR', 'IDR']"
           :options-view="['USD', 'EUR', 'IDR']"
           disabled
+          :lang="currentLocale"
         />
       </div>
 
@@ -74,13 +71,11 @@
 
     <!-- Props Table -->
     <section class="space-y-4">
-      <h2 class="text-xl font-bold text-slate-900 dark:text-slate-100">Props</h2>
       <PropsTable :props="propsList" />
     </section>
 
     <!-- Events Table -->
     <section class="space-y-4">
-      <h2 class="text-xl font-bold text-slate-900 dark:text-slate-100">Events</h2>
       <EventsTable :events="eventsList" />
     </section>
   </div>
@@ -89,10 +84,13 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { SelectedOptions } from '@zyvnox/vue-pack/components'
+import { useSiteI18n } from '@/i18n'
 import DemoSection from '@/components/DemoSection.vue'
 import CodeBlock from '@/components/CodeBlock.vue'
 import PropsTable, { type PropDef } from '@/components/PropsTable.vue'
 import EventsTable, { type EventDef } from '@/components/EventsTable.vue'
+
+const { isIndonesian, currentLocale } = useSiteI18n()
 
 const basic = ref('')
 const withTooltip = ref('read')

@@ -9,18 +9,18 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': path.resolve(import.meta.dirname, 'src'),
-      '@zyvnox/vue-pack/components': path.resolve(import.meta.dirname, '../dist/components.es.js'),
-      '@zyvnox/vue-pack/config': path.resolve(import.meta.dirname, '../dist/config.es.js'),
-      '@zyvnox/vue-pack/init': path.resolve(import.meta.dirname, '../dist/init.es.js'),
-      '@zyvnox/vue-pack/indexedDB': path.resolve(import.meta.dirname, '../dist/indexedDB.es.js'),
+      '@zyvnox/vue-pack/components': path.resolve(import.meta.dirname, '../src/components/index.ts'),
+      '@zyvnox/vue-pack/config': path.resolve(import.meta.dirname, '../src/configs/index.ts'),
+      '@zyvnox/vue-pack/init': path.resolve(import.meta.dirname, '../src/init.ts'),
+      '@zyvnox/vue-pack/indexedDB': path.resolve(import.meta.dirname, '../src/lib/indexedDB.ts'),
       '@zyvnox/vue-pack/secureFetch': path.resolve(
         import.meta.dirname,
-        '../dist/secureFetch.es.js',
+        '../src/lib/secureFetch.ts',
       ),
-      '@zyvnox/vue-pack/vue': path.resolve(import.meta.dirname, '../dist/vue.es.js'),
+      '@zyvnox/vue-pack/vue': path.resolve(import.meta.dirname, '../src/plugin/vue.plugin.ts'),
       '@zyvnox/vue-pack/style.css': path.resolve(import.meta.dirname, '../dist/style.css'),
       '@zyvnox/vue-pack/type': path.resolve(import.meta.dirname, '../src/configs/types/index.ts'),
-      '@zyvnox/vue-pack': path.resolve(import.meta.dirname, '../dist/zyvnox-vue-pack.es.js'),
+      '@zyvnox/vue-pack': path.resolve(import.meta.dirname, '../src/index.ts'),
     },
   },
   server: {

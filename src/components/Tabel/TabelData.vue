@@ -604,7 +604,7 @@
                     v-else-if="getColumnType(key) === 'currency'"
                     class="zyvnox-whitespace-nowrap zyvnox-overflow-hidden zyvnox-text-ellipsis"
                   >
-                    {{ formatCurrency(value) }}
+                    {{ formatCurrency(value, key) }}
                   </div>
 
                   <div
@@ -906,6 +906,7 @@ import {
 } from '../../configs/defaults'
 import { defaultTextLabelsMap } from '../../configs/i18n'
 import { Loader, AlertApp } from '../../components/UI/Feedback'
+import { formatCurrencyValue } from '../../helpers/currency'
 
 const showSeoModal = ref(false)
 
@@ -1000,11 +1001,28 @@ function getColumnTooltip(
   return null
 }
 
-const formatCurrency = (value: any) => {
+const formatCurrency = (value: any, header: string) => {
   if (typeof value !== 'number') return value
-  const lang = propertys.value.base.lang === 'id' ? 'id-ID' : 'en-US'
-  const currency = propertys.value.base.lang === 'id' ? 'IDR' : 'USD'
-  return new Intl.NumberFormat(lang, { style: 'currency', currency: currency }).format(value)
+  const dataDisplay = propertys.value.base.dataTabelDisplay?.[header]
+  const valueKey =
+    typeof dataDisplay === 'object'
+      ? dataDisplay.valueKey
+      : typeof dataDisplay === 'string'
+        ? dataDisplay
+        : header
+  const field =
+    propertys.value.base.schema?.global?.[header] ||
+    propertys.value.base.schema?.display?.[header] ||
+    (valueKey
+      ? propertys.value.base.schema?.global?.[valueKey] ||
+        propertys.value.base.schema?.display?.[valueKey]
+      : undefined)
+  const currency =
+    (typeof dataDisplay === 'object' ? dataDisplay.currency : undefined) ||
+    (field?.type === 'currency' ? field.currency : undefined) ||
+    'IDR'
+
+  return formatCurrencyValue(value, currency)
 }
 
 const props = withDefaults(defineProps<TabelDataProperty<Item>>(), {

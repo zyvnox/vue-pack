@@ -14,6 +14,8 @@ import type {
   XORMany,
 } from '../../index'
 import type { SecureFetchOptions } from '../../lib/secureFetch'
+import type { ArrayObjectDisplayConfig, SupportedCurrency } from './field.types'
+export type { ArrayObjectDisplayConfig, SupportedCurrency } from './field.types'
 
 export interface TooltipProps {
   /**
@@ -62,6 +64,7 @@ export interface ArrayObjectProps extends TooltipProps {
   schema: Schema
   error?: string
   lang?: SupportedLanguage
+  display?: ArrayObjectDisplayConfig
 }
 
 export interface SingleObjectProps extends TooltipProps {
@@ -190,6 +193,10 @@ export interface CurrencyInputProps extends TooltipProps {
   label: string
   placeholder?: string
   modelValue?: number
+  currency?: SupportedCurrency
+  currencyPosition?: 'prefix' | 'suffix'
+  currencies?: SupportedCurrency[]
+  allowCurrencySelect?: boolean
   error?: string | string[]
   disabled?: boolean
   validate?: {

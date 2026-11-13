@@ -63,6 +63,7 @@ export type DataView = Record<string, string | dataProperty>
 
 export interface dataProperty {
   valueKey: string
+  currency?: string
   tooltip?: string
   tooltipPosition?: 'top' | 'bottom' | 'left' | 'right'
   tooltipIcon?: string

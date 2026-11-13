@@ -68,6 +68,7 @@ export default defineConfig({
   preflights: [
     {
       getCSS: () => `
+        :root { --spacing: 0.25rem; }
         @keyframes zyvnox-fadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes zyvnox-slideUp { from { opacity: 0; transform: translateY(30px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
         @keyframes zyvnox-slideIn { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } }

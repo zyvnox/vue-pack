@@ -1,23 +1,17 @@
 <template>
   <div class="space-y-8">
-    <header class="border-b border-slate-200 dark:border-slate-800 pb-4">
-      <h1 class="text-3xl font-bold text-slate-900 dark:text-white mb-2">
-        PasswordInput
-      </h1>
-      <p class="text-sm text-slate-600 dark:text-slate-400">
-        Secure password field with visibility toggle button (show/hide), strict security policy validation (min/max length, uppercase, lowercase, numbers, special characters), and i18n support.
-      </p>
-    </header>
+    <DocHeader />
 
     <!-- Demo 1: Basic Password -->
     <DemoSection title="Basic Password Input" description="Masked input with built-in show/hide eye toggle button.">
       <PasswordInput
         v-model="basic"
-        label="Account Password"
-        placeholder="Enter secret password"
+        :label="isIndonesian ? 'Kata Sandi Akun' : 'Account Password'"
+        :placeholder="isIndonesian ? 'Masukkan kata sandi rahasia' : 'Enter secret password'"
+        :lang="currentLocale"
       />
       <div class="text-xs text-slate-500">
-        Bound Length: <code class="font-mono font-bold">{{ basic.length }} chars</code>
+        {{ isIndonesian ? 'Panjang Karakter:' : 'Bound Length:' }} <code class="font-mono font-bold">{{ basic.length }} {{ isIndonesian ? 'karakter' : 'chars' }}</code>
       </div>
 
       <template #code>
@@ -32,8 +26,9 @@
     >
       <PasswordInput
         v-model="validatedVal"
-        label="Create Master Key"
-        placeholder="Enter complex password"
+        :label="isIndonesian ? 'Buat Kunci Master' : 'Create Master Key'"
+        :placeholder="isIndonesian ? 'Masukkan kata sandi kompleks' : 'Enter complex password'"
+        :lang="currentLocale"
         :validate="{
           minLength: 8,
           maxLength: 32,
@@ -45,7 +40,7 @@
       />
       <div class="text-xs text-slate-500 space-y-1">
         <div class="text-slate-400 dark:text-slate-500">
-          Required: &gt;= 8 chars, 1 uppercase, 1 lowercase, 1 number, and 1 special symbol (!@#\$%^&*).
+          {{ isIndonesian ? 'Wajib: >= 8 karakter, 1 huruf besar, 1 huruf kecil, 1 angka, dan 1 simbol khusus (!@#$%^&*).' : 'Required: >= 8 chars, 1 uppercase, 1 lowercase, 1 number, and 1 special symbol (!@#$%^&*).' }}
         </div>
       </div>
 
@@ -58,10 +53,11 @@
     <DemoSection title="With Password Requirements Tooltip" description="Explains complexity rules via schema tooltip.">
       <PasswordInput
         v-model="withTooltip"
-        label="New Account Password"
-        tooltip="Must include minimum 8 characters, 1 uppercase letter, and 1 special symbol"
+        :label="isIndonesian ? 'Kata Sandi Akun Baru' : 'New Account Password'"
+        :tooltip="isIndonesian ? 'Harus mencakup minimal 8 karakter, 1 huruf besar, dan 1 simbol khusus' : 'Must include minimum 8 characters, 1 uppercase letter, and 1 special symbol'"
         tooltip-position="right"
         placeholder="••••••••••••"
+        :lang="currentLocale"
       />
 
       <template #code>
@@ -74,14 +70,16 @@
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <PasswordInput
           v-model="errorVal"
-          label="Confirm Password"
+          :label="isIndonesian ? 'Konfirmasi Kata Sandi' : 'Confirm Password'"
           required
-          :error="'Passwords do not match'"
+          :error="isIndonesian ? 'Kata sandi tidak cocok' : 'Passwords do not match'"
+          :lang="currentLocale"
         />
         <PasswordInput
           v-model="disabledVal"
-          label="Stored App Secret (Read-Only)"
+          :label="isIndonesian ? 'Kunci Rahasia Tersimpan (Hanya-Baca)' : 'Stored App Secret (Read-Only)'"
           disabled
+          :lang="currentLocale"
         />
       </div>
 
@@ -92,13 +90,11 @@
 
     <!-- Props Table -->
     <section class="space-y-4">
-      <h2 class="text-xl font-bold text-slate-900 dark:text-slate-100">Props</h2>
       <PropsTable :props="propsList" />
     </section>
 
     <!-- Events Table -->
     <section class="space-y-4">
-      <h2 class="text-xl font-bold text-slate-900 dark:text-slate-100">Events</h2>
       <EventsTable :events="eventsList" />
     </section>
   </div>
@@ -107,10 +103,13 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { PasswordInput } from '@zyvnox/vue-pack/components'
+import { useSiteI18n } from '@/i18n'
 import DemoSection from '@/components/DemoSection.vue'
 import CodeBlock from '@/components/CodeBlock.vue'
 import PropsTable, { type PropDef } from '@/components/PropsTable.vue'
 import EventsTable, { type EventDef } from '@/components/EventsTable.vue'
+
+const { isIndonesian, currentLocale } = useSiteI18n()
 
 const basic = ref('')
 const validatedVal = ref('weakpass')
