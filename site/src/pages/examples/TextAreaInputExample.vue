@@ -1,23 +1,17 @@
 <template>
   <div class="space-y-8">
-    <header class="border-b border-slate-200 dark:border-slate-800 pb-4">
-      <h1 class="text-3xl font-bold text-slate-900 dark:text-white mb-2">
-        TextAreaInput
-      </h1>
-      <p class="text-sm text-slate-600 dark:text-slate-400">
-        Multi-line text area component with reactive auto-expand, minLength & maxLength validation guards, custom tooltips, and i18n support.
-      </p>
-    </header>
+    <DocHeader />
 
     <!-- Demo 1: Basic Usage -->
     <DemoSection title="Basic Text Area" description="Standard multi-line text input with reactive v-model binding.">
       <TextAreaInput
         v-model="basic"
-        label="Project Overview"
-        placeholder="Describe project deliverables..."
+        :label="isIndonesian ? 'Ikhtisar Proyek' : 'Project Overview'"
+        :placeholder="isIndonesian ? 'Jelaskan deliverable proyek...' : 'Describe project deliverables...'"
+        :lang="currentLocale"
       />
       <div class="text-xs text-slate-500">
-        Character Count: <code class="font-mono font-bold">{{ basic.length }} characters</code>
+        {{ isIndonesian ? 'Jumlah Karakter:' : 'Character Count:' }} <code class="font-mono font-bold">{{ basic.length }} {{ isIndonesian ? 'karakter' : 'characters' }}</code>
       </div>
 
       <template #code>
@@ -32,17 +26,18 @@
     >
       <TextAreaInput
         v-model="validatedVal"
-        label="Executive Summary"
-        placeholder="Enter at least 20 characters..."
+        :label="isIndonesian ? 'Ringkasan Eksekutif' : 'Executive Summary'"
+        :placeholder="isIndonesian ? 'Masukkan setidaknya 20 karakter...' : 'Enter at least 20 characters...'"
+        :lang="currentLocale"
         :validate="{
           minLength: 20,
           maxLength: 200,
         }"
       />
       <div class="text-xs text-slate-500 space-y-1">
-        <div>Current Length: <code class="font-mono font-bold">{{ validatedVal.length }} / 200 chars</code></div>
+        <div>{{ isIndonesian ? 'Panjang Saat Ini:' : 'Current Length:' }} <code class="font-mono font-bold">{{ validatedVal.length }} / 200 {{ isIndonesian ? 'karakter' : 'chars' }}</code></div>
         <div class="text-slate-400 dark:text-slate-500">
-          Enforces minLength: 20, maxLength: 200.
+          {{ isIndonesian ? 'Menerapkan batas minLength: 20, maxLength: 200.' : 'Enforces minLength: 20, maxLength: 200.' }}
         </div>
       </div>
 
@@ -55,10 +50,11 @@
     <DemoSection title="With Schema Tooltip" description="Displays detailed submission guidance via tooltip.">
       <TextAreaInput
         v-model="withTooltip"
-        label="Technical Bug Reproduction Steps"
-        tooltip="Provide step-by-step numbers, expected vs actual behavior, and environment details"
+        :label="isIndonesian ? 'Langkah Reproduksi Bug Teknis' : 'Technical Bug Reproduction Steps'"
+        :tooltip="isIndonesian ? 'Berikan nomor langkah-demi-langkah, perilaku yang diharapkan vs aktual, dan detail lingkungan' : 'Provide step-by-step numbers, expected vs actual behavior, and environment details'"
         tooltip-position="right"
         placeholder="1. Navigate to /dashboard..."
+        :lang="currentLocale"
       />
 
       <template #code>
@@ -71,13 +67,15 @@
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <TextAreaInput
           v-model="errorVal"
-          label="Internal Notes"
-          :error="'Notes must not contain sensitive internal access credentials'"
+          :label="isIndonesian ? 'Catatan Internal' : 'Internal Notes'"
+          :error="isIndonesian ? 'Catatan tidak boleh berisi kredensial akses internal yang sensitif' : 'Notes must not contain sensitive internal access credentials'"
+          :lang="currentLocale"
         />
         <TextAreaInput
           v-model="disabledVal"
-          label="Archived Compliance Log (Read-Only)"
+          :label="isIndonesian ? 'Log Kepatuhan Terarsip (Hanya-Baca)' : 'Archived Compliance Log (Read-Only)'"
           disabled
+          :lang="currentLocale"
         />
       </div>
 
@@ -88,13 +86,11 @@
 
     <!-- Props Table -->
     <section class="space-y-4">
-      <h2 class="text-xl font-bold text-slate-900 dark:text-slate-100">Props</h2>
       <PropsTable :props="propsList" />
     </section>
 
     <!-- Events Table -->
     <section class="space-y-4">
-      <h2 class="text-xl font-bold text-slate-900 dark:text-slate-100">Events</h2>
       <EventsTable :events="eventsList" />
     </section>
   </div>
@@ -103,10 +99,13 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { TextAreaInput } from '@zyvnox/vue-pack/components'
+import { useSiteI18n } from '@/i18n'
 import DemoSection from '@/components/DemoSection.vue'
 import CodeBlock from '@/components/CodeBlock.vue'
 import PropsTable, { type PropDef } from '@/components/PropsTable.vue'
 import EventsTable, { type EventDef } from '@/components/EventsTable.vue'
+
+const { isIndonesian, currentLocale } = useSiteI18n()
 
 const basic = ref('')
 const validatedVal = ref('Too short')

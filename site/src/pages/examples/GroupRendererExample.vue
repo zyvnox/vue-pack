@@ -1,13 +1,6 @@
 <template>
   <div class="space-y-8">
-    <header class="border-b border-slate-200 dark:border-slate-800 pb-4">
-      <h1 class="text-3xl font-bold text-slate-900 dark:text-white mb-2">
-        GroupRenderer (Conditional Schema Branching)
-      </h1>
-      <p class="text-sm text-slate-600 dark:text-slate-400">
-        Dynamic schema dispatcher that conditionally renders different form sub-schemas based on a selection dropdown or multi-section checkboxes, complete with real-time field-level validation.
-      </p>
-    </header>
+    <DocHeader />
 
     <!-- Demo 1: Dropdown / Select Mode -->
     <DemoSection
@@ -18,18 +11,19 @@
         <GroupRendererInput
           id="account-type-group"
           :form-data="groupData"
-          label="Entity Classification"
+          :label="isIndonesian ? 'Klasifikasi Entitas' : 'Entity Classification'"
           type-design="select"
           :options="accountSchemas"
-          :options-labels="{ individual: 'Individual Person', corporate: 'Corporate Entity' }"
+          :options-labels="isIndonesian ? { individual: 'Individu / Perorangan', corporate: 'Entitas Perusahaan' } : { individual: 'Individual Person', corporate: 'Corporate Entity' }"
           :errors="groupErrors"
+          :lang="currentLocale"
           @push:errors="handlePushError"
           @remove:errors="handleRemoveError"
           @update:model-value="handleUpdateModelValue"
         />
 
         <div class="text-xs text-slate-500">
-          Bound Form State:
+          {{ isIndonesian ? 'Status Formulir Terikat:' : 'Bound Form State:' }}
           <pre class="p-3 rounded-lg bg-slate-100 dark:bg-slate-800 font-mono mt-1 overflow-x-auto">{{ JSON.stringify(groupData, null, 2) }}</pre>
         </div>
       </div>
@@ -48,18 +42,19 @@
         <GroupRendererInput
           id="extensions-group"
           :form-data="extensionData"
-          label="Optional Service Add-ons"
+          :label="isIndonesian ? 'Layanan Tambahan Opsional' : 'Optional Service Add-ons'"
           type-design="cekbox"
           :options="addonSchemas"
-          :options-labels="{ billing: 'Tax Invoice Details', logistics: 'Logistics Warehouse' }"
+          :options-labels="isIndonesian ? { billing: 'Rincian Faktur Pajak', logistics: 'Gudang Logistik' } : { billing: 'Tax Invoice Details', logistics: 'Logistics Warehouse' }"
           :errors="groupErrors"
+          :lang="currentLocale"
           @push:errors="handlePushError"
           @remove:errors="handleRemoveError"
           @update:model-value="handleUpdateExtensionValue"
         />
 
         <div class="text-xs text-slate-500">
-          Bound Extension State:
+          {{ isIndonesian ? 'Status Ekstensi Terikat:' : 'Bound Extension State:' }}
           <pre class="p-3 rounded-lg bg-slate-100 dark:bg-slate-800 font-mono mt-1 overflow-x-auto">{{ JSON.stringify(extensionData, null, 2) }}</pre>
         </div>
       </div>
@@ -77,13 +72,15 @@
       <GroupRendererInput
         id="compliance-group"
         :form-data="groupData"
-        label="Compliance Regulatory Protocol"
-        tooltip="Select your legal regulatory framework for automated ISO/SOC2 audits"
+        :label="isIndonesian ? 'Protokol Kepatuhan Regulasi' : 'Compliance Regulatory Protocol'"
+        :tooltip="isIndonesian ? 'Pilih kerangka regulasi hukum Anda untuk audit ISO/SOC2 otomatis' : 'Select your legal regulatory framework for automated ISO/SOC2 audits'"
         tooltip-position="right"
         tooltip-icon="📋"
         type-design="select"
         :options="accountSchemas"
+        :options-labels="isIndonesian ? { individual: 'Individu / Perorangan', corporate: 'Entitas Perusahaan' } : { individual: 'Individual Person', corporate: 'Corporate Entity' }"
         :errors="{}"
+        :lang="currentLocale"
       />
 
       <template #code>
@@ -93,26 +90,27 @@
 
     <!-- Props Table -->
     <section class="space-y-4">
-      <h2 class="text-xl font-bold text-slate-900 dark:text-slate-100">Props</h2>
       <PropsTable :props="propsList" />
     </section>
 
     <!-- Events Table -->
     <section class="space-y-4">
-      <h2 class="text-xl font-bold text-slate-900 dark:text-slate-100">Events</h2>
       <EventsTable :events="eventsList" />
     </section>
   </div>
 </template>
 
 <script setup lang="ts">
-import { reactive } from 'vue'
+import { reactive, computed } from 'vue'
 import { GroupRendererInput } from '@zyvnox/vue-pack/components'
 import type { Schema, Errors } from '@zyvnox/vue-pack/type'
+import { useSiteI18n } from '@/i18n'
 import DemoSection from '@/components/DemoSection.vue'
 import CodeBlock from '@/components/CodeBlock.vue'
 import PropsTable, { type PropDef } from '@/components/PropsTable.vue'
 import EventsTable, { type EventDef } from '@/components/EventsTable.vue'
+
+const { isIndonesian, currentLocale } = useSiteI18n()
 
 const groupData = reactive<Record<string, any>>({
   nik: '3578012345678901',
@@ -144,60 +142,60 @@ const handleUpdateExtensionValue = (val: any, key: string) => {
   extensionData[key] = val
 }
 
-const accountSchemas: Record<string, Schema> = {
+const accountSchemas = computed<Record<string, Schema>>(() => ({
   individual: {
     fullName: {
       type: 'text',
-      label: 'Full Name',
+      label: isIndonesian.value ? 'Nama Lengkap' : 'Full Name',
       required: true,
-      placeholder: 'e.g. Budi Santoso',
+      placeholder: isIndonesian.value ? 'cth. Budi Santoso' : 'e.g. Budi Santoso',
       validate: { minLength: 3 },
     },
     nik: {
       type: 'text',
-      label: 'NIK (16 Digits)',
+      label: isIndonesian.value ? 'NIK (16 Digit)' : 'NIK (16 Digits)',
       required: true,
-      placeholder: '16 digit national ID',
+      placeholder: isIndonesian.value ? '16 digit NIK kependudukan' : '16 digit national ID',
       validate: { pattern: '^\\d{16}$' },
     },
   },
   corporate: {
     companyName: {
       type: 'text',
-      label: 'Registered Company Name',
+      label: isIndonesian.value ? 'Nama Perusahaan Terdaftar' : 'Registered Company Name',
       required: true,
       placeholder: 'PT Zyvnox Teknologi Nusantara',
       validate: { minLength: 3 },
     },
     taxId: {
       type: 'text',
-      label: 'Tax Identification Number (NPWP)',
+      label: isIndonesian.value ? 'Nomor Pokok Wajib Pajak (NPWP)' : 'Tax Identification Number (NPWP)',
       required: true,
-      placeholder: 'e.g. 01.234.567.8-012.000',
+      placeholder: isIndonesian.value ? 'cth. 01.234.567.8-012.000' : 'e.g. 01.234.567.8-012.000',
     },
   },
-}
+}))
 
-const addonSchemas: Record<string, Schema> = {
+const addonSchemas = computed<Record<string, Schema>>(() => ({
   billing: {
     vatNumber: {
       type: 'text',
-      label: 'Tax / VAT Number',
+      label: isIndonesian.value ? 'Nomor Pajak / PPN' : 'Tax / VAT Number',
       required: true,
-      placeholder: 'e.g. ID-991204',
+      placeholder: isIndonesian.value ? 'cth. ID-991204' : 'e.g. ID-991204',
       validate: { minLength: 4 },
     },
   },
   logistics: {
     warehouseCode: {
       type: 'text',
-      label: 'Warehouse Node Code',
+      label: isIndonesian.value ? 'Kode Node Gudang' : 'Warehouse Node Code',
       required: true,
-      placeholder: 'e.g. WH-SUB-01',
+      placeholder: isIndonesian.value ? 'cth. WH-SUB-01' : 'e.g. WH-SUB-01',
       validate: { minLength: 3 },
     },
   },
-}
+}))
 
 const selectCode = `<template>
   <GroupRendererInput

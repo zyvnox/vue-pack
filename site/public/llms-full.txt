@@ -1,0 +1,213 @@
+# @zyvnox/vue-pack — Full Technical Documentation & LLM Reference
+
+## Overview
+`@zyvnox/vue-pack` is a modern, enterprise-ready, schema-driven Vue 3 component library and developer toolkit. Built with TypeScript and UnoCSS, it is designed for rapid development of administrative dashboards, data-intensive web applications, and schema-driven CRUD interfaces.
+
+- Package Name: `@zyvnox/vue-pack`
+- License: MIT
+- Repository: https://github.com/zyvnox/vue-pack
+- Documentation: https://zyvnox.github.io/vue-pack/
+- Peer Dependencies: `vue >= 3.5.0`, `zod >= 4.0.0`, `leaflet >= 1.9.4`
+
+---
+
+## 1. Installation & Plugin Registration
+
+```bash
+npm install @zyvnox/vue-pack zod
+```
+
+### Global Registration in Vue 3:
+```typescript
+import { createApp } from 'vue'
+import App from './App.vue'
+import VuePack from '@zyvnox/vue-pack/vue'
+import '@zyvnox/vue-pack/style.css'
+
+const app = createApp(App)
+app.use(VuePack, {
+  lang: 'en', // 'en' | 'id'
+})
+app.mount('#app')
+```
+
+### Direct Component Import (Tree-Shaking):
+```vue
+<template>
+  <FormModal :schema="schema" :initial-data="formData" @submit="handleSubmit" />
+</template>
+
+<script setup lang="ts">
+import { FormModal, TextInput, TabelData } from '@zyvnox/vue-pack/components'
+import type { Schema } from '@zyvnox/vue-pack/type'
+</script>
+```
+
+---
+
+## 2. Core Engines
+
+### 2.1 FormModal Engine
+`FormModal` automates dialog forms using declarative JSON schema contracts with Zod validation, tabs, dynamic field rendering, and on-page SEO calculation.
+
+#### Schema Interface:
+```typescript
+interface Schema {
+  [fieldKey: string]: {
+    type: 'text' | 'number' | 'currency' | 'email' | 'password' | 'tel' | 'url' |
+          'textArea' | 'quillEditor' | 'select' | 'tag' | 'color' | 'date' |
+          'time' | 'dateTime' | 'file' | 'fileArray' | 'image' | 'imageArray' |
+          'toggle' | 'rate' | 'location' | 'arrayObject' | 'object' | 'group'
+    label: string
+    required?: boolean
+    placeholder?: string
+    tooltip?: string
+    tooltipPosition?: 'top' | 'bottom' | 'left' | 'right'
+    options?: string[]
+    optionsView?: string[]
+    tab?: string
+    disabled?: boolean
+    validate?: Record<string, any>
+  }
+}
+```
+
+#### Example Usage:
+```vue
+<template>
+  <FormModal
+    v-if="showModal"
+    :schema="articleSchema"
+    :initial-data="currentArticle"
+    :is-update="isEditMode"
+    :lang="'id'"
+    @submit="handleSave"
+    @cancel="showModal = false"
+  />
+</template>
+
+<script setup lang="ts">
+import { ref } from 'vue'
+import { FormModal } from '@zyvnox/vue-pack/components'
+import type { Schema } from '@zyvnox/vue-pack/type'
+
+const showModal = ref(true)
+const isEditMode = ref(false)
+const currentArticle = ref({})
+
+const articleSchema: Schema = {
+  title: {
+    type: 'text',
+    label: 'Judul Artikel',
+    required: true,
+    placeholder: 'Masukkan judul...',
+  },
+  category: {
+    type: 'select',
+    label: 'Kategori',
+    options: ['tech', 'design', 'business'],
+    optionsView: ['Teknologi', 'Desain', 'Bisnis'],
+    required: true,
+  },
+  body: {
+    type: 'quillEditor',
+    label: 'Isi Konten',
+    required: true,
+  },
+}
+
+const handleSave = (payload: Record<string, any>) => {
+  console.log('Saved payload:', payload)
+  showModal.value = false
+}
+</script>
+```
+
+---
+
+### 2.2 TabelData Suite
+A high-performance datatable component with sorting, server-side/client-side pagination, search, batch row selection, column projection, and export support.
+
+#### Example Usage:
+```vue
+<template>
+  <TabelData
+    :headers="headers"
+    :items="items"
+    :actions="['create', 'edit', 'delete']"
+    @edit="handleEdit"
+    @delete="handleDelete"
+    @create="handleCreate"
+  />
+</template>
+
+<script setup lang="ts">
+import { ref } from 'vue'
+import { TabelData } from '@zyvnox/vue-pack/components'
+
+const headers = [
+  { key: 'id', label: 'ID', sortable: true },
+  { key: 'name', label: 'Full Name', sortable: true },
+  { key: 'role', label: 'Role' },
+  { key: 'status', label: 'Status' },
+]
+
+const items = ref([
+  { id: 1, name: 'Alice Smith', role: 'Admin', status: 'Active' },
+  { id: 2, name: 'Bob Johnson', role: 'Developer', status: 'Inactive' },
+])
+
+const handleEdit = (row: any) => console.log('Edit row:', row)
+const handleDelete = (row: any) => console.log('Delete row:', row)
+const handleCreate = () => console.log('Create new entry')
+</script>
+```
+
+---
+
+### 2.3 SEO Engine (`calculateSeo`)
+A real-time on-page SEO calculation utility evaluating meta lengths, focus keyword placement, heading hierarchy, image alt attributes, and content density without DOM dependency (SSR-safe).
+
+```typescript
+import { calculateSeo } from '@zyvnox/vue-pack'
+
+const result = calculateSeo(
+  {
+    title: 'Vue 3 Component Library Guide',
+    metaTitle: 'Vue 3 Schema Component Library - Enterprise UI Pack',
+    metaDescription: 'A high-performance vue 3 component library built with TypeScript.',
+    bodyContent: '<h2>Overview</h2><p>Vue 3 component library guide for developers.</p>',
+    focusKeyword: 'vue 3 component library',
+  },
+  {
+    seo: {
+      contentType: 'article',
+      meta: {
+        title: 'metaTitle',
+        description: 'metaDescription',
+        focusKeyword: 'focusKeyword',
+      },
+      content: {
+        title: 'title',
+        body: 'bodyContent',
+      },
+    },
+  }
+)
+
+console.log(result.score) // 0-100
+console.log(result.details) // Array of passed/failed rule checks
+```
+
+---
+
+## 3. Subpath Module System
+
+1. `@zyvnox/vue-pack`: Main package entrance.
+2. `@zyvnox/vue-pack/components`: Vue 3 SFC component exports.
+3. `@zyvnox/vue-pack/config`: Reactive configuration manager and locale controller.
+4. `@zyvnox/vue-pack/init`: Application bootstrapping routines.
+5. `@zyvnox/vue-pack/indexedDB`: Persistent client-side IndexedDB caching engine.
+6. `@zyvnox/vue-pack/secureFetch`: Safe request utility with built-in token lifecycle.
+7. `@zyvnox/vue-pack/type`: Complete TypeScript definitions and schema interfaces.
+8. `@zyvnox/vue-pack/style.css`: Compiled UnoCSS production styles.

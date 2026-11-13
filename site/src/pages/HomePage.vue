@@ -29,14 +29,14 @@
             class="px-2.5 py-1.5 rounded-lg text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors hidden md:inline-flex items-center gap-1"
           >
             <span>✨</span>
-            <span>What's New</span>
+            <span>{{ t('nav.whatsNew') }}</span>
           </RouterLink>
 
           <RouterLink
             to="/doc"
             class="px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-lg text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
           >
-            <span>Docs</span>
+            <span>{{ t('nav.docs') }}</span>
           </RouterLink>
 
           <RouterLink
@@ -44,7 +44,7 @@
             class="flex items-center gap-1 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-lg text-xs font-semibold bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white shadow-sm transition-all"
           >
             <span>⚡</span>
-            <span class="hidden sm:inline">Playground</span>
+            <span class="hidden sm:inline">{{ t('nav.playground') }}</span>
           </RouterLink>
 
           <div class="hidden lg:inline-flex">
@@ -53,7 +53,7 @@
               class="items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-semibold text-pink-600 dark:text-pink-400 hover:bg-pink-50 dark:hover:bg-pink-950/40 transition-colors"
             >
               <span>💖</span>
-              <span>Sponsor</span>
+              <span>{{ t('nav.sponsor') }}</span>
             </RouterLink>
           </div>
 
@@ -63,14 +63,18 @@
             rel="noopener noreferrer"
             class="hidden md:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
           >
-            <span>GitHub ↗</span>
+            <span>{{ t('nav.github') }}</span>
           </a>
 
+          <!-- Interactive Language Switcher -->
+          <LanguageSwitcher />
+
+          <!-- Dark Mode Toggle -->
           <button
             type="button"
             @click="toggleDark"
             class="p-1.5 sm:p-2 rounded-lg border border-slate-200 dark:border-slate-700/80 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors text-xs flex items-center justify-center cursor-pointer"
-            title="Toggle Dark Mode"
+            :title="t('nav.toggleTheme')"
           >
             <span v-if="isDark">🌙</span>
             <span v-else>☀️</span>
@@ -95,22 +99,22 @@
             class="inline-flex items-center gap-2 px-3 py-1 sm:px-3.5 rounded-full bg-amber-50 dark:bg-amber-950/60 border border-amber-200 dark:border-amber-800 text-amber-700 dark:text-amber-300 text-xs font-semibold shadow-xs hover:border-amber-400 dark:hover:border-amber-600 transition-colors group cursor-pointer"
           >
             <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse shrink-0"></span>
-            <span>What's New in v{{ version }}</span>
+            <span>{{ t('home.whatsNewPill', { version }) }}</span>
             <span class="hidden sm:inline text-amber-400 dark:text-amber-600">•</span>
-            <span class="hidden sm:inline group-hover:underline">Changelog & Updates ↗</span>
+            <span class="hidden sm:inline group-hover:underline">{{ t('home.changelog') }}</span>
           </RouterLink>
 
           <!-- Main Hero Headline -->
           <h1 class="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-[1.15]">
-            The Enterprise Schema-Driven<br />
+            {{ t('home.heroTitlePrefix') }}<br />
             <span class="bg-gradient-to-r from-blue-600 via-indigo-600 to-cyan-500 bg-clip-text text-transparent">
-              Vue 3 Component Library
+              {{ t('home.heroTitleHighlight') }}
             </span>
           </h1>
 
           <!-- Tagline -->
           <p class="text-sm sm:text-lg lg:text-xl text-slate-600 dark:text-slate-300 max-w-2xl mx-auto leading-relaxed px-2">
-            Engineered for high-velocity administration dashboards, complex CRUD platforms, and offline-first data platforms. Powered by Zod schemas, autonomous IndexedDB, and zero CSS collisions.
+            {{ t('home.heroTagline') }}
           </p>
 
           <!-- Primary CTA Buttons -->
@@ -119,7 +123,7 @@
               to="/doc"
               class="w-full sm:w-auto text-center px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-semibold text-sm shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2"
             >
-              <span>Explore Documentation</span>
+              <span>{{ t('home.exploreDocs') }}</span>
               <span>→</span>
             </RouterLink>
 
@@ -128,7 +132,7 @@
               class="w-full sm:w-auto text-center px-6 py-3 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white rounded-xl font-semibold text-sm shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2"
             >
               <span>⚡</span>
-              <span>Live Playground</span>
+              <span>{{ t('home.openPlayground') }}</span>
             </RouterLink>
 
             <a
@@ -137,7 +141,7 @@
               rel="noopener noreferrer"
               class="w-full sm:w-auto text-center px-6 py-3 border border-slate-300 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl font-semibold text-sm transition-colors flex items-center justify-center gap-2"
             >
-              <span>GitHub ↗</span>
+              <span>{{ t('nav.github') }}</span>
             </a>
           </div>
 
@@ -149,7 +153,7 @@
           <!-- Interactive Package Manager Install Tabs -->
           <div class="max-w-md mx-auto pt-6 text-left w-full px-2 sm:px-0">
             <div class="flex items-center justify-between pb-2 px-1 text-xs text-slate-500 dark:text-slate-400 font-medium">
-              <span>Quick Install</span>
+              <span>{{ t('home.quickInstall') }}</span>
               <div class="flex gap-2">
                 <button
                   type="button"
@@ -175,10 +179,10 @@
                 type="button"
                 @click="copyInstall"
                 class="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs transition-colors shrink-0 flex items-center gap-1 cursor-pointer"
-                title="Copy install command"
+                :title="t('home.copyInstallTitle')"
               >
-                <span v-if="copied">✓ Copied!</span>
-                <span v-else>📋 Copy</span>
+                <span v-if="copied">{{ t('home.copied') }}</span>
+                <span v-else>{{ t('home.copy') }}</span>
               </button>
             </div>
           </div>
@@ -189,10 +193,10 @@
       <section class="max-w-6xl mx-auto px-4 sm:px-6 py-12 border-t border-slate-200 dark:border-slate-800">
         <div class="text-center space-y-2 mb-12">
           <h2 class="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white">
-            Architected for Scalable Production Applications
+            {{ t('home.architectureTitle') }}
           </h2>
           <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 max-w-xl mx-auto">
-            Everything you need to deliver enterprise back-offices without rewriting repetitive CRUD tables and form schemas.
+            {{ t('home.architectureSubtitle') }}
           </p>
         </div>
 
@@ -220,27 +224,27 @@
         <div class="p-8 rounded-3xl bg-gradient-to-b from-slate-100 to-slate-200/50 dark:from-slate-900 dark:to-slate-950 border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col lg:flex-row items-center gap-8">
           <div class="flex-1 space-y-4">
             <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-100 dark:bg-emerald-950/70 text-emerald-700 dark:text-emerald-400 text-xs font-semibold">
-              <span>⚡ Standalone CDN & SFC Ready</span>
+              <span>{{ t('home.declarativeBadge') }}</span>
             </div>
             <h3 class="text-2xl font-bold text-slate-900 dark:text-white">
-              Declarative Schema UI in Seconds
+              {{ t('home.declarativeTitle') }}
             </h3>
             <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
-              Define your fields once with Zod validation rules and tooltips, and let <code class="font-bold">FormModal</code> and <code class="font-bold">TabelData</code> orchestrate responsive multi-layout inputs, live errors, and CRUD mutations automatically.
+              {{ t('home.declarativeDesc') }}
             </p>
             <div class="pt-2 flex flex-wrap gap-3">
               <RouterLink
                 to="/playground"
                 class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold shadow-sm transition-all"
               >
-                <span>⚡ Open in Live Playground</span>
+                <span>{{ t('home.openInPlayground') }}</span>
                 <span>→</span>
               </RouterLink>
               <RouterLink
                 to="/doc/examples/form-modal"
                 class="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 hover:bg-white dark:hover:bg-slate-800 text-xs font-semibold transition-colors"
               >
-                Explore FormModal Engine ↗
+                {{ t('home.exploreFormModal') }}
               </RouterLink>
             </div>
           </div>
@@ -263,15 +267,15 @@
         <div class="flex items-center gap-2.5">
           <img src="/zyvnox-black.svg" class="w-6 h-6 dark:hidden" alt="Zyvnox Logo" />
           <img src="/zyvnox-white.svg" class="w-6 h-6 hidden dark:block" alt="Zyvnox Logo" />
-          <span>&copy; 2026 zyvnox • MIT License • Early Release v{{ version }}</span>
+          <span>{{ t('footer.copyright', { version }) }}</span>
         </div>
 
         <div class="flex items-center gap-5 font-medium">
-          <RouterLink to="/" class="hover:text-slate-900 dark:hover:text-white transition-colors">Home</RouterLink>
-          <RouterLink to="/doc" class="hover:text-slate-900 dark:hover:text-white transition-colors">Documentation</RouterLink>
-          <RouterLink to="/playground" class="hover:text-slate-900 dark:hover:text-white transition-colors">Playground</RouterLink>
-          <RouterLink to="/doc/sponsor" class="text-pink-600 dark:text-pink-400 hover:underline">💖 Sponsor</RouterLink>
-          <a href="https://github.com/zyvnox/vue-pack" target="_blank" rel="noopener noreferrer" class="hover:text-slate-900 dark:hover:text-white transition-colors">GitHub</a>
+          <RouterLink to="/" class="hover:text-slate-900 dark:hover:text-white transition-colors">{{ t('footer.home') }}</RouterLink>
+          <RouterLink to="/doc" class="hover:text-slate-900 dark:hover:text-white transition-colors">{{ t('footer.docs') }}</RouterLink>
+          <RouterLink to="/playground" class="hover:text-slate-900 dark:hover:text-white transition-colors">{{ t('footer.playground') }}</RouterLink>
+          <RouterLink to="/doc/sponsor" class="text-pink-600 dark:text-pink-400 hover:underline">{{ t('footer.sponsor') }}</RouterLink>
+          <a href="https://github.com/zyvnox/vue-pack" target="_blank" rel="noopener noreferrer" class="hover:text-slate-900 dark:hover:text-white transition-colors">{{ t('footer.github') }}</a>
         </div>
       </div>
     </footer>
@@ -279,14 +283,17 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import CodeBlock from '@/components/CodeBlock.vue'
+import LanguageSwitcher from '@/components/LanguageSwitcher.vue'
 import { SponsorButton, SponsorCard } from '@zyvnox/vue-pack/components'
 import { useDark } from '@/composables/useDark'
+import { useSiteI18n } from '@/i18n'
 import pkg from '../../../package.json'
 
-const version = pkg.version || '0.1.3'
+const version = pkg.version || '0.1.4'
 const { isDark, toggleDark } = useDark()
+const { t } = useSiteI18n()
 
 const selectedPm = ref<'npm' | 'pnpm' | 'yarn' | 'bun'>('npm')
 const copied = ref(false)
@@ -310,38 +317,38 @@ const copyInstall = async () => {
   }
 }
 
-const features = [
+const features = computed(() => [
   {
     icon: '🧩',
-    title: 'Schema-Driven UI Engine',
-    desc: 'Render complex responsive forms, modals, and datatables declaratively from Zod/JSON schemas with zero boilerplate.',
+    title: t('home.features.schema.title'),
+    desc: t('home.features.schema.desc'),
   },
   {
     icon: '🎨',
-    title: 'Prefixed UnoCSS Isolation',
-    desc: 'All utilities strictly namespaced with zyvnox- prefix, preventing any styling bleed in host consumer applications.',
+    title: t('home.features.unocss.title'),
+    desc: t('home.features.unocss.desc'),
   },
   {
     icon: '🛡️',
-    title: 'Dual-Layer Zod Validation',
-    desc: 'Schema-first validation with runtime type safety and custom tooltip guidance across all inputs and CRUD actions.',
+    title: t('home.features.validation.title'),
+    desc: t('home.features.validation.desc'),
   },
   {
     icon: '💾',
-    title: 'Autonomous Offline Storage',
-    desc: 'Integrated IndexedDB engine with automatic store upgrades, reactive caching, and offline mock support.',
+    title: t('home.features.offline.title'),
+    desc: t('home.features.offline.desc'),
   },
   {
     icon: '📦',
-    title: 'Granular Subpath Tree-Shaking',
-    desc: 'Fine-grained module exports: /components, /config, /init, /indexedDB, /secureFetch, /vue, /type, and /style.css.',
+    title: t('home.features.treeshaking.title'),
+    desc: t('home.features.treeshaking.desc'),
   },
   {
     icon: '🌐',
-    title: 'Deep Multi-Language i18n',
-    desc: 'Built-in en and id language packs with dynamic runtime registration via registerLanguage and full message overrides.',
+    title: t('home.features.i18n.title'),
+    desc: t('home.features.i18n.desc'),
   },
-]
+])
 
 const quickSnippet = `<template>
   <div class="p-6">

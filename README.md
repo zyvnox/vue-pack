@@ -1,14 +1,14 @@
-# @zyvnox/vue-pack v0.1.3 Early Release
+# @zyvnox/vue-pack v0.1.4 Early Release
 
 <div align="center">
 
 [![NPM Version](https://img.shields.io/npm/v/@zyvnox/vue-pack?style=for-the-badge&color=blue&logo=npm)](https://www.npmjs.com/package/@zyvnox/vue-pack)
-[![Status](https://img.shields.io/badge/Status-v0.1.3%20Early%20Release-amber?style=for-the-badge)](https://github.com/zyvnox/vue-pack)
+[![Status](https://img.shields.io/badge/Status-v0.1.4%20Early%20Release-amber?style=for-the-badge)](https://github.com/zyvnox/vue-pack)
 [![NPM Downloads](https://img.shields.io/npm/dm/@zyvnox/vue-pack?style=for-the-badge&color=brightgreen)](https://www.npmjs.com/package/@zyvnox/vue-pack)
 [![Vue 3](https://img.shields.io/badge/Vue-3.5+-4FC08D?style=for-the-badge&logo=vue.js&logoColor=white)](https://vuejs.org/)
 [![Vite 6](https://img.shields.io/badge/Vite-6.0+-646CFF?style=for-the-badge&logo=vite&logoColor=white)](https://vitejs.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.6+-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
-[![Zod](https://img.shields.io/badge/Zod-v4%20%7C%20v3-3E67B1?style=for-the-badge&logo=zod&logoColor=white)](https://zod.dev/)
+[![Zod](https://img.shields.io/badge/Zod-v4-3E67B1?style=for-the-badge&logo=zod&logoColor=white)](https://zod.dev/)
 [![Leaflet](https://img.shields.io/badge/Leaflet-1.9+-199900?style=for-the-badge&logo=leaflet&logoColor=white)](https://leafletjs.com/)
 [![Quill](https://img.shields.io/badge/Quill-2.0+-e23e2a?style=for-the-badge&logo=quill&logoColor=white)](https://quilljs.com/)
 [![UnoCSS](https://img.shields.io/badge/UnoCSS-Prefixed-grey?style=for-the-badge&logo=unocss&logoColor=white)](https://unocss.dev/)
@@ -16,11 +16,11 @@
 
 **Enterprise Schema-Driven Vue 3 Component Library, Datatable Suite, and Offline-First Storage Utilities.**
 
-[Overview](#-overview) • [What's New](#-whats-new-in-v013) • [Project Structure](#-project-structure) • [Built With](#-built-with--core-dependencies) • [Installation & CDN](#-installation) • [Quick Start](#-quick-start) • [Subpath Architecture](#-subpath-architecture) • [SEO Studio & SERP Preview](#-real-time-seo-studio--serp-preview) • [Development & Scripts](#-development--workflow-scripts) • [API Reference](#-complete-subpath-api-reference) • [Contributing](#-contributing) • [License](#-license)
+[Overview](#-overview) • [What's New](#-whats-new-in-v014) • [Project Structure](#-project-structure) • [Built With](#-built-with--core-dependencies) • [Installation & CDN](#-installation) • [Quick Start](#-quick-start) • [Subpath Architecture](#-subpath-architecture) • [SEO Studio & SERP Preview](#-real-time-seo-studio--serp-preview) • [Development & Scripts](#-development--workflow-scripts) • [API Reference](#-complete-subpath-api-reference) • [Contributing](#-contributing) • [License](#-license)
 
 </div>
 
-> ⚠️ **v0.1.3 Early Release Notice:** This library is currently in active early development. Public APIs are subject to change prior to `v1.0.0` stable. For production use cases, please pin exact versions or test changes carefully. Feedback, issues, and contributions are warmly appreciated!
+> ⚠️ **v0.1.4 Early Release Notice:** This library is currently in active early development. Public APIs are subject to change prior to `v1.0.0` stable. For production use cases, please pin exact versions or test changes carefully. Feedback, issues, and contributions are warmly appreciated!
 
 ---
 
@@ -32,7 +32,7 @@ Instead of writing redundant templates, form state handlers, and table logic fro
 
 1. **Schema-Driven Form Engine (`FormModal`)**: Automatically generates multi-layout reactive forms with nested objects, arrays, document uploaders, rich-text editors, and GIS maps directly from JSON/TypeScript schemas.
 2. **Enterprise Datatable Suite (`TabelData`)**: Supports server-side & client-side data workflows, full-text searching, multi-column sorting, pagination, customizable cell renderers, and end-to-end CRUD orchestration.
-3. **Deep Zod Schema Validation**: Compile-time type inference and runtime validation with Zod (v4 and v3) across forms, table mutations, and storage pipelines.
+3. **Deep Zod Schema Validation**: Compile-time type inference and runtime validation with Zod v4 across forms, table mutations, and storage pipelines.
 4. **Autonomous Offline-First Storage (`indexedDB`)**: Dynamic object store generation, reactive queries, migration-free schema handling, and Zod cache validation.
 5. **Zero-Pollution Subpath Exports**: Granular subpaths allowing aggressive tree-shaking—import only the storage module or HTTP fetch client without bundling UI code.
 6. **SSR & Isomorphic Security**: Safe HTML sanitization powered by DOMPurify with Node.js fallback, and isolated browser-dependent modules (Leaflet & Quill) for seamless Nuxt 3 integration.
@@ -53,6 +53,35 @@ Instead of writing redundant templates, form state handlers, and table logic fro
 | 🌐 **Extensible i18n System** | Built-in languages (`en`, `id`) with dynamic `registerLanguage` API and deep-merge fallback.                                |
 | 🎨 **Zero Scoped CSS**        | Atomic UnoCSS classes prefixed with `zyvnox-` ensuring no conflicting style overrides in your app.                          |
 | ⚡ **Isomorphic & SSR Ready** | Hydration-safe components, safe SSR sanitization fallbacks, and Nuxt 3 compatibility.                                       |
+
+---
+
+## 🚀 What's New in v0.1.4
+
+Release `v0.1.4` improves currency inputs, configurable array summaries, input interactions, and schema/tooling reliability:
+
+### 💱 Multi-Currency `CurrencyInput`
+
+- Resolves common currency codes and symbols (including USD, IDR, JPY, EUR, GBP, and SAR) with locale-aware number formatting.
+- Supports selectable currencies, prefix or suffix placement, and emits clean numeric values while users type.
+- Adds a shared currency metadata helper and focused tests for symbol, locale, selection, and model-value behavior.
+
+### 🧱 Flexible `ArrayObject` Summaries
+
+- Adds ordered display slots for text, images, files/documents, sanitized rich text, and formatted badges such as prices or quantities.
+- Keeps the default title/image rendering available when no custom display configuration is supplied.
+- Adds regression tests for slot ordering, document badges, safe HTML rendering, and the fallback display.
+
+### 🎨 Input & Tooltip Refinements
+
+- Refines the multi-color picker interactions, including swatch selection/removal, single-color mode, and error presentation.
+- Makes tooltips keyboard-focusable, dismissible with Escape, and better positioned near viewport edges.
+- Extends field and component types for the improved input configuration.
+
+### 🔎 SEO & Release Maintenance
+
+- Refines shared SEO metadata handling and updates documentation examples to the current release.
+- Updates the documentation site to the patched Zod v4 release and keeps dependency audits free of known advisories.
 
 ---
 
@@ -265,9 +294,9 @@ bun add @zyvnox/vue-pack vue@^3.5.0 zod@^4.0.0 leaflet@^1.9.4
 
 #### CDN Providers
 
-- **jsDelivr**: `https://cdn.jsdelivr.net/npm/@zyvnox/vue-pack@0.1.3/`
-- **unpkg**: `https://unpkg.com/@zyvnox/vue-pack@0.1.3/`
-- **esm.sh**: `https://esm.sh/@zyvnox/vue-pack@0.1.3`
+- **jsDelivr**: `https://cdn.jsdelivr.net/npm/@zyvnox/vue-pack@0.1.4/`
+- **unpkg**: `https://unpkg.com/@zyvnox/vue-pack@0.1.4/`
+- **esm.sh**: `https://esm.sh/@zyvnox/vue-pack@0.1.4`
 
 #### Option 1: Native ES Modules with W3C Import Map (Recommended for Modern Browsers)
 
@@ -280,7 +309,7 @@ bun add @zyvnox/vue-pack vue@^3.5.0 zod@^4.0.0 leaflet@^1.9.4
     <!-- 1. Include Pre-compiled UnoCSS Stylesheet -->
     <link
       rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/@zyvnox/vue-pack@0.1.3/dist/style.css"
+      href="https://cdn.jsdelivr.net/npm/@zyvnox/vue-pack@0.1.4/dist/style.css"
     />
 
     <!-- 2. W3C Import Map for Pure ESM Browser Resolution -->
@@ -288,7 +317,7 @@ bun add @zyvnox/vue-pack vue@^3.5.0 zod@^4.0.0 leaflet@^1.9.4
       {
         "imports": {
           "vue": "https://cdn.jsdelivr.net/npm/vue@3.5.18/dist/vue.esm-browser.prod.js",
-          "@zyvnox/vue-pack": "https://cdn.jsdelivr.net/npm/@zyvnox/vue-pack@0.1.3/dist/cdn/vue-pack.es.js"
+          "@zyvnox/vue-pack": "https://cdn.jsdelivr.net/npm/@zyvnox/vue-pack@0.1.4/dist/cdn/vue-pack.es.js"
         }
       }
     </script>
@@ -330,14 +359,14 @@ For legacy setups or quick non-modular prototyping:
     <title>Zyvnox Vue Pack UMD</title>
     <link
       rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/@zyvnox/vue-pack@0.1.3/dist/style.css"
+      href="https://cdn.jsdelivr.net/npm/@zyvnox/vue-pack@0.1.4/dist/style.css"
     />
 
     <!-- Vue 3 Peer Dependency (Global build) -->
     <script src="https://cdn.jsdelivr.net/npm/vue@3.5.18/dist/vue.global.prod.js"></script>
 
     <!-- Zyvnox Vue Pack Standalone UMD Bundle -->
-    <script src="https://cdn.jsdelivr.net/npm/@zyvnox/vue-pack@0.1.3/dist/cdn/vue-pack.umd.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@zyvnox/vue-pack@0.1.4/dist/cdn/vue-pack.umd.js"></script>
   </head>
   <body>
     <div id="app"></div>
@@ -493,7 +522,7 @@ Run `@zyvnox/vue-pack` directly in pure HTML without Node.js or bundlers, mirror
     <!-- Scoped stylesheet -->
     <link
       rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/@zyvnox/vue-pack@0.1.3/dist/style.css"
+      href="https://cdn.jsdelivr.net/npm/@zyvnox/vue-pack@0.1.4/dist/style.css"
     />
 
     <!-- W3C Browser Import Map -->
@@ -501,7 +530,7 @@ Run `@zyvnox/vue-pack` directly in pure HTML without Node.js or bundlers, mirror
       {
         "imports": {
           "vue": "https://cdn.jsdelivr.net/npm/vue@3.5.18/dist/vue.esm-browser.prod.js",
-          "@zyvnox/vue-pack": "https://cdn.jsdelivr.net/npm/@zyvnox/vue-pack@0.1.3/dist/cdn/vue-pack.es.js"
+          "@zyvnox/vue-pack": "https://cdn.jsdelivr.net/npm/@zyvnox/vue-pack@0.1.4/dist/cdn/vue-pack.es.js"
         }
       }
     </script>
@@ -1387,7 +1416,7 @@ Have a suggestion or found an issue?
 - **Feature Request:** [Request a Feature](https://github.com/zyvnox/vue-pack/issues/new?template=feature_request.md)
 - **Discussions / Q&A:** [GitHub Discussions](https://github.com/zyvnox/vue-pack/discussions)
 
-Please include `@zyvnox/vue-pack` version (`0.1.3`), your Vue version, and a minimal reproduction.
+Please include `@zyvnox/vue-pack` version (`0.1.4`), your Vue version, and a minimal reproduction.
 
 ---
 

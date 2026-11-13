@@ -12,6 +12,7 @@ function extractSafeString(data: Record<string, any>, path?: string): string {
   if (val === null || val === undefined) return ''
   if (typeof val === 'string') return val.trim()
   if (typeof val === 'number' || typeof val === 'boolean') return String(val).trim()
+  if (typeof File !== 'undefined' && val instanceof File) return val.name.trim()
   if (typeof val === 'object' && !Array.isArray(val)) {
     // Dukungan objek multibahasa
     if (typeof val.id === 'string' && val.id) return val.id.trim()
@@ -110,6 +111,11 @@ export function calculateSeo(
   const ogImg = ogImgPath ? extractSafeString(data, ogImgPath) : mainImage
   const twitterTitle = extractSafeString(data, mapping.social?.twitterTitle)
   const twitterDesc = extractSafeString(data, mapping.social?.twitterDescription)
+  const resolvedContentType =
+    (mapping.contentType && data[mapping.contentType]) ||
+    data.contentType ||
+    mapping.contentType ||
+    'article'
 
   // --- 2. PARSING & SANITASI KONTEN HTML (SSR-Safe) ---
   let plainText = ''
@@ -396,12 +402,11 @@ export function calculateSeo(
   // ANALISIS GRUP: CONTENT QUALITY & STRUCTURE
   // =========================================================
   if (mapping.content?.body) {
-    const cType = mapping.contentType || 'article'
     let minWords = 300
-    if (cType === 'article') minWords = 300
-    else if (cType === 'product') minWords = 100
-    else if (cType === 'page') minWords = 150
-    else if (cType === 'promo') minWords = 50
+    if (resolvedContentType === 'article') minWords = 300
+    else if (resolvedContentType === 'product') minWords = 100
+    else if (resolvedContentType === 'page') minWords = 150
+    else if (resolvedContentType === 'promo') minWords = 50
 
     const isLengthPassed = wordCount >= minWords
     addCheck(
@@ -415,7 +420,7 @@ export function calculateSeo(
     )
 
     // Subheading check untuk artikel dan halaman
-    if (cType === 'article' || cType === 'page') {
+    if (resolvedContentType === 'article' || resolvedContentType === 'page') {
       addCheck(
         hasSubheadings,
         hasSubheadings
@@ -492,7 +497,7 @@ export function calculateSeo(
     )
   }
 
-  if (mapping.content?.tags && mapping.contentType !== 'promo') {
+  if (mapping.content?.tags && resolvedContentType !== 'promo') {
     const hasTags = tags.length > 0
     addCheck(
       hasTags,

@@ -2,9 +2,122 @@
 <html lang="en" class="overflow-x-hidden">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@zyvnox/vue-pack — Playground & Docs</title>
+
+    <!-- Primary Meta Tags -->
+    <title>@zyvnox/vue-pack — Schema-Driven Vue 3 Enterprise UI & Developer Toolkit</title>
+    <meta name="title" content="@zyvnox/vue-pack — Schema-Driven Vue 3 Enterprise UI & Developer Toolkit" />
+    <meta
+      name="description"
+      content="Enterprise-grade Vue 3 component library featuring schema-driven FormModal, interactive TabelData suite, 25+ validated inputs, real-time SEO engine, and bilingual docs."
+    />
+    <meta
+      name="keywords"
+      content="vue 3, vue-pack, zyvnox, form modal, schema form generator, datatable, vue components, typescript, unocss, zod validation, seo engine, location picker, leaflet, quill editor, i18n"
+    />
+    <meta name="author" content="zyvnox" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <meta name="theme-color" content="#0284c7" />
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://zyvnox.github.io/vue-pack/" />
+
+    <!-- Sitemap & Discovery -->
+    <link rel="sitemap" type="application/xml" title="Sitemap" href="/vue-pack/sitemap.xml" />
+    <link rel="alternate" type="text/plain" title="LLMs Summary" href="/vue-pack/llms.txt" />
+    <link rel="alternate" type="text/plain" title="LLMs Full Context" href="/vue-pack/llms-full.txt" />
+
+    <!-- Favicons -->
+    <link rel="icon" type="image/svg+xml" href="/vue-pack/favicon.svg" />
+    <link rel="alternate icon" href="/vue-pack/favicon.ico" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://zyvnox.github.io/vue-pack/" />
+    <meta property="og:title" content="@zyvnox/vue-pack — Schema-Driven Vue 3 Enterprise UI & Developer Toolkit" />
+    <meta
+      property="og:description"
+      content="Enterprise-grade Vue 3 component library featuring schema-driven FormModal, interactive TabelData suite, 25+ validated inputs, and real-time SEO engine."
+    />
+    <meta property="og:image" content="https://zyvnox.github.io/vue-pack/og-banner.svg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="@zyvnox/vue-pack Enterprise UI Pack Preview" />
+    <meta property="og:site_name" content="@zyvnox/vue-pack" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:locale:alternate" content="id_ID" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="https://zyvnox.github.io/vue-pack/" />
+    <meta name="twitter:title" content="@zyvnox/vue-pack — Schema-Driven Vue 3 Enterprise UI" />
+    <meta
+      name="twitter:description"
+      content="Schema-driven FormModal, interactive TabelData suite, 25+ validated inputs, real-time SEO engine, and bilingual docs."
+    />
+    <meta name="twitter:image" content="https://zyvnox.github.io/vue-pack/og-banner.svg" />
+    <meta name="twitter:creator" content="@zyvnox" />
+
+    <!-- JSON-LD Structured Data: WebSite & SoftwareApplication -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "WebSite",
+            "@id": "https://zyvnox.github.io/vue-pack/#website",
+            "url": "https://zyvnox.github.io/vue-pack/",
+            "name": "@zyvnox/vue-pack",
+            "description": "Enterprise-grade, schema-driven Vue 3 component library and developer toolkit.",
+            "publisher": {
+              "@type": "Organization",
+              "name": "Zyvnox",
+              "url": "https://github.com/zyvnox"
+            },
+            "inLanguage": ["en", "id"]
+          },
+          {
+            "@type": "SoftwareApplication",
+            "@id": "https://zyvnox.github.io/vue-pack/#software",
+            "name": "@zyvnox/vue-pack",
+            "applicationCategory": "DeveloperApplication",
+            "operatingSystem": "Web Browser",
+            "softwareVersion": "0.1.4",
+            "license": "https://opensource.org/licenses/MIT",
+            "url": "https://zyvnox.github.io/vue-pack/",
+            "downloadUrl": "https://www.npmjs.com/package/@zyvnox/vue-pack",
+            "codeRepository": "https://github.com/zyvnox/vue-pack",
+            "programmingLanguage": ["TypeScript", "Vue 3", "JavaScript"],
+            "offers": {
+              "@type": "Offer",
+              "price": "0",
+              "priceCurrency": "USD"
+            },
+            "author": {
+              "@type": "Organization",
+              "name": "Zyvnox",
+              "url": "https://github.com/zyvnox"
+            }
+          }
+        ]
+      }
+    </script>
+
+    <!-- SPA Redirect Decoder for GitHub Pages (Preserves deep links like /doc/getting-started on refresh) -->
+    <script type="text/javascript">
+      (function (l) {
+        if (l.search[1] === '/') {
+          var decoded = l.search
+            .slice(1)
+            .split('&')
+            .map(function (s) {
+              return s.replace(/~and~/g, '&')
+            })
+            .join('?')
+          window.history.replaceState(null, null, l.pathname.slice(0, -1) + decoded + l.hash)
+        }
+      })(window.location)
+    </script>
   </head>
   <body class="bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-100 antialiased overflow-x-hidden">
     <div id="app" class="overflow-x-hidden"></div>

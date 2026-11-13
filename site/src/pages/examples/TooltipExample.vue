@@ -1,32 +1,25 @@
 <template>
   <div class="space-y-8">
-    <header class="border-b border-slate-200 dark:border-slate-800 pb-4">
-      <h1 class="text-3xl font-bold text-slate-900 dark:text-white mb-2">
-        Tooltip
-      </h1>
-      <p class="text-sm text-slate-600 dark:text-slate-400">
-        Reusable floating tooltip trigger component supporting multiple placements (top, bottom, left, right), custom icons, and hotkey hints.
-      </p>
-    </header>
+    <DocHeader />
 
     <!-- Demo 1: Placement Positions -->
     <DemoSection title="Tooltip Placements" description="Hover over any of the four trigger icons to test positioning.">
-      <div class="flex flex-wrap items-center gap-8 py-4">
-        <div class="flex items-center gap-2">
-          <span class="text-xs">Top:</span>
-          <Tooltip text="Tooltip positioned on top" position="top" />
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 py-4">
+        <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 flex flex-col items-center justify-center gap-2 text-center min-h-[90px]">
+          <span class="text-xs font-semibold text-slate-600 dark:text-slate-400">{{ isIndonesian ? 'Posisi Atas' : 'Top Placement' }}</span>
+          <Tooltip :text="isIndonesian ? 'Tooltip diposisikan di atas' : 'Tooltip positioned on top'" position="top" />
         </div>
-        <div class="flex items-center gap-2">
-          <span class="text-xs">Bottom:</span>
-          <Tooltip text="Tooltip positioned below" position="bottom" />
+        <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 flex flex-col items-center justify-center gap-2 text-center min-h-[90px]">
+          <span class="text-xs font-semibold text-slate-600 dark:text-slate-400">{{ isIndonesian ? 'Posisi Bawah' : 'Bottom Placement' }}</span>
+          <Tooltip :text="isIndonesian ? 'Tooltip diposisikan di bawah' : 'Tooltip positioned below'" position="bottom" />
         </div>
-        <div class="flex items-center gap-2">
-          <span class="text-xs">Left:</span>
-          <Tooltip text="Tooltip positioned on the left" position="left" />
+        <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 flex flex-col items-center justify-center gap-2 text-center min-h-[90px]">
+          <span class="text-xs font-semibold text-slate-600 dark:text-slate-400">{{ isIndonesian ? 'Posisi Kiri' : 'Left Placement' }}</span>
+          <Tooltip :text="isIndonesian ? 'Tooltip diposisikan di sebelah kiri' : 'Tooltip positioned on the left'" position="left" />
         </div>
-        <div class="flex items-center gap-2">
-          <span class="text-xs">Right:</span>
-          <Tooltip text="Tooltip positioned on the right" position="right" />
+        <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 flex flex-col items-center justify-center gap-2 text-center min-h-[90px]">
+          <span class="text-xs font-semibold text-slate-600 dark:text-slate-400">{{ isIndonesian ? 'Posisi Kanan' : 'Right Placement' }}</span>
+          <Tooltip :text="isIndonesian ? 'Tooltip diposisikan di sebelah kanan' : 'Tooltip positioned on the right'" position="right" />
         </div>
       </div>
 
@@ -37,18 +30,18 @@
 
     <!-- Demo 2: Custom Icons & Hotkeys -->
     <DemoSection title="Custom Trigger Icons & Hotkeys" description="Provide custom glyphs or keyboard shortcut labels.">
-      <div class="flex items-center gap-8 py-2">
-        <div class="flex items-center gap-2">
-          <span class="text-xs">Info Glyph (ℹ️):</span>
-          <Tooltip text="Detailed information note" icon="ℹ️" position="right" />
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 py-2">
+        <div class="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 flex items-center justify-between gap-2">
+          <span class="text-xs font-medium text-slate-600 dark:text-slate-400">{{ isIndonesian ? 'Simbol Info (ℹ️):' : 'Info Glyph (ℹ️):' }}</span>
+          <Tooltip :text="isIndonesian ? 'Catatan informasi terperinci' : 'Detailed information note'" icon="ℹ️" position="top" />
         </div>
-        <div class="flex items-center gap-2">
-          <span class="text-xs">Warning Glyph (⚠️):</span>
-          <Tooltip text="Critical security advisory" icon="⚠️" position="right" />
+        <div class="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 flex items-center justify-between gap-2">
+          <span class="text-xs font-medium text-slate-600 dark:text-slate-400">{{ isIndonesian ? 'Simbol Peringatan (⚠️):' : 'Warning Glyph (⚠️):' }}</span>
+          <Tooltip :text="isIndonesian ? 'Pemberitahuan keamanan kritis' : 'Critical security advisory'" icon="⚠️" position="top" />
         </div>
-        <div class="flex items-center gap-2">
-          <span class="text-xs">Hotkey Badge:</span>
-          <Tooltip text="Save changes" hotkey="Ctrl+S" position="top" />
+        <div class="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 flex items-center justify-between gap-2">
+          <span class="text-xs font-medium text-slate-600 dark:text-slate-400">{{ isIndonesian ? 'Lencana Pintasan Tombol:' : 'Hotkey Badge:' }}</span>
+          <Tooltip :text="isIndonesian ? 'Simpan perubahan' : 'Save changes'" hotkey="Ctrl+S" position="top" />
         </div>
       </div>
 
@@ -59,7 +52,6 @@
 
     <!-- Props Table -->
     <section class="space-y-4">
-      <h2 class="text-xl font-bold text-slate-900 dark:text-slate-100">Props</h2>
       <PropsTable :props="propsList" />
     </section>
   </div>
@@ -67,9 +59,12 @@
 
 <script setup lang="ts">
 import { Tooltip } from '@zyvnox/vue-pack/components'
+import { useSiteI18n } from '@/i18n'
 import DemoSection from '@/components/DemoSection.vue'
 import CodeBlock from '@/components/CodeBlock.vue'
 import PropsTable from '@/components/PropsTable.vue'
+
+const { isIndonesian } = useSiteI18n()
 
 const positionsCode = `<template>
   <Tooltip text="Top Tooltip" position="top" />

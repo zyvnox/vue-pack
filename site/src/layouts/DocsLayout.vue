@@ -39,30 +39,32 @@
             <span
               class="inline-block text-[9px] font-mono bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300 px-1 rounded truncate"
             >
-              v0.1.3
+              v0.1.4
             </span>
           </div>
         </RouterLink>
       </div>
 
       <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
+        <LanguageSwitcher />
+
         <div class="hidden md:inline-flex">
           <SponsorButton variant="both" />
         </div>
         <RouterLink
           to="/playground"
           class="px-2 sm:px-2.5 py-1 text-xs font-semibold rounded-lg bg-emerald-600 text-white hover:bg-emerald-500 transition-colors flex items-center gap-1 shadow-sm shrink-0"
-          title="Open Live Playground"
+          :title="t('nav.playground')"
         >
           <span>⚡</span>
-          <span class="hidden sm:inline">Playground</span>
+          <span class="hidden sm:inline">{{ t('nav.playground') }}</span>
         </RouterLink>
 
         <button
           type="button"
           @click="toggleDark"
           class="p-1 sm:p-1.5 rounded-lg border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors shrink-0"
-          title="Toggle Dark Mode"
+          :title="t('nav.toggleTheme')"
         >
           <span v-if="isDark">🌙</span>
           <span v-else>☀️</span>
@@ -88,9 +90,9 @@
         <div class="flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 dark:text-slate-400 gap-3 pt-2">
           <span>&copy; 2026 zyvnox • MIT License</span>
           <div class="flex items-center gap-4">
-            <RouterLink to="/doc/sponsor" class="hover:underline text-amber-600 dark:text-amber-400 font-medium">💖 Sponsor</RouterLink>
+            <RouterLink to="/doc/sponsor" class="hover:underline text-amber-600 dark:text-amber-400 font-medium">{{ t('footer.sponsor') }}</RouterLink>
             <a href="https://github.com/zyvnox/vue-pack" target="_blank" rel="noopener noreferrer" class="hover:underline">GitHub</a>
-            <RouterLink to="/playground" class="hover:underline">Live Playground</RouterLink>
+            <RouterLink to="/playground" class="hover:underline">{{ t('footer.playground') }}</RouterLink>
           </div>
         </div>
       </footer>
@@ -101,9 +103,12 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import SidebarNav from '@/components/SidebarNav.vue'
+import LanguageSwitcher from '@/components/LanguageSwitcher.vue'
 import { useDark } from '@/composables/useDark'
+import { useSiteI18n } from '@/i18n'
 import { SponsorButton, SponsorCard } from '@zyvnox/vue-pack/components'
 
 const mobileOpen = ref(false)
 const { isDark, toggleDark } = useDark()
+const { t } = useSiteI18n()
 </script>

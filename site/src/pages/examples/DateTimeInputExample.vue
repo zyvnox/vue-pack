@@ -1,22 +1,16 @@
 <template>
   <div class="space-y-8">
-    <header class="border-b border-slate-200 dark:border-slate-800 pb-4">
-      <h1 class="text-3xl font-bold text-slate-900 dark:text-white mb-2">
-        DateTimeInput
-      </h1>
-      <p class="text-sm text-slate-600 dark:text-slate-400">
-        Combined date and time timestamp selector supporting ISO-8601 formatting, UTC / local-offset output, minDateTime & maxDateTime boundary checks, and tooltip guidance.
-      </p>
-    </header>
+    <DocHeader />
 
     <!-- Demo 1: Basic DateTime -->
     <DemoSection title="Basic Date & Time Selection" description="Combined picker outputting timestamp formatted values.">
       <DateTimeInput
         v-model="basic"
-        label="Webinar Scheduled Time"
+        :label="isIndonesian ? 'Jadwal Waktu Webinar' : 'Webinar Scheduled Time'"
+        :lang="currentLocale"
       />
       <div class="text-xs text-slate-500">
-        Selected Timestamp: <code class="font-mono font-bold">{{ basic || '(none)' }}</code>
+        {{ isIndonesian ? 'Timestamp Terpilih:' : 'Selected Timestamp:' }} <code class="font-mono font-bold">{{ basic || (isIndonesian ? '(tidak ada)' : '(none)') }}</code>
       </div>
 
       <template #code>
@@ -31,17 +25,18 @@
     >
       <DateTimeInput
         v-model="validatedVal"
-        label="Scheduled Maintenance Window"
+        :label="isIndonesian ? 'Jendela Waktu Pemeliharaan Terjadwal' : 'Scheduled Maintenance Window'"
         output-format="utc"
+        :lang="currentLocale"
         :validate="{
           minDateTime: '2026-11-01T00:00:00Z' as any,
           maxDateTime: '2026-11-30T23:59:59Z' as any,
         }"
       />
       <div class="text-xs text-slate-500 space-y-1">
-        <div>Current Timestamp (UTC output): <code class="font-mono font-bold">{{ validatedVal || '(none)' }}</code></div>
+        <div>{{ isIndonesian ? 'Timestamp Saat Ini (output UTC):' : 'Current Timestamp (UTC output):' }} <code class="font-mono font-bold">{{ validatedVal || (isIndonesian ? '(tidak ada)' : '(none)') }}</code></div>
         <div class="text-slate-400 dark:text-slate-500">
-          Allowed range: Nov 1, 2026 00:00 through Nov 30, 2026 23:59.
+          {{ isIndonesian ? 'Rentang diizinkan: 1 Nov 2026 00:00 hingga 30 Nov 2026 23:59.' : 'Allowed range: Nov 1, 2026 00:00 through Nov 30, 2026 23:59.' }}
         </div>
       </div>
 
@@ -54,9 +49,10 @@
     <DemoSection title="With Schema Tooltip" description="Displays timezone and timestamp guidance via tooltip.">
       <DateTimeInput
         v-model="withTooltip"
-        label="System Maintenance Downtime"
-        tooltip="Select beginning of maintenance window in local timezone"
+        :label="isIndonesian ? 'Downtime Pemeliharaan Sistem' : 'System Maintenance Downtime'"
+        :tooltip="isIndonesian ? 'Pilih awal jendela pemeliharaan dalam zona waktu lokal' : 'Select beginning of maintenance window in local timezone'"
         tooltip-position="right"
+        :lang="currentLocale"
       />
 
       <template #code>
@@ -69,13 +65,15 @@
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <DateTimeInput
           v-model="errorVal"
-          label="Auction Closing Moment"
-          :error="'Closing time must be at least 24 hours in advance'"
+          :label="isIndonesian ? 'Waktu Penutupan Lelang' : 'Auction Closing Moment'"
+          :error="isIndonesian ? 'Waktu penutupan harus setidaknya 24 jam sebelumnya' : 'Closing time must be at least 24 hours in advance'"
+          :lang="currentLocale"
         />
         <DateTimeInput
           v-model="disabledVal"
-          label="Server Creation Timestamp (Read-Only)"
+          :label="isIndonesian ? 'Timestamp Pembuatan Server (Hanya-Baca)' : 'Server Creation Timestamp (Read-Only)'"
           disabled
+          :lang="currentLocale"
         />
       </div>
 
@@ -86,13 +84,11 @@
 
     <!-- Props Table -->
     <section class="space-y-4">
-      <h2 class="text-xl font-bold text-slate-900 dark:text-slate-100">Props</h2>
       <PropsTable :props="propsList" />
     </section>
 
     <!-- Events Table -->
     <section class="space-y-4">
-      <h2 class="text-xl font-bold text-slate-900 dark:text-slate-100">Events</h2>
       <EventsTable :events="eventsList" />
     </section>
   </div>
@@ -101,10 +97,13 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { DateTimeInput } from '@zyvnox/vue-pack/components'
+import { useSiteI18n } from '@/i18n'
 import DemoSection from '@/components/DemoSection.vue'
 import CodeBlock from '@/components/CodeBlock.vue'
 import PropsTable, { type PropDef } from '@/components/PropsTable.vue'
 import EventsTable, { type EventDef } from '@/components/EventsTable.vue'
+
+const { isIndonesian, currentLocale } = useSiteI18n()
 
 const basic = ref('2026-10-31T18:00')
 const validatedVal = ref('2026-10-25T14:30')

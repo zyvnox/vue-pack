@@ -1,43 +1,59 @@
 import { ref, computed, watch, type Ref, inject } from 'vue'
+import type { CurrencyInputProps } from '../../../../configs/types/props.types'
 import type {
-  CurrencyInputProps,
   GlobalDefaultText,
   SupportedLanguage,
-} from '../../../../configs/types'
+} from '../../../../configs/types/globalText.types'
 import { defaultTextLabelsMap } from '../../../../configs/i18n'
+import { resolveCurrency, type CurrencyMeta } from '../../../../helpers/currency'
 
-type CurrencyEmit = {
-  (e: 'update:modelValue', value: number | null, key: string): void
-}
+export type CurrencyEmit = (e: any, ...args: any[]) => void
 
-/**
- * Map untuk menentukan mata uang dan simbol berdasarkan bahasa.
- */
-const langCurrencyMap: Record<
-  SupportedLanguage,
-  { currency: string; symbol: string; locale: string }
-> = {
-  id: { currency: 'IDR', symbol: 'Rp', locale: 'id-ID' },
-  en: { currency: 'USD', symbol: '$', locale: 'en-US' },
-  us: { currency: 'USD', symbol: '$', locale: 'en-US' },
-}
-
-export function useCurrencyInput(props: CurrencyInputProps, emit: CurrencyEmit) {
+export function useCurrencyInput(
+  props: CurrencyInputProps,
+  emit: CurrencyEmit,
+  options?: {
+    currency?: Ref<string | undefined>
+  },
+) {
   const injected = inject<{ labels: Ref<GlobalDefaultText> }>('TableComponents', {
     labels: ref(defaultTextLabelsMap[props.lang ?? 'en']),
   })
 
-  const lang = computed(() => (injected.labels.value.lang as SupportedLanguage) ?? 'en')
-  const currencyInfo = computed(() => langCurrencyMap[lang.value] || langCurrencyMap.en)
+  const lang = computed(
+    () => (injected.labels.value?.lang as SupportedLanguage) ?? props.lang ?? 'en',
+  )
+
+  const activeCurrencyProp = computed(() => {
+    return options?.currency?.value ?? props.currency
+  })
+
+  // Internal active currency override (allows switching dynamically)
+  const selectedCurrency = ref<string | undefined>(activeCurrencyProp.value)
+
+  watch(
+    activeCurrencyProp,
+    (val) => {
+      selectedCurrency.value = val
+    },
+    { immediate: true },
+  )
+
+  const currencyMeta = computed<CurrencyMeta>(() => {
+    return resolveCurrency(selectedCurrency.value ?? activeCurrencyProp.value, lang.value)
+  })
+
+  const currencySymbol = computed(() => currencyMeta.value.symbol)
+  const currencyCode = computed(() => currencyMeta.value.code)
+
+  function setCurrency(newCurrency: string) {
+    selectedCurrency.value = newCurrency
+    emit('update:currency', newCurrency, props.id!)
+  }
 
   // State untuk menyimpan nilai yang sedang diketik pengguna
   const displayValue = ref('')
   const isEditing = ref(false)
-
-  /**
-   * Simbol mata uang yang akan ditampilkan di samping input.
-   */
-  const currencySymbol = computed(() => currencyInfo.value.symbol)
 
   /**
    * Fungsi untuk memformat angka menjadi format mata uang.
@@ -45,9 +61,7 @@ export function useCurrencyInput(props: CurrencyInputProps, emit: CurrencyEmit) 
    */
   const formatCurrency = (value: number | null | undefined): string => {
     if (value === null || value === undefined) return ''
-    return new Intl.NumberFormat(currencyInfo.value.locale, {
-      // style: 'currency' akan menambahkan simbol, kita hanya butuh pemisah ribuan.
-      // currency: currencyInfo.value.currency,
+    return new Intl.NumberFormat(currencyMeta.value.locale, {
       minimumFractionDigits: 0,
       maximumFractionDigits: 0,
     }).format(value)
@@ -102,6 +116,11 @@ export function useCurrencyInput(props: CurrencyInputProps, emit: CurrencyEmit) 
   return {
     formattedValue,
     currencySymbol,
+    currencyCode,
+    currencyMeta,
+    selectedCurrency,
+    setCurrency,
+    formatCurrency,
     onInput,
     onBlur,
   }
