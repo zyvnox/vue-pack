@@ -1,13 +1,6 @@
 <template>
   <div class="space-y-8">
-    <header class="border-b border-slate-200 dark:border-slate-800 pb-4">
-      <h1 class="text-3xl font-bold text-slate-900 dark:text-white mb-2">
-        TextAreaQuillInput (WYSIWYG Editor)
-      </h1>
-      <p class="text-sm text-slate-600 dark:text-slate-400">
-        Rich text WYSIWYG editor powered by Quill 2.0 with extended headers (H1–H5), image resizing, live word/char counters, min/max length validation, code-view mode, and AI generation hooks.
-      </p>
-    </header>
+    <DocHeader />
 
     <!-- Demo 1: Basic Rich Text Editor -->
     <DemoSection
@@ -16,15 +9,16 @@
     >
       <TextAreaQuillInput
         v-model="basicHtml"
-        label="Article Body Content"
-        placeholder="Start composing your rich document..."
+        :label="isIndonesian ? 'Konten Utama Artikel' : 'Article Body Content'"
+        :placeholder="isIndonesian ? 'Mulai menulis dokumen kaya Anda...' : 'Start composing your rich document...'"
+        :lang="currentLocale"
       />
 
       <div
         class="mt-4 p-3 rounded-lg bg-slate-100 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/60"
       >
         <div class="text-xs font-bold text-slate-500 mb-1">
-          Live HTML Output:
+          {{ isIndonesian ? 'Output HTML Langsung:' : 'Live HTML Output:' }}
         </div>
         <pre
           class="font-mono text-xs text-slate-700 dark:text-slate-300 overflow-x-auto max-h-32"
@@ -44,8 +38,9 @@
     >
       <TextAreaQuillInput
         v-model="validatedHtml"
-        label="Editorial Review Summary"
-        placeholder="Write editorial summary with at least 30 characters..."
+        :label="isIndonesian ? 'Ringkasan Tinjauan Redaksi' : 'Editorial Review Summary'"
+        :placeholder="isIndonesian ? 'Tulis ringkasan redaksi dengan setidaknya 30 karakter...' : 'Write editorial summary with at least 30 characters...'"
+        :lang="currentLocale"
         :validate="{
           minLength: 30,
           maxLength: 500,
@@ -53,7 +48,7 @@
       />
       <div class="text-xs text-slate-500 space-y-1 mt-2">
         <div class="text-slate-400 dark:text-slate-500">
-          Enforces minLength: 30 chars, maxLength: 500 chars with built-in live counters.
+          {{ isIndonesian ? 'Menerapkan batas minLength: 30 karakter, maxLength: 500 karakter dengan penghitung realtime bawaan.' : 'Enforces minLength: 30 chars, maxLength: 500 chars with built-in live counters.' }}
         </div>
       </div>
 
@@ -69,9 +64,10 @@
     >
       <TextAreaQuillInput
         v-model="withTooltipHtml"
-        label="Terms of Service & Agreement"
-        tooltip="Use heading levels H2 and H3 to structure legal clauses logically"
+        :label="isIndonesian ? 'Syarat & Perjanjian Layanan' : 'Terms of Service & Agreement'"
+        :tooltip="isIndonesian ? 'Gunakan heading H2 dan H3 untuk menstrukturkan klausul hukum secara logis' : 'Use heading levels H2 and H3 to structure legal clauses logically'"
         tooltip-position="right"
+        :lang="currentLocale"
       />
 
       <template #code>
@@ -87,15 +83,17 @@
       <div class="space-y-4">
         <TextAreaQuillInput
           v-model="errorHtml"
-          label="Required Editorial Summary"
+          :label="isIndonesian ? 'Ringkasan Redaksi Wajib' : 'Required Editorial Summary'"
           required
-          :error="'Article body content is required and cannot be empty'"
+          :error="isIndonesian ? 'Konten utama artikel wajib diisi dan tidak boleh kosong' : 'Article body content is required and cannot be empty'"
+          :lang="currentLocale"
         />
         <TextAreaQuillInput
           id="2"
           v-model="disabledHtml"
-          label="Locked Published Version (Read-Only)"
+          :label="isIndonesian ? 'Versi Terbit Terkunci (Hanya-Baca)' : 'Locked Published Version (Read-Only)'"
           disabled
+          :lang="currentLocale"
         />
       </div>
 
@@ -106,17 +104,11 @@
 
     <!-- Props Table -->
     <section class="space-y-4">
-      <h2 class="text-xl font-bold text-slate-900 dark:text-slate-100">
-        Props
-      </h2>
       <PropsTable :props="propsList" />
     </section>
 
     <!-- Events Table -->
     <section class="space-y-4">
-      <h2 class="text-xl font-bold text-slate-900 dark:text-slate-100">
-        Events
-      </h2>
       <EventsTable :events="eventsList" />
     </section>
   </div>
@@ -125,10 +117,13 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { TextAreaQuillInput } from '@zyvnox/vue-pack/components'
+import { useSiteI18n } from '@/i18n'
 import DemoSection from '@/components/DemoSection.vue'
 import CodeBlock from '@/components/CodeBlock.vue'
 import PropsTable, { type PropDef } from '@/components/PropsTable.vue'
 import EventsTable, { type EventDef } from '@/components/EventsTable.vue'
+
+const { isIndonesian, currentLocale } = useSiteI18n()
 
 const basicHtml = ref(
   '<h2>Heading 2 Title</h2><p>This is a rich text editor supporting <strong>bold</strong>, <em>italics</em>, and custom typography.</p>',

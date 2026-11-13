@@ -1,14 +1,6 @@
 <template>
   <div class="space-y-8">
-    <header class="border-b border-slate-200 dark:border-slate-800 pb-4">
-      <h1 class="text-3xl font-bold text-slate-900 dark:text-white mb-2">
-        MapPicker (GIS Leaflet Map)
-      </h1>
-      <p class="text-sm text-slate-600 dark:text-slate-400">
-        Interactive Leaflet GIS map coordinate picker with draggable pin marker, search city filter,
-        client-side guards, and tooltip support.
-      </p>
-    </header>
+    <DocHeader />
 
     <!-- Demo 1: Basic Location Picker -->
     <DemoSection
@@ -18,13 +10,13 @@
       <MapPicker
         v-model="basicCoords"
         id="1"
-        label="Delivery Destination Coordinates"
+        :label="isIndonesian ? 'Koordinat Tujuan Pengiriman' : 'Delivery Destination Coordinates'"
         :initial-lat="-7.245874"
         :initial-lng="112.737821"
         height="420px"
       />
       <div class="text-xs text-slate-500 mt-2">
-        Coordinates:
+        {{ isIndonesian ? 'Koordinat:' : 'Coordinates:' }}
         <code class="font-mono font-bold">{{ JSON.stringify(basicCoords) }}</code>
       </div>
 
@@ -41,8 +33,8 @@
       <MapPicker
         id="2"
         v-model="withTooltipCoords"
-        label="Warehouse Logistics Hub"
-        tooltip="Pinpoint the primary loading dock entrance for freight container trucks"
+        :label="isIndonesian ? 'Pusat Logistik Gudang' : 'Warehouse Logistics Hub'"
+        :tooltip="isIndonesian ? 'Tentukan titik pintu masuk dok pemuatan untuk truk kontainer pengiriman' : 'Pinpoint the primary loading dock entrance for freight container trucks'"
         tooltip-position="right"
         :initial-lat="-7.245874"
         :initial-lng="112.737821"
@@ -62,8 +54,8 @@
       <MapPicker
         id="3"
         v-model="withTooltipCoords"
-        label="Warehouse Logistics Hub"
-        tooltip="Pinpoint the primary loading dock entrance for freight container trucks"
+        :label="isIndonesian ? 'Pusat Logistik Gudang' : 'Warehouse Logistics Hub'"
+        :tooltip="isIndonesian ? 'Tentukan titik pintu masuk dok pemuatan untuk truk kontainer pengiriman' : 'Pinpoint the primary loading dock entrance for freight container trucks'"
         tooltip-position="right"
         :validate="{
           geoJson: `${origin}/surabaya.geojson`,
@@ -86,7 +78,7 @@
       <MapPicker
         id="4"
         v-model="viewOnlyCoords"
-        label="Surabaya Landmark (Tugu Pahlawan)"
+        :label="isIndonesian ? 'Landmark Surabaya (Tugu Pahlawan)' : 'Surabaya Landmark (Tugu Pahlawan)'"
         :view-only="true"
         :initial-lat="-7.245874"
         :initial-lng="112.737821"
@@ -105,7 +97,7 @@
     >
       <MapPicker
         id="5"
-        label="Surabaya Geo Boundary & Route"
+        :label="isIndonesian ? 'Batas Wilayah & Rute Geo Surabaya' : 'Surabaya Geo Boundary & Route'"
         :geo-json="geoRoutingJson"
         :view-only="true"
         height="360px"
@@ -124,7 +116,7 @@
       <MapPicker
         id="6"
         v-model="bboxCoords"
-        label="Delivery Service Area (Surabaya Central Box)"
+        :label="isIndonesian ? 'Area Layanan Pengiriman (Kotak Pusat Surabaya)' : 'Delivery Service Area (Surabaya Central Box)'"
         :validate="{
           minLat: -7.3,
           maxLat: -7.2,
@@ -136,10 +128,10 @@
         height="380px"
       />
       <div class="text-xs text-slate-500 mt-2">
-        Coordinates:
+        {{ isIndonesian ? 'Koordinat:' : 'Coordinates:' }}
         <code class="font-mono font-bold">{{ JSON.stringify(bboxCoords) }}</code>
         <span class="ml-2 text-slate-400 dark:text-slate-500"
-          >(Allowed: Lat [-7.300000 to -7.200000], Lng [112.700000 to 112.800000])</span
+          >{{ isIndonesian ? '(Diizinkan: Lat [-7.300000 s/d -7.200000], Lng [112.700000 s/d 112.800000])' : '(Allowed: Lat [-7.300000 to -7.200000], Lng [112.700000 to 112.800000])' }}</span
         >
       </div>
 
@@ -161,11 +153,11 @@
         lang="id"
         search-city="Surabaya"
         search-country="Indonesia"
-        label="Titik Penjemputan Pelanggan"
+        :label="isIndonesian ? 'Titik Penjemputan Pelanggan' : 'Customer Pickup Point'"
         height="360px"
       />
       <div class="text-xs text-slate-500 mt-2">
-        Custom Payload:
+        {{ isIndonesian ? 'Payload Kustom:' : 'Custom Payload:' }}
         <code class="font-mono font-bold">{{ JSON.stringify(customKeyCoords) }}</code>
       </div>
 
@@ -177,7 +169,7 @@
     <!-- Toolbar Features Guide -->
     <section class="space-y-4">
       <h2 class="text-xl font-bold text-slate-900 dark:text-slate-100">
-        Built-in Interactive Toolbar Features
+        {{ isIndonesian ? 'Fitur Toolbar Interaktif Bawaan' : 'Built-in Interactive Toolbar Features' }}
       </h2>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         <div
@@ -185,11 +177,12 @@
         >
           <div class="flex items-center gap-2 font-bold text-slate-900 dark:text-white text-sm">
             <span>🌙 / ☀️</span>
-            <span>Dark / Light Mode Toggle</span>
+            <span>{{ isIndonesian ? 'Peralihan Mode Gelap / Terang' : 'Dark / Light Mode Toggle' }}</span>
           </div>
           <p class="text-xs text-slate-600 dark:text-slate-400">
-            Dynamically applies high-contrast dark tile filters to OpenStreetMap tiles and toggles
-            pin marker accent colors (blue for dark, red for light).
+            {{ isIndonesian
+              ? 'Menerapkan filter ubin peta gelap ber-kontras tinggi pada OpenStreetMap dan mengalihkan aksen warna pin marker (biru untuk mode gelap, merah untuk mode terang).'
+              : 'Dynamically applies high-contrast dark tile filters to OpenStreetMap tiles and toggles pin marker accent colors (blue for dark, red for light).' }}
           </p>
         </div>
 
@@ -198,11 +191,12 @@
         >
           <div class="flex items-center gap-2 font-bold text-slate-900 dark:text-white text-sm">
             <span>🎯</span>
-            <span>Sync GPS Location</span>
+            <span>{{ isIndonesian ? 'Sinkronisasi Lokasi GPS' : 'Sync GPS Location' }}</span>
           </div>
           <p class="text-xs text-slate-600 dark:text-slate-400">
-            Automatically queries the device's hardware Geolocation API, pins your current position,
-            centers the map view, and validates coordinates against boundaries.
+            {{ isIndonesian
+              ? 'Meminta koordinat Geolocation API perangkat keras secara otomatis, menyematkan posisi Anda, memusatkan peta, dan memvalidasi batas wilayah.'
+              : 'Automatically queries the device\'s hardware Geolocation API, pins your current position, centers the map view, and validates coordinates against boundaries.' }}
           </p>
         </div>
 
@@ -211,12 +205,14 @@
         >
           <div class="flex items-center gap-2 font-bold text-slate-900 dark:text-white text-sm">
             <span>🏠</span>
-            <span>Reset to Home Center</span>
+            <span>{{ isIndonesian ? 'Atur Ulang ke Posisi Awal' : 'Reset to Home Center' }}</span>
           </div>
           <p class="text-xs text-slate-600 dark:text-slate-400">
-            Immediately returns the map viewport and marker pin back to configured
-            <code class="font-mono text-blue-600 dark:text-blue-400">initialLat</code> and
-            <code class="font-mono text-blue-600 dark:text-blue-400">initialLng</code>.
+            {{ isIndonesian
+              ? 'Mengembalikan viewport peta dan pin penanda seketika ke koordinat awal yang dikonfigurasi ('
+              : 'Immediately returns the map viewport and marker pin back to configured ' }}
+            <code class="font-mono text-blue-600 dark:text-blue-400">initialLat</code> {{ isIndonesian ? 'dan' : 'and' }}
+            <code class="font-mono text-blue-600 dark:text-blue-400">initialLng</code>).
           </p>
         </div>
 
@@ -225,11 +221,12 @@
         >
           <div class="flex items-center gap-2 font-bold text-slate-900 dark:text-white text-sm">
             <span>🔒 / 🔓</span>
-            <span>Marker Lock / Unlock Guard</span>
+            <span>{{ isIndonesian ? 'Pengunci / Pelepas Marker' : 'Marker Lock / Unlock Guard' }}</span>
           </div>
           <p class="text-xs text-slate-600 dark:text-slate-400">
-            Locks the pin marker dragging and map clicks to prevent accidental movement while
-            scrolling through a long web form.
+            {{ isIndonesian
+              ? 'Mengunci pergeseran pin marker dan klik peta untuk mencegah pergeseran tidak sengaja saat menggulir formulir web yang panjang.'
+              : 'Locks the pin marker dragging and map clicks to prevent accidental movement while scrolling through a long web form.' }}
           </p>
         </div>
 
@@ -240,11 +237,12 @@
             <span class="font-mono text-xs bg-slate-200 dark:bg-slate-700 px-1 py-0.5 rounded"
               >LAT / LNG</span
             >
-            <span>Direct Coordinate Input</span>
+            <span>{{ isIndonesian ? 'Input Koordinat Langsung' : 'Direct Coordinate Input' }}</span>
           </div>
           <p class="text-xs text-slate-600 dark:text-slate-400">
-            Allows typing exact numeric GPS coordinates with automatic range validation (-90..90,
-            -180..180).
+            {{ isIndonesian
+              ? 'Memungkinkan pengetikan koordinat GPS numerik presisi dengan validasi rentang otomatis (-90..90, -180..180).'
+              : 'Allows typing exact numeric GPS coordinates with automatic range validation (-90..90, -180..180).' }}
           </p>
         </div>
 
@@ -253,14 +251,12 @@
         >
           <div class="flex items-center gap-2 font-bold text-slate-900 dark:text-white text-sm">
             <span>🔍</span>
-            <span>Multi-Provider Geocoder</span>
+            <span>{{ isIndonesian ? 'Geocoding Multi-Penyedia' : 'Multi-Provider Geocoder' }}</span>
           </div>
           <p class="text-xs text-slate-600 dark:text-slate-400">
-            Searches addresses scoped by
-            <code class="font-mono text-blue-600 dark:text-blue-400">searchCity</code> and
-            <code class="font-mono text-blue-600 dark:text-blue-400">searchCountry</code> using
-            Nominatim or custom
-            <code class="font-mono text-blue-600 dark:text-blue-400">geocodeApi</code>.
+            {{ isIndonesian
+              ? 'Mencari alamat dengan cakupan kota searchCity dan negara searchCountry menggunakan Nominatim atau geocodeApi kustom.'
+              : 'Searches addresses scoped by searchCity and searchCountry using Nominatim or custom geocodeApi.' }}
           </p>
         </div>
 
@@ -269,12 +265,12 @@
         >
           <div class="flex items-center gap-2 font-bold text-slate-900 dark:text-white text-sm">
             <span>🛣️ / ⏱️</span>
-            <span>Route HUD Summary Badge</span>
+            <span>{{ isIndonesian ? 'Ringkasan HUD Jarak & Durasi Rute' : 'Route HUD Summary Badge' }}</span>
           </div>
           <p class="text-xs text-slate-600 dark:text-slate-400">
-            Parses OSRM or OpenRouteService (ORS) route data from
-            <code class="font-mono text-blue-600 dark:text-blue-400">geoJson</code> and renders live
-            distance and travel duration badges with A/B pins.
+            {{ isIndonesian
+              ? 'Mem-parsing rute OSRM / OpenRouteService (ORS) dari geoJson dan merender penanda Titik Awal & Selesai rute serta HUD jarak tempuh dan perkiraan durasi.'
+              : 'Parses OSRM or OpenRouteService (ORS) route data from geoJson and renders live distance and travel duration badges with A/B pins.' }}
           </p>
         </div>
       </div>
@@ -282,20 +278,18 @@
 
     <!-- Props Table -->
     <section class="space-y-4">
-      <h2 class="text-xl font-bold text-slate-900 dark:text-slate-100">Props</h2>
       <PropsTable :props="propsList" />
     </section>
 
     <!-- Events Table -->
     <section class="space-y-4">
-      <h2 class="text-xl font-bold text-slate-900 dark:text-slate-100">Events</h2>
       <EventsTable :events="eventsList" />
     </section>
 
     <!-- Exposed Methods Table -->
     <section class="space-y-4">
       <h2 class="text-xl font-bold text-slate-900 dark:text-slate-100">
-        Exposed Methods (Template Ref)
+        {{ isIndonesian ? 'Metode Publik (Template Ref)' : 'Exposed Methods (Template Ref)' }}
       </h2>
       <div class="overflow-x-auto rounded-lg border border-slate-200 dark:border-slate-800">
         <table class="w-full min-w-[540px] text-sm border-collapse">
@@ -304,17 +298,17 @@
               <th
                 class="px-4 py-2.5 text-left font-semibold border-b border-slate-200 dark:border-slate-800"
               >
-                Method
+                {{ isIndonesian ? 'Metode' : 'Method' }}
               </th>
               <th
                 class="px-4 py-2.5 text-left font-semibold border-b border-slate-200 dark:border-slate-800"
               >
-                Signature
+                {{ isIndonesian ? 'Signature' : 'Signature' }}
               </th>
               <th
                 class="px-4 py-2.5 text-left font-semibold border-b border-slate-200 dark:border-slate-800"
               >
-                Description
+                {{ isIndonesian ? 'Deskripsi' : 'Description' }}
               </th>
             </tr>
           </thead>
@@ -329,7 +323,9 @@
                 (lat: number, lng: number) =&gt; void
               </td>
               <td class="px-4 py-2.5 text-xs text-slate-600 dark:text-slate-300">
-                Programmatically sets marker pin and centers the map view on new coordinates.
+                {{ isIndonesian
+                  ? 'Menyetel posisi pin penanda dan memusatkan tampilan peta ke koordinat baru secara terprogram.'
+                  : 'Programmatically sets marker pin and centers the map view on new coordinates.' }}
               </td>
             </tr>
             <tr class="hover:bg-slate-50/60 dark:hover:bg-slate-800/40 transition-colors">
@@ -342,8 +338,9 @@
                 () =&gt; void
               </td>
               <td class="px-4 py-2.5 text-xs text-slate-600 dark:text-slate-300">
-                Recomputes map container dimensions and invalidates Leaflet cache (essential when
-                inside modals, drawers, or tabs).
+                {{ isIndonesian
+                  ? 'Menghitung ulang dimensi kontainer peta dan meng-invalidate cache Leaflet (sangat penting saat diletakkan di dalam modal, drawer, atau tab).'
+                  : 'Recomputes map container dimensions and invalidates Leaflet cache (essential when inside modals, drawers, or tabs).' }}
               </td>
             </tr>
           </tbody>
@@ -356,10 +353,13 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { MapPicker } from '@zyvnox/vue-pack/components'
+import { useSiteI18n } from '@/i18n'
 import DemoSection from '@/components/DemoSection.vue'
 import CodeBlock from '@/components/CodeBlock.vue'
 import PropsTable, { type PropDef } from '@/components/PropsTable.vue'
 import EventsTable, { type EventDef } from '@/components/EventsTable.vue'
+
+const { isIndonesian } = useSiteI18n()
 
 const origin = window.location.origin
 const geoRoutingJson = ref<JSON>()

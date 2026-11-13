@@ -23,19 +23,19 @@
         <RouterLink
           to="/"
           class="flex items-center gap-1 px-2 py-1 sm:px-2.5 sm:py-1.5 rounded-lg text-xs font-medium text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white bg-slate-100 hover:bg-slate-200 dark:bg-slate-800/80 dark:hover:bg-slate-700 transition-colors border border-slate-200 dark:border-slate-700/60 shrink-0"
-          title="Back to Home Page"
+          :title="isIndonesian ? 'Kembali ke Beranda' : 'Back to Home Page'"
         >
           <span>🏠</span>
-          <span class="hidden md:inline">Home</span>
+          <span class="hidden md:inline">{{ isIndonesian ? 'Beranda' : 'Home' }}</span>
         </RouterLink>
 
         <RouterLink
           to="/doc"
           class="flex items-center gap-1 px-2 py-1 sm:px-2.5 sm:py-1.5 rounded-lg text-xs font-medium text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white bg-slate-100 hover:bg-slate-200 dark:bg-slate-800/80 dark:hover:bg-slate-700 transition-colors border border-slate-200 dark:border-slate-700/60 shrink-0"
-          title="Go to Documentation"
+          :title="isIndonesian ? 'Ke Halaman Dokumentasi' : 'Go to Documentation'"
         >
           <span>📖</span>
-          <span class="hidden md:inline">Docs</span>
+          <span class="hidden md:inline">{{ isIndonesian ? 'Dokumentasi' : 'Docs' }}</span>
         </RouterLink>
       </div>
 
@@ -51,26 +51,28 @@
 
       <!-- Right: Action Buttons -->
       <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
+        <LanguageSwitcher />
+
         <button
           type="button"
           @click="resetCode"
           class="flex items-center gap-1 px-2 py-1 sm:px-3 sm:py-1.5 rounded-lg text-xs font-medium bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 transition-colors cursor-pointer border border-slate-200 dark:border-slate-700/60 shrink-0"
-          title="Reset code to default example"
+          :title="isIndonesian ? 'Reset kode ke contoh awal' : 'Reset code to default example'"
         >
           <span>🔄</span>
-          <span class="hidden sm:inline">Reset</span>
+          <span class="hidden sm:inline">{{ isIndonesian ? 'Atur Ulang' : 'Reset' }}</span>
         </button>
 
         <button
           type="button"
           @click="copyCode"
           class="flex items-center gap-1 px-2 py-1 sm:px-3 sm:py-1.5 rounded-lg text-xs font-medium bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 transition-colors cursor-pointer border border-slate-200 dark:border-slate-700/60 shrink-0"
-          title="Copy current code to clipboard"
+          :title="isIndonesian ? 'Salin kode ke papan klip' : 'Copy current code to clipboard'"
         >
-          <span v-if="copied" class="text-emerald-600 dark:text-emerald-400 font-semibold">✓ Copied!</span>
+          <span v-if="copied" class="text-emerald-600 dark:text-emerald-400 font-semibold">{{ isIndonesian ? '✓ Tersalin!' : '✓ Copied!' }}</span>
           <span v-else class="flex items-center gap-1">
             <span>📋</span>
-            <span class="hidden sm:inline">Copy Code</span>
+            <span class="hidden sm:inline">{{ isIndonesian ? 'Salin Kode' : 'Copy Code' }}</span>
           </span>
         </button>
 
@@ -122,11 +124,14 @@ import { ref } from 'vue'
 import CodeEditor from '@/components/playground/CodeEditor.vue'
 import Preview from '@/components/playground/Preview.vue'
 import { useDark } from '@/composables/useDark'
+import { useSiteI18n } from '@/i18n'
+import LanguageSwitcher from '@/components/LanguageSwitcher.vue'
 import { SponsorButton } from '@zyvnox/vue-pack/components'
 import pkg from '../../../package.json'
 
-const version = pkg.version || '0.1.3'
+const version = pkg.version || '0.1.4'
 const { isDark, toggleDark } = useDark()
+const { isIndonesian } = useSiteI18n()
 
 const defaultCode = `<script setup>
 import { ref } from 'vue'
@@ -213,4 +218,3 @@ const copyCode = async () => {
   }
 }
 </script>
-

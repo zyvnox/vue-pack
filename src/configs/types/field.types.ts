@@ -1,17 +1,17 @@
 import type {
-  DataKeyConfig,
-  Item,
-  SubmitAuthOptionMap,
-  Schema,
-  XORMany,
-  XOR,
-  DateOnly,
-  TimeOnly,
-  DateTimeString,
-  watermarkMargin,
-  watermarkPosition,
-  watermarkSize,
+	DateOnly,
+	DateTimeString,
+	Item,
+	Schema,
+	SubmitAuthOptionMap,
+	TimeOnly,
+	watermarkMargin,
+	watermarkPosition,
+	watermarkSize,
+	XOR,
+	XORMany
 } from '../..'
+import type { SecureFetchOptions } from '../../lib/secureFetch'
 export const ImageTypes = [
   'png',
   'jpg',
@@ -30,7 +30,6 @@ export const ImageTypes = [
 ] as const
 
 export type ImageType = (typeof ImageTypes)[number]
-import type { SecureFetchOptions } from '../../lib/secureFetch'
 export const fieldTypes = [
   'text',
   'email',
@@ -150,9 +149,81 @@ export interface PasswordField extends BaseField {
   }
 }
 
+export type SupportedCurrency =
+  | 'IDR'
+  | 'USD'
+  | 'EUR'
+  | 'GBP'
+  | 'JPY'
+  | 'CNY'
+  | 'KRW'
+  | 'SGD'
+  | 'AUD'
+  | 'CAD'
+  | 'MYR'
+  | 'THB'
+  | 'PHP'
+  | 'VND'
+  | 'INR'
+  | 'SAR'
+  | 'AED'
+  | 'CHF'
+  | 'BRL'
+  | 'RUB'
+  | 'TRY'
+  | 'HKD'
+  | 'NZD'
+  | 'TWD'
+  | 'idr'
+  | 'usd'
+  | 'eur'
+  | 'gbp'
+  | 'jpy'
+  | 'cny'
+  | 'krw'
+  | 'sgd'
+  | 'aud'
+  | 'cad'
+  | 'myr'
+  | 'thb'
+  | 'php'
+  | 'vnd'
+  | 'inr'
+  | 'sar'
+  | 'aed'
+  | 'chf'
+  | 'brl'
+  | 'rub'
+  | 'try'
+  | 'hkd'
+  | 'nzd'
+  | 'twd'
+  | '$'
+  | 'Rp'
+  | 'Rp.'
+  | '¥'
+  | '€'
+  | '£'
+  | '₩'
+  | '₹'
+  | '฿'
+  | 'RM'
+  | '₫'
+  | '₱'
+  | 'yen'
+  | 'rupiah'
+  | 'dollar'
+  | 'euro'
+  | 'pound'
+  | (string & {})
+
 export interface CurrencyField extends BaseField {
   type: 'currency'
   placeholder?: string
+  currency?: SupportedCurrency
+  currencyPosition?: 'prefix' | 'suffix'
+  currencies?: SupportedCurrency[]
+  allowCurrencySelect?: boolean
   validate?: {
     min?: number
     max?: number
@@ -430,6 +501,12 @@ export interface TagField extends BaseField {
   }
 }
 
+export interface ArrayObjectDisplayConfig {
+  titleKey?: string
+  imageKey?: string
+  [key: string]: string | undefined
+}
+
 export interface ArrayObjectField extends BaseField {
   type: 'arrayObject'
   initialItem?: Record<string, any>
@@ -440,6 +517,7 @@ export interface ArrayObjectField extends BaseField {
     update?: string
     create?: string
   }
+  display?: ArrayObjectDisplayConfig
   schema: Schema
 }
 

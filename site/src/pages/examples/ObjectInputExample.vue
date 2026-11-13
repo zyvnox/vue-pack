@@ -1,13 +1,6 @@
 <template>
   <div class="space-y-8">
-    <header class="border-b border-slate-200 dark:border-slate-800 pb-4">
-      <h1 class="text-3xl font-bold text-slate-900 dark:text-white mb-2">
-        ObjectInput (Nested Schema Object)
-      </h1>
-      <p class="text-sm text-slate-600 dark:text-slate-400">
-        Sub-schema form container that renders a structured nested object with real-time field validation, schema binding, and custom tooltips.
-      </p>
-    </header>
+    <DocHeader />
 
     <!-- Demo 1: Basic Object Group with Real-time Field Validation -->
     <DemoSection
@@ -17,32 +10,33 @@
       <div class="space-y-4">
         <ObjectInput
           :form-data="addressData"
-          label="Primary Billing Address"
+          :label="isIndonesian ? 'Alamat Penagihan Utama' : 'Primary Billing Address'"
           :schema="addressSchema"
           :errors="objectErrors"
+          :lang="currentLocale"
           @push:errors="handlePushError"
           @remove:errors="handleRemoveError"
           @update:model-value="handleUpdateModelValue"
         />
 
         <div class="flex flex-wrap items-center gap-3 text-xs">
-          <span class="font-semibold text-slate-600 dark:text-slate-400">Validation Status:</span>
+          <span class="font-semibold text-slate-600 dark:text-slate-400">{{ isIndonesian ? 'Status Validasi:' : 'Validation Status:' }}</span>
           <span
             v-if="Object.keys(objectErrors).length === 0"
             class="px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300 font-medium"
           >
-            ✓ All nested fields valid
+            {{ isIndonesian ? '✓ Semua field bersarang valid' : '✓ All nested fields valid' }}
           </span>
           <span
             v-else
             class="px-2 py-0.5 rounded-full bg-rose-100 dark:bg-rose-900/40 text-rose-700 dark:text-rose-300 font-medium"
           >
-            ✕ Errors: {{ Object.keys(objectErrors).join(', ') }}
+            {{ isIndonesian ? '✕ Kesalahan:' : '✕ Errors:' }} {{ Object.keys(objectErrors).join(', ') }}
           </span>
         </div>
 
         <div class="text-xs text-slate-500">
-          Bound Object Data:
+          {{ isIndonesian ? 'Data Objek Terikat:' : 'Bound Object Data:' }}
           <pre class="p-3 rounded-lg bg-slate-100 dark:bg-slate-800 font-mono mt-1 overflow-x-auto">{{ JSON.stringify(addressData, null, 2) }}</pre>
         </div>
       </div>
@@ -59,12 +53,13 @@
     >
       <ObjectInput
         :form-data="metadataData"
-        label="Cloud Infrastructure Metadata"
-        tooltip="Enter AWS VPC network segmentation details"
+        :label="isIndonesian ? 'Metadata Infrastruktur Cloud' : 'Cloud Infrastructure Metadata'"
+        :tooltip="isIndonesian ? 'Masukkan rincian segmentasi jaringan AWS VPC' : 'Enter AWS VPC network segmentation details'"
         tooltip-position="right"
         tooltip-icon="🌐"
         :schema="metadataSchema"
         :errors="{}"
+        :lang="currentLocale"
       />
 
       <template #code>
@@ -79,10 +74,11 @@
     >
       <ObjectInput
         :form-data="addressData"
-        label="Archived Address (Read-Only)"
+        :label="isIndonesian ? 'Alamat Terarsip (Hanya-Baca)' : 'Archived Address (Read-Only)'"
         :schema="addressSchema"
         :errors="{}"
         disabled
+        :lang="currentLocale"
       />
 
       <template #code>
@@ -92,26 +88,27 @@
 
     <!-- Props Table -->
     <section class="space-y-4">
-      <h2 class="text-xl font-bold text-slate-900 dark:text-slate-100">Props</h2>
       <PropsTable :props="propsList" />
     </section>
 
     <!-- Events Table -->
     <section class="space-y-4">
-      <h2 class="text-xl font-bold text-slate-900 dark:text-slate-100">Events</h2>
       <EventsTable :events="eventsList" />
     </section>
   </div>
 </template>
 
 <script setup lang="ts">
-import { reactive } from 'vue'
-import { ObjectInput } from '@zyvnox/vue-pack/components'
-import type { Schema, Errors } from '@zyvnox/vue-pack/type'
-import DemoSection from '@/components/DemoSection.vue'
 import CodeBlock from '@/components/CodeBlock.vue'
-import PropsTable, { type PropDef } from '@/components/PropsTable.vue'
+import DemoSection from '@/components/DemoSection.vue'
 import EventsTable, { type EventDef } from '@/components/EventsTable.vue'
+import PropsTable, { type PropDef } from '@/components/PropsTable.vue'
+import { useSiteI18n } from '@/i18n'
+import { ObjectInput } from '@zyvnox/vue-pack/components'
+import type { Errors, Schema } from '@zyvnox/vue-pack/type'
+import { computed, reactive } from 'vue'
+
+const { isIndonesian, currentLocale } = useSiteI18n()
 
 const addressData = reactive<Record<string, any>>({
   street: '123 Enterprise Blvd',
@@ -140,33 +137,33 @@ const metadataData = reactive<Record<string, any>>({
   subnet: '10.0.1.0/24',
 })
 
-const addressSchema: Schema = {
+const addressSchema = computed<Schema>(() => ({
   street: {
     type: 'text',
-    label: 'Street Address',
+    label: isIndonesian.value ? 'Alamat Jalan' : 'Street Address',
     required: true,
-    placeholder: 'Min. 5 characters',
+    placeholder: isIndonesian.value ? 'Min. 5 karakter' : 'Min. 5 characters',
     validate: { minLength: 5, maxLength: 60 },
   },
   city: {
     type: 'text',
-    label: 'City',
+    label: isIndonesian.value ? 'Kota' : 'City',
     required: true,
-    placeholder: 'e.g. Surabaya',
+    placeholder: isIndonesian.value ? 'contoh: Surabaya' : 'e.g. Surabaya',
   },
   postalCode: {
     type: 'text',
-    label: 'Postal Code (5 Digits)',
+    label: isIndonesian.value ? 'Kode Pos (5 Digit)' : 'Postal Code (5 Digits)',
     required: true,
     placeholder: '60175',
     validate: { pattern: '^\\d{5}$' },
   },
-}
+}))
 
-const metadataSchema: Schema = {
-  vpcId: { type: 'text', label: 'VPC ID', required: true },
-  subnet: { type: 'text', label: 'Subnet CIDR', required: true },
-}
+const metadataSchema = computed<Schema>(() => ({
+  vpcId: { type: 'text', label: isIndonesian.value ? 'ID VPC' : 'VPC ID', required: true },
+  subnet: { type: 'text', label: isIndonesian.value ? 'Blok Subnet CIDR' : 'Subnet CIDR', required: true },
+}))
 
 const basicCode = `<template>
   <ObjectInput

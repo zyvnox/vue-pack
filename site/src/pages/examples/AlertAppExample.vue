@@ -1,13 +1,6 @@
 <template>
   <div class="space-y-8">
-    <header class="border-b border-slate-200 dark:border-slate-800 pb-4">
-      <h1 class="text-3xl font-bold text-slate-900 dark:text-white mb-2">
-        AlertApp (Toast Notification Manager)
-      </h1>
-      <p class="text-sm text-slate-600 dark:text-slate-400">
-        Global floating toast notification manager with stacked animation, auto-dismiss timers, and success/error status styles.
-      </p>
-    </header>
+    <DocHeader />
 
     <!-- Mount AlertApp instance -->
     <AlertApp ref="alertRef" />
@@ -20,21 +13,21 @@
           @click="triggerSuccess"
           class="px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold transition-colors"
         >
-          ✓ Trigger Success Toast
+          {{ isIndonesian ? '✓ Picu Toast Sukses' : '✓ Trigger Success Toast' }}
         </button>
         <button
           type="button"
           @click="triggerWarning"
           class="px-4 py-2 rounded-lg bg-amber-500 hover:bg-amber-600 text-white text-xs font-semibold transition-colors"
         >
-          ⚠️ Trigger Warning Toast
+          {{ isIndonesian ? '⚠️ Picu Toast Peringatan' : '⚠️ Trigger Warning Toast' }}
         </button>
         <button
           type="button"
           @click="triggerError"
           class="px-4 py-2 rounded-lg bg-rose-600 hover:bg-rose-700 text-white text-xs font-semibold transition-colors"
         >
-          ✕ Trigger Error Toast
+          {{ isIndonesian ? '✕ Picu Toast Error' : '✕ Trigger Error Toast' }}
         </button>
       </div>
 
@@ -45,8 +38,7 @@
 
     <!-- Expose API Table -->
     <section class="space-y-4">
-      <h2 class="text-xl font-bold text-slate-900 dark:text-slate-100">Exposed Methods</h2>
-      <PropsTable :props="exposedMethods" />
+      <PropsTable :props="exposedMethods" title="Exposed Methods" />
     </section>
   </div>
 </template>
@@ -54,27 +46,29 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { AlertApp } from '@zyvnox/vue-pack/components'
+import { useSiteI18n } from '@/i18n'
 import DemoSection from '@/components/DemoSection.vue'
 import CodeBlock from '@/components/CodeBlock.vue'
 import PropsTable from '@/components/PropsTable.vue'
 
+const { isIndonesian } = useSiteI18n()
 const alertRef = ref<InstanceType<typeof AlertApp> | null>(null)
 
 const triggerSuccess = () => {
   alertRef.value?.addAlert({
     type: 'success',
-    title: 'Changes Saved Successfully',
-    messages: ['Customer profile record has been synchronized with the database.'],
+    title: isIndonesian.value ? 'Perubahan Berhasil Disimpan' : 'Changes Saved Successfully',
+    messages: [isIndonesian.value ? 'Data profil pelanggan telah disinkronkan ke database.' : 'Customer profile record has been synchronized with the database.'],
   })
 }
 
 const triggerWarning = () => {
   alertRef.value?.addAlert({
     type: 'warning',
-    title: 'Storage Capacity Alert',
+    title: isIndonesian.value ? 'Peringatan Kapasitas Penyimpanan' : 'Storage Capacity Alert',
     messages: [
-      'Cloud storage utilization is currently at 88%.',
-      'Consider archiving older log files or upgrading your plan.',
+      isIndonesian.value ? 'Kapasitas penyimpanan cloud telah mencapai 88%.' : 'Cloud storage utilization is currently at 88%.',
+      isIndonesian.value ? 'Pertimbangkan untuk mengarsipkan log lama atau meningkatkan paket langganan.' : 'Consider archiving older log files or upgrading your plan.',
     ],
   })
 }
@@ -82,10 +76,10 @@ const triggerWarning = () => {
 const triggerError = () => {
   alertRef.value?.addAlert({
     type: 'error',
-    title: 'Network Synchronization Failed',
+    title: isIndonesian.value ? 'Sinkronisasi Jaringan Gagal' : 'Network Synchronization Failed',
     messages: [
-      'Failed to connect to gateway endpoint.',
-      'Check your internet connection and retry.',
+      isIndonesian.value ? 'Gagal menghubungkan ke gateway endpoint.' : 'Failed to connect to gateway endpoint.',
+      isIndonesian.value ? 'Periksa koneksi internet Anda dan coba lagi.' : 'Check your internet connection and retry.',
     ],
   })
 }

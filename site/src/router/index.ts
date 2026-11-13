@@ -304,4 +304,113 @@ export const router = createRouter({
   scrollBehavior: () => ({ top: 0 }),
 })
 
+const titlesByRoute: Record<string, { title: string; desc: string }> = {
+  home: {
+    title: '@zyvnox/vue-pack — Schema-Driven Vue 3 Enterprise UI & Developer Toolkit',
+    desc: 'Enterprise-grade Vue 3 component library featuring schema-driven FormModal, interactive TabelData suite, 25+ validated inputs, and real-time SEO engine.',
+  },
+  playground: {
+    title: 'Interactive Playground & Monaco Editor — @zyvnox/vue-pack',
+    desc: 'Live browser playground with Monaco code editor to test and experiment with @zyvnox/vue-pack components in real-time.',
+  },
+  'doc-home': {
+    title: 'Getting Started — @zyvnox/vue-pack Documentation',
+    desc: 'Learn how to get started with @zyvnox/vue-pack in Vue 3 projects: quick start, installation, and component usage.',
+  },
+  'doc-getting-started': {
+    title: 'Getting Started — @zyvnox/vue-pack Documentation',
+    desc: 'Learn how to get started with @zyvnox/vue-pack in Vue 3 projects: quick start, installation, and component usage.',
+  },
+  'doc-whats-new': {
+    title: "What's New in v0.1.4 — @zyvnox/vue-pack",
+    desc: 'Discover all new features, enhancements, and bug fixes in @zyvnox/vue-pack v0.1.4.',
+  },
+  'doc-installation': {
+    title: 'Installation & Setup Guide — @zyvnox/vue-pack',
+    desc: 'Step-by-step guide to installing @zyvnox/vue-pack via npm, pnpm, yarn, or CDN with Tailwind/UnoCSS support.',
+  },
+  'doc-config': {
+    title: 'Configuration & Global Settings — @zyvnox/vue-pack',
+    desc: 'Configure global options, custom styling, theme preferences, and plugin defaults in @zyvnox/vue-pack.',
+  },
+  'doc-i18n': {
+    title: 'Internationalization (i18n) — @zyvnox/vue-pack',
+    desc: 'Native multi-language support (English and Indonesian) with automatic location and timezone detection.',
+  },
+  'doc-sponsor': {
+    title: 'Sponsor & Community Support — @zyvnox/vue-pack',
+    desc: 'Support independent open-source development of @zyvnox/vue-pack on GitHub Sponsors, Ko-fi, or Saweria.',
+  },
+  'doc-example-form-modal': {
+    title: 'FormModal (Schema-Driven Modal Form Generator) — @zyvnox/vue-pack',
+    desc: 'Build modal forms automatically from JSON schema contracts with Zod validation, tabs, and SEO score indicators.',
+  },
+  'doc-example-tabel-data': {
+    title: 'TabelData (Interactive Datatable Suite) — @zyvnox/vue-pack',
+    desc: 'Powerful datatable with server-side pagination, sorting, search, selection, and CSV export.',
+  },
+  'doc-example-seo-studio': {
+    title: 'SEO Studio (Real-Time On-Page Auditor) — @zyvnox/vue-pack',
+    desc: 'Verify on-page SEO factors in real-time: keyword density, headings, meta tags, and Google SERP snippet preview.',
+  },
+  'doc-example-location-picker': {
+    title: 'LocationPicker / MapPicker (Leaflet GPS & GeoJSON) — @zyvnox/vue-pack',
+    desc: 'Interactive Leaflet map coordinate selector with device GPS sync, GeoJSON polygon validation, and geocoding.',
+  },
+}
+
+router.afterEach((to) => {
+  if (typeof document === 'undefined') return
+
+  const routeName = String(to.name || '')
+  const metaInfo = titlesByRoute[routeName]
+
+  const pageTitle =
+    metaInfo?.title ||
+    (routeName.startsWith('doc-example-')
+      ? `${routeName
+          .replace('doc-example-', '')
+          .split('-')
+          .map((s) => s.charAt(0).toUpperCase() + s.slice(1))
+          .join('')} Component — @zyvnox/vue-pack`
+      : '@zyvnox/vue-pack — Schema-Driven Vue 3 Enterprise UI')
+
+  const pageDesc =
+    metaInfo?.desc ||
+    'Enterprise-grade Vue 3 component library featuring schema-driven FormModal, interactive TabelData, 25+ validated inputs, and real-time SEO engine.'
+
+  document.title = pageTitle
+
+  const setMeta = (name: string, content: string, isProperty = false) => {
+    const attr = isProperty ? 'property' : 'name'
+    let el = document.querySelector(`meta[${attr}="${name}"]`)
+    if (!el) {
+      el = document.createElement('meta')
+      el.setAttribute(attr, name)
+      document.head.appendChild(el)
+    }
+    el.setAttribute('content', content)
+  }
+
+  setMeta('description', pageDesc)
+  setMeta('title', pageTitle)
+  setMeta('og:title', pageTitle, true)
+  setMeta('og:description', pageDesc, true)
+  setMeta('twitter:title', pageTitle)
+  setMeta('twitter:description', pageDesc)
+
+  const cleanPath = to.path.startsWith('/') ? to.path : `/${to.path}`
+  const canonicalUrl = `https://zyvnox.github.io/vue-pack${cleanPath === '/' ? '/' : cleanPath}`
+  setMeta('og:url', canonicalUrl, true)
+  setMeta('twitter:url', canonicalUrl)
+
+  let linkCanonical = document.querySelector('link[rel="canonical"]')
+  if (!linkCanonical) {
+    linkCanonical = document.createElement('link')
+    linkCanonical.setAttribute('rel', 'canonical')
+    document.head.appendChild(linkCanonical)
+  }
+  linkCanonical.setAttribute('href', canonicalUrl)
+})
+
 export default router

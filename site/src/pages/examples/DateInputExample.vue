@@ -1,23 +1,17 @@
 <template>
   <div class="space-y-8">
-    <header class="border-b border-slate-200 dark:border-slate-800 pb-4">
-      <h1 class="text-3xl font-bold text-slate-900 dark:text-white mb-2">
-        DateInput
-      </h1>
-      <p class="text-sm text-slate-600 dark:text-slate-400">
-        Calendar date selection component with ISO date format validation, minDate & maxDate bounds, custom tooltips, and i18n support.
-      </p>
-    </header>
+    <DocHeader />
 
     <!-- Demo 1: Basic Date -->
     <DemoSection title="Basic Date Selection" description="Selects a calendar date bound to an ISO format string (YYYY-MM-DD).">
       <DateInput
         v-model="basic"
-        label="Event Start Date"
+        :label="isIndonesian ? 'Tanggal Mulai Acara' : 'Event Start Date'"
         placeholder="YYYY-MM-DD"
+        :lang="currentLocale"
       />
       <div class="text-xs text-slate-500">
-        Selected Date: <code class="font-mono font-bold">{{ basic || '(none)' }}</code>
+        {{ isIndonesian ? 'Tanggal Terpilih:' : 'Selected Date:' }} <code class="font-mono font-bold">{{ basic || (isIndonesian ? '(tidak ada)' : '(none)') }}</code>
       </div>
 
       <template #code>
@@ -32,16 +26,17 @@
     >
       <DateInput
         v-model="validatedVal"
-        label="Booking Schedule Range"
+        :label="isIndonesian ? 'Rentang Jadwal Pemesanan' : 'Booking Schedule Range'"
+        :lang="currentLocale"
         :validate="{
           minDate: '2026-06-01' as DateOnly,
           maxDate: '2026-12-31' as DateOnly,
         }"
       />
       <div class="text-xs text-slate-500 space-y-1">
-        <div>Current Date: <code class="font-mono font-bold">{{ validatedVal || '(none)' }}</code></div>
+        <div>{{ isIndonesian ? 'Tanggal Saat Ini:' : 'Current Date:' }} <code class="font-mono font-bold">{{ validatedVal || (isIndonesian ? '(tidak ada)' : '(none)') }}</code></div>
         <div class="text-slate-400 dark:text-slate-500">
-          Allowed window: 2026-06-01 through 2026-12-31.
+          {{ isIndonesian ? 'Rentang yang diizinkan: 2026-06-01 hingga 2026-12-31.' : 'Allowed window: 2026-06-01 through 2026-12-31.' }}
         </div>
       </div>
 
@@ -54,9 +49,10 @@
     <DemoSection title="With Schema Tooltip" description="Displays date constraints and format hints via tooltip.">
       <DateInput
         v-model="withTooltip"
-        label="Fiscal Year Closing Date"
-        tooltip="Must fall on the final working day of the accounting period"
+        :label="isIndonesian ? 'Tanggal Tutup Tahun Buku' : 'Fiscal Year Closing Date'"
+        :tooltip="isIndonesian ? 'Harus jatuh pada hari kerja terakhir periode akuntansi' : 'Must fall on the final working day of the accounting period'"
         tooltip-position="right"
+        :lang="currentLocale"
       />
 
       <template #code>
@@ -69,13 +65,15 @@
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <DateInput
           v-model="errorVal"
-          label="Required Deadline"
-          :error="'Deadline date must be scheduled in the future'"
+          :label="isIndonesian ? 'Batas Waktu Wajib' : 'Required Deadline'"
+          :error="isIndonesian ? 'Tanggal tenggat waktu harus dijadwalkan di masa depan' : 'Deadline date must be scheduled in the future'"
+          :lang="currentLocale"
         />
         <DateInput
           v-model="disabledVal"
-          label="Contract Signing Date (Read-Only)"
+          :label="isIndonesian ? 'Tanggal Penandatanganan Kontrak (Hanya-Baca)' : 'Contract Signing Date (Read-Only)'"
           disabled
+          :lang="currentLocale"
         />
       </div>
 
@@ -86,13 +84,11 @@
 
     <!-- Props Table -->
     <section class="space-y-4">
-      <h2 class="text-xl font-bold text-slate-900 dark:text-slate-100">Props</h2>
       <PropsTable :props="propsList" />
     </section>
 
     <!-- Events Table -->
     <section class="space-y-4">
-      <h2 class="text-xl font-bold text-slate-900 dark:text-slate-100">Events</h2>
       <EventsTable :events="eventsList" />
     </section>
   </div>
@@ -102,10 +98,13 @@
 import { ref } from 'vue'
 import { DateInput } from '@zyvnox/vue-pack/components'
 import type { DateOnly } from '@zyvnox/vue-pack'
+import { useSiteI18n } from '@/i18n'
 import DemoSection from '@/components/DemoSection.vue'
 import CodeBlock from '@/components/CodeBlock.vue'
 import PropsTable, { type PropDef } from '@/components/PropsTable.vue'
 import EventsTable, { type EventDef } from '@/components/EventsTable.vue'
+
+const { isIndonesian, currentLocale } = useSiteI18n()
 
 const basic = ref<DateOnly>('2026-12-31' as DateOnly)
 const validatedVal = ref<DateOnly>('2026-05-15' as DateOnly)

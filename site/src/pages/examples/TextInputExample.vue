@@ -1,23 +1,17 @@
 <template>
   <div class="space-y-8">
-    <header class="border-b border-slate-200 dark:border-slate-800 pb-4">
-      <h1 class="text-3xl font-bold text-slate-900 dark:text-white mb-2">
-        TextInput
-      </h1>
-      <p class="text-sm text-slate-600 dark:text-slate-400">
-        Single-line text input component with custom tooltip support, dark-mode UnoCSS prefix styling, client-side duplicate & regex validation, and i18n support.
-      </p>
-    </header>
+    <DocHeader />
 
     <!-- Demo 1: Basic Usage -->
     <DemoSection title="Basic Usage" description="Standard text input with reactive v-model binding.">
       <TextInput
         v-model="basic"
-        label="Full Name"
-        placeholder="e.g. Sarah Connor"
+        :label="isIndonesian ? 'Nama Lengkap' : 'Full Name'"
+        :placeholder="isIndonesian ? 'cth. Sarah Connor' : 'e.g. Sarah Connor'"
+        :lang="currentLocale"
       />
       <div class="text-xs text-slate-500">
-        Bound Value: <code class="font-mono font-bold">{{ basic || '(empty)' }}</code>
+        {{ isIndonesian ? 'Nilai Terikat:' : 'Bound Value:' }} <code class="font-mono font-bold">{{ basic || (isIndonesian ? '(kosong)' : '(empty)') }}</code>
       </div>
 
       <template #code>
@@ -32,8 +26,9 @@
     >
       <TextInput
         v-model="validatedVal"
-        label="Unique Username"
-        placeholder="Enter 3-12 alphanumeric characters"
+        :label="isIndonesian ? 'Nama Pengguna Unik' : 'Unique Username'"
+        :placeholder="isIndonesian ? 'Masukkan 3-12 karakter alfanumerik' : 'Enter 3-12 alphanumeric characters'"
+        :lang="currentLocale"
         :validate="{
           minLength: 3,
           maxLength: 12,
@@ -42,9 +37,14 @@
         }"
       />
       <div class="text-xs text-slate-500 space-y-1">
-        <div>Value: <code class="font-mono font-bold">{{ validatedVal || '(empty)' }}</code></div>
+        <div>{{ isIndonesian ? 'Nilai:' : 'Value:' }} <code class="font-mono font-bold">{{ validatedVal || (isIndonesian ? '(kosong)' : '(empty)') }}</code></div>
         <div class="text-slate-400 dark:text-slate-500">
-          Rules: Min 3, Max 12 chars, regex <code class="font-mono">^[a-zA-Z0-9_]+$</code>, forbidden: <code class="font-mono">['admin', 'root', 'superuser', 'owner']</code>.
+          <span v-if="isIndonesian">
+            Aturan: Min 3, Maks 12 karakter, regex <code class="font-mono">^[a-zA-Z0-9_]+$</code>, dilarang: <code class="font-mono">['admin', 'root', 'superuser', 'owner']</code>.
+          </span>
+          <span v-else>
+            Rules: Min 3, Max 12 chars, regex <code class="font-mono">^[a-zA-Z0-9_]+$</code>, forbidden: <code class="font-mono">['admin', 'root', 'superuser', 'owner']</code>.
+          </span>
         </div>
       </div>
 
@@ -57,13 +57,14 @@
     <DemoSection title="Custom Schema Tooltip" description="Displays a help icon with interactive tooltip text beside the label.">
       <TextInput
         v-model="withTooltip"
-        label="National Identity / Passport ID"
-        tooltip="Enter 16-digit ID number as printed on your national identity card"
+        :label="isIndonesian ? 'Nomor KTP / Paspor' : 'National Identity / Passport ID'"
+        :tooltip="isIndonesian ? 'Masukkan 16 digit NIK sesuai e-KTP' : 'Enter 16-digit ID number as printed on your national identity card'"
         tooltip-position="right"
         placeholder="320102..."
+        :lang="currentLocale"
       />
       <div class="text-xs text-slate-500">
-        Hover over the <span class="font-semibold">❓</span> icon above to reveal the tooltip.
+        {{ isIndonesian ? 'Arahkan kursor ke ikon ❓ di atas untuk melihat tooltip.' : 'Hover over the ❓ icon above to reveal the tooltip.' }}
       </div>
 
       <template #code>
@@ -76,15 +77,17 @@
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <TextInput
           v-model="withError"
-          label="Server Hostname"
+          :label="isIndonesian ? 'Nama Host Server' : 'Server Hostname'"
           placeholder="primary.node.local"
           required
-          :error="'Host unreachable on specified port'"
+          :error="isIndonesian ? 'Host tidak dapat dijangkau pada port yang ditentukan' : 'Host unreachable on specified port'"
+          :lang="currentLocale"
         />
         <TextInput
           v-model="disabledVal"
-          label="System Node UUID (Read-Only)"
+          :label="isIndonesian ? 'UUID Node Sistem (Hanya-Baca)' : 'System Node UUID (Read-Only)'"
           disabled
+          :lang="currentLocale"
         />
       </div>
 
@@ -95,13 +98,11 @@
 
     <!-- Props Table -->
     <section class="space-y-4">
-      <h2 class="text-xl font-bold text-slate-900 dark:text-slate-100">Props</h2>
       <PropsTable :props="propsList" />
     </section>
 
     <!-- Events Table -->
     <section class="space-y-4">
-      <h2 class="text-xl font-bold text-slate-900 dark:text-slate-100">Events</h2>
       <EventsTable :events="eventsList" />
     </section>
   </div>
@@ -110,10 +111,13 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { TextInput } from '@zyvnox/vue-pack/components'
+import { useSiteI18n } from '@/i18n'
 import DemoSection from '@/components/DemoSection.vue'
 import CodeBlock from '@/components/CodeBlock.vue'
 import PropsTable, { type PropDef } from '@/components/PropsTable.vue'
 import EventsTable, { type EventDef } from '@/components/EventsTable.vue'
+
+const { isIndonesian, currentLocale } = useSiteI18n()
 
 const basic = ref('')
 const validatedVal = ref('admin')

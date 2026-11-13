@@ -1,22 +1,16 @@
 <template>
   <div class="space-y-8">
-    <header class="border-b border-slate-200 dark:border-slate-800 pb-4">
-      <h1 class="text-3xl font-bold text-slate-900 dark:text-white mb-2">
-        FileArrayInput
-      </h1>
-      <p class="text-sm text-slate-600 dark:text-slate-400">
-        Multi-file attachments manager with list preview, max file count limits (`maxFiles`), file type & size constraints, custom tooltips, and i18n support.
-      </p>
-    </header>
+    <DocHeader />
 
     <!-- Demo 1: Basic Multi-File -->
     <DemoSection title="Basic Multi-File Attachments" description="Manage a list of files or remote links with add/remove actions.">
       <FileArrayInput
         v-model="basic"
-        label="Project Supporting Documents"
+        :label="isIndonesian ? 'Dokumen Pendukung Proyek' : 'Project Supporting Documents'"
+        :lang="currentLocale"
       />
       <div class="text-xs text-slate-500">
-        Total Attached Files: <code class="font-mono font-bold">{{ basic.length }} files</code>
+        {{ isIndonesian ? 'Total Berkas Terlampir:' : 'Total Attached Files:' }} <code class="font-mono font-bold">{{ basic.length }} {{ isIndonesian ? 'berkas' : 'files' }}</code>
       </div>
 
       <template #code>
@@ -31,9 +25,10 @@
     >
       <FileArrayInput
         v-model="validatedFiles"
-        label="Tender Submission Package"
-        tooltip="Submit max 3 files in PDF or ZIP format"
+        :label="isIndonesian ? 'Paket Pengajuan Tender' : 'Tender Submission Package'"
+        :tooltip="isIndonesian ? 'Kirim maksimal 3 berkas dalam format PDF atau ZIP' : 'Submit max 3 files in PDF or ZIP format'"
         tooltip-position="right"
+        :lang="currentLocale"
         :validate="{
           maxFiles: 3,
           maxSize: 4096,
@@ -42,7 +37,7 @@
       />
       <div class="text-xs text-slate-500 space-y-1 mt-2">
         <div class="text-slate-400 dark:text-slate-500">
-          Constraints: maxFiles: 3, maxSize: 4096 KB per file, allowed: <code class="font-mono">['pdf', 'zip']</code>.
+          {{ isIndonesian ? 'Batasan: maxFiles: 3, maxSize: 4096 KB per berkas, format:' : 'Constraints: maxFiles: 3, maxSize: 4096 KB per file, allowed:' }} <code class="font-mono">['pdf', 'zip']</code>.
         </div>
       </div>
 
@@ -56,13 +51,15 @@
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <FileArrayInput
           v-model="errorVal"
-          label="Mandatory Audit Evidences"
-          :error="'At least one notarized evidence document is required'"
+          :label="isIndonesian ? 'Bukti Audit Wajib' : 'Mandatory Audit Evidences'"
+          :error="isIndonesian ? 'Setidaknya satu dokumen bukti tersahkan diperlukan' : 'At least one notarized evidence document is required'"
+          :lang="currentLocale"
         />
         <FileArrayInput
           v-model="disabledVal"
-          label="Locked Case Evidences (Read-Only)"
+          :label="isIndonesian ? 'Bukti Kasus Terkunci (Hanya-Baca)' : 'Locked Case Evidences (Read-Only)'"
           disabled
+          :lang="currentLocale"
         />
       </div>
 
@@ -73,13 +70,11 @@
 
     <!-- Props Table -->
     <section class="space-y-4">
-      <h2 class="text-xl font-bold text-slate-900 dark:text-slate-100">Props</h2>
       <PropsTable :props="propsList" />
     </section>
 
     <!-- Events Table -->
     <section class="space-y-4">
-      <h2 class="text-xl font-bold text-slate-900 dark:text-slate-100">Events</h2>
       <EventsTable :events="eventsList" />
     </section>
   </div>
@@ -88,10 +83,13 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { FileArrayInput } from '@zyvnox/vue-pack/components'
+import { useSiteI18n } from '@/i18n'
 import DemoSection from '@/components/DemoSection.vue'
 import CodeBlock from '@/components/CodeBlock.vue'
 import PropsTable, { type PropDef } from '@/components/PropsTable.vue'
 import EventsTable, { type EventDef } from '@/components/EventsTable.vue'
+
+const { isIndonesian, currentLocale } = useSiteI18n()
 
 const basic = ref<(File | string)[]>([
   'https://company.internal/specs.pdf',

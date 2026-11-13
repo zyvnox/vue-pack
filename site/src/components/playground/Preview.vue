@@ -32,7 +32,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed } from 'vue';
 
 const props = withDefaults(
   defineProps<{
@@ -42,7 +42,7 @@ const props = withDefaults(
   }>(),
   {
     isDark: false,
-    version: '0.1.3',
+    version: '0.1.4',
   },
 )
 
@@ -126,7 +126,7 @@ const generatedSrcDoc = computed(() => {
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <!-- CDN Stylesheet for @zyvnox/vue-pack with resilient CDN fallback -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@unocss/reset/tailwind.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@unocss/reset/normalize.min.css" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@zyvnox/vue-pack@${props.version}/dist/style.css" onerror="this.onerror=null;this.href='https://esm.sh/@zyvnox/vue-pack@${props.version}/dist/style.css';" />
   
   <!-- CDN Tailwind for layout in preview -->

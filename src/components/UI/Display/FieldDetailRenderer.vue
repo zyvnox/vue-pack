@@ -478,6 +478,7 @@
 <script setup lang="ts">
 import { computed, inject, ref } from 'vue'
 import { formatDate, formatTime, formatDateTime } from '../../../helpers'
+import { formatCurrencyValue } from '../../../helpers/currency'
 import { BaseLabel, BaseImage } from './'
 import { MapPicker } from '../Inputs'
 import { useI18n } from '../../composables/useI18n'
@@ -571,9 +572,8 @@ const { t, labels } = useI18n(computed(() => props.lang))
 
 const formatCurrency = (value: any) => {
   if (typeof value !== 'number') return value
-  const lang = props.lang === 'id' ? 'id-ID' : 'en-US'
-  const currency = props.lang === 'id' ? 'IDR' : 'USD'
-  return new Intl.NumberFormat(lang, { style: 'currency', currency: currency }).format(value)
+  const currency = props.field.type === 'currency' ? props.field.currency : undefined
+  return formatCurrencyValue(value, currency)
 }
 
 /**

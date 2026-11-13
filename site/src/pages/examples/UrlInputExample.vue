@@ -1,23 +1,17 @@
 <template>
   <div class="space-y-8">
-    <header class="border-b border-slate-200 dark:border-slate-800 pb-4">
-      <h1 class="text-3xl font-bold text-slate-900 dark:text-white mb-2">
-        UrlInput
-      </h1>
-      <p class="text-sm text-slate-600 dark:text-slate-400">
-        Web URL address input component with real-time protocol & URI parsing validation, custom tooltips, and i18n support.
-      </p>
-    </header>
+    <DocHeader />
 
     <!-- Demo 1: Basic URL -->
     <DemoSection title="Basic URL Input" description="Input with web address validation and link icon indicator.">
       <UrlInput
         v-model="basic"
-        label="Company Homepage"
+        :label="isIndonesian ? 'Beranda Perusahaan' : 'Company Homepage'"
         placeholder="https://zyvnox.com"
+        :lang="currentLocale"
       />
       <div class="text-xs text-slate-500">
-        Bound Value: <code class="font-mono font-bold">{{ basic || '(empty)' }}</code>
+        {{ isIndonesian ? 'Nilai Terikat:' : 'Bound Value:' }} <code class="font-mono font-bold">{{ basic || (isIndonesian ? '(kosong)' : '(empty)') }}</code>
       </div>
 
       <template #code>
@@ -32,14 +26,15 @@
     >
       <UrlInput
         v-model="validatedVal"
-        label="Webhook Endpoint Target"
+        :label="isIndonesian ? 'Target Endpoint Webhook' : 'Webhook Endpoint Target'"
         placeholder="https://api.zyvnox.com/v1/webhook"
         :validate="true"
+        :lang="currentLocale"
       />
       <div class="text-xs text-slate-500 space-y-1">
-        <div>Current Value: <code class="font-mono font-bold">{{ validatedVal || '(empty)' }}</code></div>
+        <div>{{ isIndonesian ? 'Nilai Saat Ini:' : 'Current Value:' }} <code class="font-mono font-bold">{{ validatedVal || (isIndonesian ? '(kosong)' : '(empty)') }}</code></div>
         <div class="text-slate-400 dark:text-slate-500">
-          Enforces standard web URI format (valid protocol, host domain, path).
+          {{ isIndonesian ? 'Menerapkan format URI web standar (protokol valid, domain host, jalur).' : 'Enforces standard web URI format (valid protocol, host domain, path).' }}
         </div>
       </div>
 
@@ -52,10 +47,11 @@
     <DemoSection title="With Schema Tooltip" description="Displays URL protocol requirement hints via tooltip.">
       <UrlInput
         v-model="withTooltip"
-        label="Public Documentation Repo"
-        tooltip="Must begin with https:// and point to public repository"
+        :label="isIndonesian ? 'Repositori Dokumentasi Publik' : 'Public Documentation Repo'"
+        :tooltip="isIndonesian ? 'Harus diawali https:// dan mengarah ke repositori publik' : 'Must begin with https:// and point to public repository'"
         tooltip-position="right"
         placeholder="https://github.com/..."
+        :lang="currentLocale"
       />
 
       <template #code>
@@ -68,13 +64,15 @@
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <UrlInput
           v-model="errorVal"
-          label="Callback URL"
-          :error="'Callback URL must use secure HTTPS protocol'"
+          :label="isIndonesian ? 'URL Callback' : 'Callback URL'"
+          :error="isIndonesian ? 'URL Callback harus menggunakan protokol HTTPS yang aman' : 'Callback URL must use secure HTTPS protocol'"
+          :lang="currentLocale"
         />
         <UrlInput
           v-model="disabledVal"
-          label="Canonical Base URL (Read-Only)"
+          :label="isIndonesian ? 'URL Basis Kanonis (Hanya-Baca)' : 'Canonical Base URL (Read-Only)'"
           disabled
+          :lang="currentLocale"
         />
       </div>
 
@@ -85,13 +83,11 @@
 
     <!-- Props Table -->
     <section class="space-y-4">
-      <h2 class="text-xl font-bold text-slate-900 dark:text-slate-100">Props</h2>
       <PropsTable :props="propsList" />
     </section>
 
     <!-- Events Table -->
     <section class="space-y-4">
-      <h2 class="text-xl font-bold text-slate-900 dark:text-slate-100">Events</h2>
       <EventsTable :events="eventsList" />
     </section>
   </div>
@@ -100,10 +96,13 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { UrlInput } from '@zyvnox/vue-pack/components'
+import { useSiteI18n } from '@/i18n'
 import DemoSection from '@/components/DemoSection.vue'
 import CodeBlock from '@/components/CodeBlock.vue'
 import PropsTable, { type PropDef } from '@/components/PropsTable.vue'
 import EventsTable, { type EventDef } from '@/components/EventsTable.vue'
+
+const { isIndonesian, currentLocale } = useSiteI18n()
 
 const basic = ref('https://zyvnox.com')
 const validatedVal = ref('not-a-valid-url')

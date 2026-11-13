@@ -48,11 +48,8 @@
             {{ hotkey }}
           </span>
           <span
-            :class="[
-              'zyvnox-absolute zyvnox-w-2 zyvnox-h-2 zyvnox-rotate-45',
-              'zyvnox-bg-slate-900 dark:zyvnox-bg-slate-100',
-              arrowClass,
-            ]"
+            class="zyvnox-absolute zyvnox-w-2 zyvnox-h-2 zyvnox-bg-slate-900 dark:zyvnox-bg-slate-100"
+            :style="arrowStyle"
           />
         </div>
       </Transition>
@@ -110,25 +107,25 @@ const updatePosition = async () => {
   const tooltipEl = tooltipRef.value
   const tooltipWidth = tooltipEl?.offsetWidth || 160
   const tooltipHeight = tooltipEl?.offsetHeight || 32
-  const padding = 8
+  const padding = 12
 
   let effectivePos = props.position
 
+  // Flip horizontally if outside viewport
+  if (effectivePos === 'left' && rect.left - tooltipWidth - padding < padding) {
+    effectivePos = 'right'
+  } else if (effectivePos === 'right' && rect.right + tooltipWidth + padding > window.innerWidth - padding) {
+    effectivePos = 'left'
+  }
+
   // Flip vertically if outside viewport
-  if (effectivePos === 'top' && rect.top - tooltipHeight - padding < 0) {
+  if (effectivePos === 'top' && rect.top - tooltipHeight - padding < padding) {
     effectivePos = 'bottom'
   } else if (
     effectivePos === 'bottom' &&
-    rect.bottom + tooltipHeight + padding > window.innerHeight
+    rect.bottom + tooltipHeight + padding > window.innerHeight - padding
   ) {
     effectivePos = 'top'
-  }
-
-  // Flip horizontally if outside viewport
-  if (effectivePos === 'left' && rect.left - tooltipWidth - padding < 0) {
-    effectivePos = 'right'
-  } else if (effectivePos === 'right' && rect.right + tooltipWidth + padding > window.innerWidth) {
-    effectivePos = 'left'
   }
 
   let top = 0
@@ -154,12 +151,30 @@ const updatePosition = async () => {
   }
 
   // Clamp horizontal position so tooltip doesn't bleed out of viewport
-  const halfWidth = tooltipWidth / 2
   if (effectivePos === 'top' || effectivePos === 'bottom') {
+    const halfWidth = tooltipWidth / 2
     if (left - halfWidth < padding) {
       left = halfWidth + padding
     } else if (left + halfWidth > window.innerWidth - padding) {
       left = window.innerWidth - halfWidth - padding
+    }
+  } else if (effectivePos === 'left') {
+    if (left - tooltipWidth < padding) {
+      left = tooltipWidth + padding
+    }
+  } else if (effectivePos === 'right') {
+    if (left + tooltipWidth > window.innerWidth - padding) {
+      left = window.innerWidth - tooltipWidth - padding
+    }
+  }
+
+  // Clamp vertical position
+  const halfHeight = tooltipHeight / 2
+  if (effectivePos === 'left' || effectivePos === 'right') {
+    if (top - halfHeight < padding) {
+      top = halfHeight + padding
+    } else if (top + halfHeight > window.innerHeight - padding) {
+      top = window.innerHeight - halfHeight - padding
     }
   }
 
@@ -188,18 +203,38 @@ const tooltipStyle = computed(() => {
   }
 })
 
-const arrowClass = computed(() => {
+const arrowStyle = computed(() => {
   switch (coords.value.position) {
     case 'top':
-      return 'zyvnox--bottom-1 zyvnox-left-1/2 zyvnox--translate-x-1/2'
+      return {
+        bottom: '-4px',
+        left: '50%',
+        transform: 'translateX(-50%) rotate(45deg)',
+      }
     case 'bottom':
-      return 'zyvnox--top-1 zyvnox-left-1/2 zyvnox--translate-x-1/2'
+      return {
+        top: '-4px',
+        left: '50%',
+        transform: 'translateX(-50%) rotate(45deg)',
+      }
     case 'left':
-      return 'zyvnox--right-1 zyvnox-top-1/2 zyvnox--translate-y-1/2'
+      return {
+        right: '-4px',
+        top: '50%',
+        transform: 'translateY(-50%) rotate(45deg)',
+      }
     case 'right':
-      return 'zyvnox--left-1 zyvnox-top-1/2 zyvnox--translate-y-1/2'
+      return {
+        left: '-4px',
+        top: '50%',
+        transform: 'translateY(-50%) rotate(45deg)',
+      }
     default:
-      return 'zyvnox--bottom-1 zyvnox-left-1/2 zyvnox--translate-x-1/2'
+      return {
+        bottom: '-4px',
+        left: '50%',
+        transform: 'translateX(-50%) rotate(45deg)',
+      }
   }
 })
 

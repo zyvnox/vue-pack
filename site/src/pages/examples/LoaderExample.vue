@@ -1,13 +1,6 @@
 <template>
   <div class="space-y-8">
-    <header class="border-b border-slate-200 dark:border-slate-800 pb-4">
-      <h1 class="text-3xl font-bold text-slate-900 dark:text-white mb-2">
-        Loader (Fullscreen Status Overlay)
-      </h1>
-      <p class="text-sm text-slate-600 dark:text-slate-400">
-        Imperative fullscreen loading and feedback overlay supporting loading spinner, success checkmark, and error cross animations.
-      </p>
-    </header>
+    <DocHeader />
 
     <!-- Mount Loader instance -->
     <Loader ref="loaderRef" />
@@ -20,28 +13,28 @@
           @click="showLoading"
           class="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold transition-colors"
         >
-          ⏳ Show Spinner (Auto-closes in 2s)
+          {{ isIndonesian ? '⏳ Tampilkan Spinner (Otomatis tutup 2d)' : '⏳ Show Spinner (Auto-closes in 2s)' }}
         </button>
         <button
           type="button"
           @click="showSuccess"
           class="px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold transition-colors"
         >
-          ✓ Show Success Screen
+          {{ isIndonesian ? '✓ Tampilkan Layar Sukses' : '✓ Show Success Screen' }}
         </button>
         <button
           type="button"
           @click="showWarning"
           class="px-4 py-2 rounded-lg bg-amber-500 hover:bg-amber-600 text-white text-xs font-semibold transition-colors"
         >
-          ⚠️ Show Warning Screen
+          {{ isIndonesian ? '⚠️ Tampilkan Layar Peringatan' : '⚠️ Show Warning Screen' }}
         </button>
         <button
           type="button"
           @click="showError"
           class="px-4 py-2 rounded-lg bg-rose-600 hover:bg-rose-700 text-white text-xs font-semibold transition-colors"
         >
-          ✕ Show Error Screen
+          {{ isIndonesian ? '✕ Tampilkan Layar Error' : '✕ Show Error Screen' }}
         </button>
       </div>
 
@@ -52,38 +45,39 @@
 
     <!-- Expose API Table -->
     <section class="space-y-4">
-      <h2 class="text-xl font-bold text-slate-900 dark:text-slate-100">Exposed Methods</h2>
-      <PropsTable :props="exposedMethods" />
+      <PropsTable :props="exposedMethods" title="Exposed Methods" />
     </section>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import { Loader } from '@zyvnox/vue-pack/components'
-import DemoSection from '@/components/DemoSection.vue'
 import CodeBlock from '@/components/CodeBlock.vue'
+import DemoSection from '@/components/DemoSection.vue'
 import PropsTable from '@/components/PropsTable.vue'
+import { useSiteI18n } from '@/i18n'
+import { Loader } from '@zyvnox/vue-pack/components'
+import { ref } from 'vue'
 
+const { isIndonesian } = useSiteI18n()
 const loaderRef = ref<InstanceType<typeof Loader> | null>(null)
 
 const showLoading = () => {
-  loaderRef.value?.show('loading', 'Synchronizing data...')
+  loaderRef.value?.show('loading', isIndonesian.value ? 'Menyinkronkan data...' : 'Synchronizing data...')
   setTimeout(() => {
     loaderRef.value?.hide()
   }, 2000)
 }
 
 const showSuccess = () => {
-  loaderRef.value?.show('success', 'Order Placed Successfully!')
+  loaderRef.value?.show('success', isIndonesian.value ? 'Pesanan Berhasil Dibuat!' : 'Order Placed Successfully!')
 }
 
 const showWarning = () => {
-  loaderRef.value?.show('warning', 'Network latency high. Operating in fallback mode.')
+  loaderRef.value?.show('warning', isIndonesian.value ? 'Latensi jaringan tinggi. Beroperasi dalam mode fallback.' : 'Network latency high. Operating in fallback mode.')
 }
 
 const showError = () => {
-  loaderRef.value?.show('error', 'Payment Authorization Failed')
+  loaderRef.value?.show('error', isIndonesian.value ? 'Otorisasi Pembayaran Gagal' : 'Payment Authorization Failed')
 }
 
 const triggerCode = `<template>
