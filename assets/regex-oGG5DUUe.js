@@ -1,0 +1,1 @@
+var e=/^[^\s@]+@[^\s@]+\.[^\s@]+$/,t=/^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/,n=/^([01]\d|2[0-3]):([0-5]\d)$/,r=/^[+]?[\d\s-]{7,15}$/;function i(e){if(!t.test(e))throw Error(`Invalid DateOnly format: ${e}. Use YYYY-MM-DD`);return e}function a(e){if(!n.test(e))throw Error(`Invalid TimeOnly format: ${e}. Use HH:mm`);return e}export{a as i,r as n,i as r,e as t};

@@ -1,0 +1,1 @@
+import{O as e,S as t,d as n,g as r}from"./i18n-CQHTY6ci.js";var i=[`src`,`alt`],a=r({__name:`BaseImage`,props:{src:{},alt:{}},setup(r){return(a,o)=>(e(),n(`img`,t({src:r.src,alt:r.alt,loading:`lazy`,decoding:`async`,class:`zyvnox-object-cover`},a.$attrs),null,16,i))}});export{a as t};

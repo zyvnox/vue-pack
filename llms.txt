@@ -1,0 +1,80 @@
+# @zyvnox/vue-pack
+
+> Enterprise-grade, schema-driven Vue 3 component library & developer toolkit built with TypeScript and UnoCSS. Features schema-driven FormModal, interactive TabelData suite, 25+ validated inputs, real-time SEO engine, and full i18n support.
+
+- Docs: https://zyvnox.github.io/vue-pack/doc/getting-started
+- Live Playground: https://zyvnox.github.io/vue-pack/playground
+- GitHub Repository: https://github.com/zyvnox/vue-pack
+- NPM Package: https://www.npmjs.com/package/@zyvnox/vue-pack
+- Full LLM Context: https://zyvnox.github.io/vue-pack/llms-full.txt
+
+## Quick Start
+
+```bash
+npm install @zyvnox/vue-pack zod
+```
+
+```ts
+// main.ts
+import { createApp } from 'vue'
+import App from './App.vue'
+import VuePack from '@zyvnox/vue-pack/vue'
+import '@zyvnox/vue-pack/style.css'
+
+const app = createApp(App)
+app.use(VuePack)
+app.mount('#app')
+```
+
+## Core Architecture & Subpath Exports
+
+- `@zyvnox/vue-pack`: Core bundle with tree-shaking support
+- `@zyvnox/vue-pack/components`: All individual UI components (FormModal, TabelData, TextInput, etc.)
+- `@zyvnox/vue-pack/config`: Reactive configuration manager and locale controller
+- `@zyvnox/vue-pack/init`: App initialization helpers and plugins
+- `@zyvnox/vue-pack/indexedDB`: Persistent client-side IndexedDB caching engine
+- `@zyvnox/vue-pack/secureFetch`: CSRF/XSRF-protected fetch utility
+- `@zyvnox/vue-pack/type`: Complete TypeScript type declarations and schema contracts
+
+## Core Engines
+
+- [FormModal](https://zyvnox.github.io/vue-pack/doc/examples/form-modal): Schema-driven modal form generator powered by declarative schema contracts with Zod validation, multi-tab layout, and built-in SEO calculation.
+- [TabelData](https://zyvnox.github.io/vue-pack/doc/examples/tabel-data): High-performance data table component supporting server-side pagination, real-time search, multi-column sorting, selection, and custom actions.
+- [SEO Studio](https://zyvnox.github.io/vue-pack/doc/examples/seo-studio): Real-time on-page SEO calculation engine evaluating keyword density, heading distribution, meta character limits, and SERP previews.
+
+## Input Components (25 Validated Inputs)
+
+- [TextInput](https://zyvnox.github.io/vue-pack/doc/examples/text-input): Single-line text input with custom tooltips, duplicate checks, and regex pattern validation.
+- [NumberInput](https://zyvnox.github.io/vue-pack/doc/examples/number-input): Numeric input with step controls, minimum/maximum boundaries, and formatting.
+- [CurrencyInput](https://zyvnox.github.io/vue-pack/doc/examples/currency-input): Localized monetary input supporting IDR, USD, EUR, and custom currency masks.
+- [EmailInput](https://zyvnox.github.io/vue-pack/doc/examples/email-input): Email input with RFC 5322 compliance and custom domain restrictions.
+- [PasswordInput](https://zyvnox.github.io/vue-pack/doc/examples/password-input): Secure password field with reveal toggle and strength indicator.
+- [TelInput](https://zyvnox.github.io/vue-pack/doc/examples/tel-input): International telephone input with country dial codes and formatting.
+- [UrlInput](https://zyvnox.github.io/vue-pack/doc/examples/url-input): Validated URL input for HTTPS links and repository paths.
+- [TextAreaInput](https://zyvnox.github.io/vue-pack/doc/examples/text-area-input): Multi-line text area with auto-resize and character counter.
+- [TextAreaQuillInput](https://zyvnox.github.io/vue-pack/doc/examples/text-area-quill): Rich-text WYSIWYG editor powered by Quill 2.0 with HTML and delta bindings.
+- [SelectedOptions (Combobox)](https://zyvnox.github.io/vue-pack/doc/examples/combobox): Searchable combobox dropdown with keyboard navigation and remote query resolution.
+- [TagInput](https://zyvnox.github.io/vue-pack/doc/examples/tag-input): Interactive chip/tag input supporting custom delimiters and duplicate prevention.
+- [ColorPicker](https://zyvnox.github.io/vue-pack/doc/examples/color-picker): HEX and RGBA color selection tool with preset palette swatches.
+- [DateInput](https://zyvnox.github.io/vue-pack/doc/examples/date-input): Localized calendar date picker with date range constraints.
+- [TimeInput](https://zyvnox.github.io/vue-pack/doc/examples/time-input): Time picker supporting 12-hour AM/PM and 24-hour military formats.
+- [DateTimeInput](https://zyvnox.github.io/vue-pack/doc/examples/date-time-input): Combined timestamp input for precise scheduling.
+- [FileInput](https://zyvnox.github.io/vue-pack/doc/examples/file-input): Single file upload dropzone with MIME-type and size validation.
+- [FileArrayInput](https://zyvnox.github.io/vue-pack/doc/examples/file-array-input): Multi-file batch dropzone with progress indicators and file list management.
+- [ImageInput](https://zyvnox.github.io/vue-pack/doc/examples/image-input): Image upload component with instant aspect-ratio preview, remote URL support, and watermark overlay.
+- [ImageArrayInput](https://zyvnox.github.io/vue-pack/doc/examples/image-array-input): Multi-image gallery uploader with thumbnail ordering.
+- [ToggleInput](https://zyvnox.github.io/vue-pack/doc/examples/toggle-input): Boolean switch toggle with customizable status colors.
+- [RateInput](https://zyvnox.github.io/vue-pack/doc/examples/rate-input): Star rating feedback component with fractional support.
+- [LocationPicker (MapPicker)](https://zyvnox.github.io/vue-pack/doc/examples/location-picker): Interactive Leaflet map coordinate picker with GPS geolocation, GeoJSON boundary validation, and geocoding.
+- [ArrayObjectInput](https://zyvnox.github.io/vue-pack/doc/examples/array-object): Dynamic sub-form repeater for arrays of objects (e.g. invoice items, variants).
+- [ObjectInput](https://zyvnox.github.io/vue-pack/doc/examples/object-input): Nested object schema handler for hierarchical data structures.
+- [GroupRenderer](https://zyvnox.github.io/vue-pack/doc/examples/group-renderer): Conditional form section generator that renders sub-schemas based on field values.
+
+## Feedback & Display Components
+
+- [AlertApp](https://zyvnox.github.io/vue-pack/doc/examples/alert-app): Toast notifications and alert banners with danger, warning, success, and info themes.
+- [Loader](https://zyvnox.github.io/vue-pack/doc/examples/loader): 60fps dual-ring spinner with success, warning, and error state transitions.
+- [WarningForm](https://zyvnox.github.io/vue-pack/doc/examples/warning-form): Modal confirmation dialog for destructive and warning operations.
+- [SafeHtml](https://zyvnox.github.io/vue-pack/doc/examples/safe-html): XSS-sanitized HTML renderer powered by DOMPurify.
+- [Tooltip](https://zyvnox.github.io/vue-pack/doc/examples/tooltip): Hover guidance tooltip with top, bottom, left, and right placement.
+- [ModalDetailData](https://zyvnox.github.io/vue-pack/doc/examples/modal-detail-data): Read-only modal inspector for structured object inspection.
