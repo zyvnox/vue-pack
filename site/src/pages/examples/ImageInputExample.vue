@@ -1,22 +1,16 @@
 <template>
   <div class="space-y-8">
-    <header class="border-b border-slate-200 dark:border-slate-800 pb-4">
-      <h1 class="text-3xl font-bold text-slate-900 dark:text-white mb-2">
-        ImageInput
-      </h1>
-      <p class="text-sm text-slate-600 dark:text-slate-400">
-        Single image upload component with live canvas preview, pixel dimensions (min/max), aspect ratio enforcement, watermark overlay, and i18n support.
-      </p>
-    </header>
+    <DocHeader />
 
     <!-- Demo 1: Basic Image -->
     <DemoSection title="Basic Image Upload" description="Selects an image file or enters a remote image URL with instant preview.">
       <ImageInput
         v-model="basic"
-        label="Store Hero Banner"
+        :label="isIndonesian ? 'Banner Utama Toko' : 'Store Hero Banner'"
+        :lang="currentLocale"
       />
       <div class="text-xs text-slate-500">
-        Selection: <code class="font-mono font-bold">{{ typeof basic === 'string' ? basic : (basic?.name ?? '(none)') }}</code>
+        {{ isIndonesian ? 'Pilihan Saat Ini:' : 'Current Selection:' }} <code class="font-mono font-bold">{{ typeof basic === 'string' ? basic : (basic?.name ?? (isIndonesian ? '(tidak ada)' : '(none)')) }}</code>
       </div>
 
       <template #code>
@@ -31,9 +25,10 @@
     >
       <ImageInput
         v-model="validatedImage"
-        label="Featured Product Showcase"
-        tooltip="Must be 16:9 aspect ratio and maximum 1920x1080 pixels"
+        :label="isIndonesian ? 'Etalase Produk Unggulan' : 'Featured Product Showcase'"
+        :tooltip="isIndonesian ? 'Harus rasio 16:9 dan resolusi maksimal 1920x1080 piksel' : 'Must be 16:9 aspect ratio and maximum 1920x1080 pixels'"
         tooltip-position="right"
+        :lang="currentLocale"
         :validate="{
           maxSize: 2048,
           allowedTypes: ['jpeg', 'png', 'webp'],
@@ -46,7 +41,7 @@
       />
       <div class="text-xs text-slate-500 space-y-1 mt-2">
         <div class="text-slate-400 dark:text-slate-500">
-          Constraints: max 2048 KB, allowed: <code class="font-mono">['jpeg', 'png', 'webp']</code>, ratio: 16:9, max dimensions: 1920x1080px.
+          {{ isIndonesian ? 'Batasan: maksimal 2048 KB, format yang diizinkan:' : 'Constraints: max 2048 KB, allowed:' }} <code class="font-mono">['jpeg', 'png', 'webp']</code>{{ isIndonesian ? ', rasio: 16:9, resolusi maksimal: 1920x1080px.' : ', ratio: 16:9, max dimensions: 1920x1080px.' }}
         </div>
       </div>
 
@@ -62,7 +57,8 @@
     >
       <ImageInput
         v-model="watermarkImage"
-        label="Watermarked Corporate Asset"
+        :label="isIndonesian ? 'Aset Perusahaan Ber-Watermark' : 'Watermarked Corporate Asset'"
+        :lang="currentLocale"
         :watermark="{
           url: '/favicon.svg',
           position: 'bottom-right',
@@ -80,13 +76,15 @@
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <ImageInput
           v-model="errorVal"
-          label="Profile Avatar"
-          :error="'Avatar dimensions must not exceed 500x500 pixels'"
+          :label="isIndonesian ? 'Foto Profil Avatar' : 'Profile Avatar'"
+          :error="isIndonesian ? 'Dimensi avatar tidak boleh melebihi 500x500 piksel' : 'Avatar dimensions must not exceed 500x500 pixels'"
+          :lang="currentLocale"
         />
         <ImageInput
           v-model="disabledVal"
-          label="System Default Logo (Read-Only)"
+          :label="isIndonesian ? 'Logo Bawaan Sistem (Hanya-Baca)' : 'System Default Logo (Read-Only)'"
           disabled
+          :lang="currentLocale"
         />
       </div>
 
@@ -97,25 +95,26 @@
 
     <!-- Props Table -->
     <section class="space-y-4">
-      <h2 class="text-xl font-bold text-slate-900 dark:text-slate-100">Props</h2>
       <PropsTable :props="propsList" />
     </section>
 
     <!-- Events Table -->
     <section class="space-y-4">
-      <h2 class="text-xl font-bold text-slate-900 dark:text-slate-100">Events</h2>
       <EventsTable :events="eventsList" />
     </section>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import { ImageInput } from '@zyvnox/vue-pack/components'
-import DemoSection from '@/components/DemoSection.vue'
 import CodeBlock from '@/components/CodeBlock.vue'
-import PropsTable, { type PropDef } from '@/components/PropsTable.vue'
+import DemoSection from '@/components/DemoSection.vue'
 import EventsTable, { type EventDef } from '@/components/EventsTable.vue'
+import PropsTable, { type PropDef } from '@/components/PropsTable.vue'
+import { useSiteI18n } from '@/i18n'
+import { ImageInput } from '@zyvnox/vue-pack/components'
+import { ref } from 'vue'
+
+const { isIndonesian, currentLocale } = useSiteI18n()
 
 const basic = ref<File | string | null>('https://images.unsplash.com/photo-1579546929518-9e396f3cc809?w=600')
 const validatedImage = ref<File | string | null>(null)

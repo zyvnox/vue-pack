@@ -2,18 +2,27 @@
   <div class="max-w-4xl mx-auto space-y-10 py-6">
     <!-- Header -->
     <header class="border-b border-slate-200 dark:border-slate-800 pb-6">
-      <h1 class="text-3xl font-bold text-slate-900 dark:text-white mb-2">
-        Installation
-      </h1>
+      <div class="flex items-center gap-3 mb-2">
+        <h1 class="text-3xl font-bold text-slate-900 dark:text-white">
+          {{ isIndonesian ? 'Panduan Instalasi' : 'Installation' }}
+        </h1>
+        <span
+          class="px-2.5 py-0.5 rounded text-[11px] font-mono font-semibold bg-amber-100 dark:bg-amber-950/70 text-amber-700 dark:text-amber-400 border border-amber-300/60 dark:border-amber-800/60"
+        >
+          v0.1.4 Early Release
+        </span>
+      </div>
       <p class="text-sm text-slate-600 dark:text-slate-400">
-        Detailed system requirements, package manager installation commands, and integration methods.
+        {{ isIndonesian
+          ? 'Persyaratan sistem terperinci, perintah instalasi manajer paket, dan metode integrasi aplikasi.'
+          : 'Detailed system requirements, package manager installation commands, and integration methods.' }}
       </p>
     </header>
 
     <!-- System Requirements -->
     <section class="space-y-4">
       <h2 class="text-xl font-bold text-slate-900 dark:text-slate-100">
-        Requirements
+        {{ isIndonesian ? 'Persyaratan Sistem' : 'Requirements' }}
       </h2>
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <div class="p-4 rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
@@ -38,7 +47,7 @@
     <!-- Package Manager Commands -->
     <section class="space-y-4">
       <h2 class="text-xl font-bold text-slate-900 dark:text-slate-100">
-        Package Managers
+        {{ isIndonesian ? 'Manajer Paket' : 'Package Managers' }}
       </h2>
       <div class="space-y-3">
         <h3 class="text-xs font-semibold text-slate-500 uppercase">npm</h3>
@@ -53,25 +62,29 @@
     <!-- Plugin Registration Options -->
     <section class="space-y-4">
       <h2 class="text-xl font-bold text-slate-900 dark:text-slate-100">
-        Registration Strategies
+        {{ isIndonesian ? 'Strategi Pendaftaran Komponen' : 'Registration Strategies' }}
       </h2>
       <div class="space-y-4">
         <div class="p-4 rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
           <h3 class="text-sm font-bold text-blue-600 dark:text-blue-400 mb-2">
-            Option A: Granular Subpath Imports (Recommended for Tree-Shaking)
+            {{ isIndonesian ? 'Opsi A: Impor Subpath Granular (Disarankan untuk Tree-Shaking)' : 'Option A: Granular Subpath Imports (Recommended for Tree-Shaking)' }}
           </h3>
           <p class="text-xs text-slate-600 dark:text-slate-400 mb-3">
-            Import only the components you need directly into SFCs. Provides optimal bundle sizes.
+            {{ isIndonesian
+              ? 'Hanya impor komponen yang Anda butuhkan langsung ke dalam SFC. Memberikan ukuran bundle paling optimal.'
+              : 'Import only the components you need directly into SFCs. Provides optimal bundle sizes.' }}
           </p>
           <CodeBlock :code="granularCode" language="vue" />
         </div>
 
         <div class="p-4 rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
           <h3 class="text-sm font-bold text-emerald-600 dark:text-emerald-400 mb-2">
-            Option B: Global Vue Plugin Registration
+            {{ isIndonesian ? 'Opsi B: Pendaftaran Plugin Vue Global' : 'Option B: Global Vue Plugin Registration' }}
           </h3>
           <p class="text-xs text-slate-600 dark:text-slate-400 mb-3">
-            Register all components globally across your entire Vue application.
+            {{ isIndonesian
+              ? 'Daftarkan semua komponen secara global ke seluruh aplikasi Vue Anda.'
+              : 'Register all components globally across your entire Vue application.' }}
           </p>
           <CodeBlock :code="pluginCode" language="ts" />
         </div>
@@ -82,6 +95,9 @@
 
 <script setup lang="ts">
 import CodeBlock from '@/components/CodeBlock.vue'
+import { useSiteI18n } from '@/i18n'
+
+const { isIndonesian } = useSiteI18n()
 
 const granularCode = `<template>
   <TextInput v-model="name" label="Full Name" />
@@ -95,16 +111,13 @@ import '@zyvnox/vue-pack/style.css'
 const name = ref('')
 <\/script>`
 
-const pluginCode = [
-  '// src/main.ts',
-  "import { createApp } from 'vue'",
-  "import App from './" + "App.vue'",
-  "import ZyvnoxVuePack from '@zyvnox/vue-pack/vue'",
-  "import '@zyvnox/vue-pack/style.css'",
-  '',
-  'const app = createApp(App)',
-  'app.use(ZyvnoxVuePack)',
-  "app.mount('#app')",
-].join('\n')
-</script>
+const pluginCode = `// src/main.ts
+import { createApp } from 'vue'
+import App from './App.vue'
+import ZyvnoxVuePack from '@zyvnox/vue-pack/vue'
+import '@zyvnox/vue-pack/style.css'
 
+const app = createApp(App)
+app.use(ZyvnoxVuePack)
+app.mount('#app')`
+</script>

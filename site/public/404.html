@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>@zyvnox/vue-pack — Redirecting...</title>
+    <meta name="robots" content="noindex" />
+    <script type="text/javascript">
+      // SPA redirect script for GitHub Pages
+      // Preserves deep links like /vue-pack/doc/getting-started across page reloads
+      var pathSegmentsToKeep = 1; // Keep '/vue-pack/'
+      var l = window.location;
+      l.replace(
+        l.protocol +
+          '//' +
+          l.hostname +
+          (l.port ? ':' + l.port : '') +
+          l.pathname.split('/').slice(0, 1 + pathSegmentsToKeep).join('/') +
+          '/?/' +
+          l.pathname
+            .slice(1)
+            .split('/')
+            .slice(pathSegmentsToKeep)
+            .join('/')
+            .replace(/&/g, '~and~') +
+          (l.search ? '&' + l.search.slice(1).replace(/&/g, '~and~') : '') +
+          l.hash
+      );
+    </script>
+  </head>
+  <body>
+    <p>Redirecting to @zyvnox/vue-pack documentation...</p>
+  </body>
+</html>

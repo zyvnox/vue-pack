@@ -1,22 +1,16 @@
 <template>
   <div class="space-y-8">
-    <header class="border-b border-slate-200 dark:border-slate-800 pb-4">
-      <h1 class="text-3xl font-bold text-slate-900 dark:text-white mb-2">
-        ImageArrayInput (Photo Gallery Dropzone)
-      </h1>
-      <p class="text-sm text-slate-600 dark:text-slate-400">
-        Multi-image gallery uploader featuring thumbnail grid preview, individual image deletion, max file count boundaries, format & dimension validation, and tooltip guidance.
-      </p>
-    </header>
+    <DocHeader />
 
     <!-- Demo 1: Basic Multi-Image -->
     <DemoSection title="Multi-Image Gallery Dropzone" description="Upload multiple photos with grid previews and deletion controls.">
       <ImageArrayInput
         v-model="basic"
-        label="Product Showcase Gallery"
+        :label="isIndonesian ? 'Galeri Etalase Produk' : 'Product Showcase Gallery'"
+        :lang="currentLocale"
       />
       <div class="text-xs text-slate-500">
-        Images Uploaded: <code class="font-mono font-bold">{{ basic?.length || 0 }}</code>
+        {{ isIndonesian ? 'Jumlah Foto Diunggah:' : 'Images Uploaded:' }} <code class="font-mono font-bold">{{ basic?.length || 0 }}</code>
       </div>
 
       <template #code>
@@ -31,9 +25,10 @@
     >
       <ImageArrayInput
         v-model="validatedPhotos"
-        label="Property Portfolio Gallery"
-        tooltip="Upload up to 4 high-resolution photos in JPG, PNG, or WEBP format"
+        :label="isIndonesian ? 'Galeri Portofolio Properti' : 'Property Portfolio Gallery'"
+        :tooltip="isIndonesian ? 'Unggah hingga 4 foto resolusi tinggi dalam format JPG, PNG, atau WEBP' : 'Upload up to 4 high-resolution photos in JPG, PNG, or WEBP format'"
         tooltip-position="right"
+        :lang="currentLocale"
         :validate="{
           maxFiles: 4,
           maxSize: 3000,
@@ -42,7 +37,7 @@
       />
       <div class="text-xs text-slate-500 space-y-1 mt-2">
         <div class="text-slate-400 dark:text-slate-500">
-          Constraints: maxFiles: 4, maxSize: 3000 KB per photo, allowed: <code class="font-mono">['jpeg', 'png', 'webp']</code>.
+          {{ isIndonesian ? 'Batasan: maxFiles: 4, maxSize: 3000 KB per foto, format diizinkan:' : 'Constraints: maxFiles: 4, maxSize: 3000 KB per photo, allowed:' }} <code class="font-mono">['jpeg', 'png', 'webp']</code>.
         </div>
       </div>
 
@@ -55,8 +50,9 @@
     <DemoSection title="With Existing Photos Previews" description="Pre-populates existing image URLs in gallery.">
       <ImageArrayInput
         v-model="presetPhotosList"
-        label="Real Estate Property Showcase"
+        :label="isIndonesian ? 'Galeri Properti Real Estat' : 'Real Estate Property Showcase'"
         :preview-images="presetPhotos"
+        :lang="currentLocale"
       />
 
       <template #code>
@@ -69,14 +65,16 @@
       <div class="space-y-4">
         <ImageArrayInput
           v-model="errorVal"
-          label="Catalog Thumbnail Set"
-          :error="'You must provide at least 2 catalog images'"
+          :label="isIndonesian ? 'Koleksi Thumbnail Katalog' : 'Catalog Thumbnail Set'"
+          :error="isIndonesian ? 'Anda harus menyertakan minimal 2 gambar katalog' : 'You must provide at least 2 catalog images'"
+          :lang="currentLocale"
         />
         <ImageArrayInput
           v-model="disabledVal"
-          label="Locked Archive Gallery (Read-Only)"
+          :label="isIndonesian ? 'Galeri Arsip Terkunci (Hanya-Baca)' : 'Locked Archive Gallery (Read-Only)'"
           disabled
           :preview-images="presetPhotos.slice(0, 2)"
+          :lang="currentLocale"
         />
       </div>
 
@@ -87,25 +85,26 @@
 
     <!-- Props Table -->
     <section class="space-y-4">
-      <h2 class="text-xl font-bold text-slate-900 dark:text-slate-100">Props</h2>
       <PropsTable :props="propsList" />
     </section>
 
     <!-- Events Table -->
     <section class="space-y-4">
-      <h2 class="text-xl font-bold text-slate-900 dark:text-slate-100">Events</h2>
       <EventsTable :events="eventsList" />
     </section>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import { ImageArrayInput } from '@zyvnox/vue-pack/components'
-import DemoSection from '@/components/DemoSection.vue'
 import CodeBlock from '@/components/CodeBlock.vue'
-import PropsTable, { type PropDef } from '@/components/PropsTable.vue'
+import DemoSection from '@/components/DemoSection.vue'
 import EventsTable, { type EventDef } from '@/components/EventsTable.vue'
+import PropsTable, { type PropDef } from '@/components/PropsTable.vue'
+import { useSiteI18n } from '@/i18n'
+import { ImageArrayInput } from '@zyvnox/vue-pack/components'
+import { ref } from 'vue'
+
+const { isIndonesian, currentLocale } = useSiteI18n()
 
 const basic = ref<(File | string)[]>([])
 const validatedPhotos = ref<(File | string)[]>([])

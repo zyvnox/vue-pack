@@ -1,28 +1,35 @@
 <template>
   <div class="space-y-8">
-    <header class="border-b border-slate-200 dark:border-slate-800 pb-4">
-      <h1 class="text-3xl font-bold text-slate-900 dark:text-white mb-2">
-        FormModal
-      </h1>
-      <p class="text-sm text-slate-600 dark:text-slate-400">
-        Enterprise schema-driven modal form generator featuring real-time input validation, required field enforcement, automatic SEO scoring, and seamless integration with TabelData CRUD operations.
-      </p>
-    </header>
+    <DocHeader />
 
     <!-- Architecture Callout: Connection between TabelData and FormModal -->
     <div class="p-4 rounded-xl border border-blue-200 bg-blue-50/70 dark:border-blue-800 dark:bg-blue-900/20 text-xs text-blue-800 dark:text-blue-200 space-y-2">
       <div class="flex items-center gap-2 font-bold text-sm text-blue-900 dark:text-blue-100">
-        <span>🔗 Architecture: How FormModal & TabelData Connect via Validation</span>
+        <span>🔗</span>
+        <span>
+          {{ isIndonesian ? 'Arsitektur: Bagaimana FormModal & TabelData Terhubung melalui Validasi' : 'Architecture: How FormModal & TabelData Connect via Validation' }}
+        </span>
       </div>
-      <p>
-        <code class="font-bold">FormModal</code> acts as the interactive dialog engine inside <code class="font-bold">TabelData</code>. Validation operates in two collaborative layers:
+      <p class="leading-relaxed">
+        <template v-if="isIndonesian">
+          <code class="font-bold">FormModal</code> berperan sebagai engine dialog interaktif di dalam <code class="font-bold">TabelData</code>. Proses validasi bekerja dalam dua lapisan terintegrasi:
+        </template>
+        <template v-else>
+          <code class="font-bold">FormModal</code> acts as the interactive dialog engine inside <code class="font-bold">TabelData</code>. Validation operates in two collaborative layers:
+        </template>
       </p>
-      <ul class="list-disc list-inside space-y-1 ml-2">
+      <ul class="list-disc list-inside space-y-1 ml-2 leading-relaxed">
         <li>
-          <strong>Layer 1 (FormModal & Inputs):</strong> When editing or adding records, <code class="font-bold">FormModal</code> renders fields via <code class="font-bold">FormFieldRenderer</code>, passing each field's <code class="font-mono">:validate</code> configuration (e.g. <code class="font-mono">minLength</code>, <code class="font-mono">pattern</code>, <code class="font-mono">min</code>, <code class="font-mono">max</code>). Child inputs emit real-time validation errors to block invalid submissions.
+          <strong>{{ isIndonesian ? 'Lapisan 1 (FormModal & Komponen Input):' : 'Layer 1 (FormModal & Inputs):' }}</strong>
+          {{ isIndonesian
+            ? 'Saat mengedit atau menambah data, FormModal merender kolom input via FormFieldRenderer dengan meneruskan konfigurasi :validate (misal minLength, pattern, min, max). Komponen anak memancarkan error validasi realtime untuk mencegah pengiriman data tidak valid.'
+            : "When editing or adding records, FormModal renders fields via FormFieldRenderer, passing each field's :validate configuration (e.g. minLength, pattern, min, max). Child inputs emit real-time validation errors to block invalid submissions." }}
         </li>
         <li>
-          <strong>Layer 2 (TabelData & Zod Schema):</strong> Upon clicking Submit in <code class="font-bold">FormModal</code>, valid data is emitted via <code class="font-mono">@submit</code> to <code class="font-bold">TabelData</code>'s <code class="font-mono">submitFormData</code> pipeline. <code class="font-bold">TabelData</code> runs final type-safe pipeline validation against <code class="font-mono">props.validation.create</code> or <code class="font-mono">props.validation.update</code> (Zod schemas) before persisting to IndexedDB or transmitting to remote endpoints.
+          <strong>{{ isIndonesian ? 'Lapisan 2 (TabelData & Skema Zod):' : 'Layer 2 (TabelData & Zod Schema):' }}</strong>
+          {{ isIndonesian
+            ? 'Ketika tombol Simpan ditekan, FormModal memancarkan event @submit ke pipeline submitFormData TabelData. TabelData menjalankan validasi pipa skema Zod (validation.create/update) dengan type safety sebelum menyimpannya ke IndexedDB atau API remote.'
+            : "Upon clicking Submit in FormModal, valid data is emitted via @submit to TabelData's submitFormData pipeline. TabelData runs final type-safe pipeline validation against props.validation.create or props.validation.update (Zod schemas) before persisting." }}
         </li>
       </ul>
     </div>
@@ -36,12 +43,12 @@
         <button
           type="button"
           @click="showValidatedModal = true"
-          class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold rounded-lg shadow-sm transition-colors"
+          class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold rounded-lg shadow-sm transition-colors cursor-pointer"
         >
-          Open Validated Form Modal
+          {{ isIndonesian ? 'Buka Formulir Modal Tervalidasi' : 'Open Validated Form Modal' }}
         </button>
         <span v-if="validatedResult" class="text-xs text-emerald-600 dark:text-emerald-400 font-medium">
-          ✓ Submitted: {{ validatedResult.fullName }} ({{ validatedResult.role }}) - {{ validatedResult.email }}
+          {{ isIndonesian ? '✓ Terkirim:' : '✓ Submitted:' }} {{ validatedResult.fullName }} ({{ validatedResult.role }}) - {{ validatedResult.email }}
         </span>
       </div>
 
@@ -49,7 +56,7 @@
         v-if="showValidatedModal"
         :schema="validatedSchema"
         :is-update="false"
-        lang="en"
+        :lang="currentLocale"
         @cancel="showValidatedModal = false"
         @submit="handleValidatedSubmit"
       />
@@ -68,12 +75,12 @@
         <button
           type="button"
           @click="showUpdateModal = true"
-          class="px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white text-xs font-semibold rounded-lg shadow-sm transition-colors"
+          class="px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white text-xs font-semibold rounded-lg shadow-sm transition-colors cursor-pointer"
         >
-          Edit Existing Employee Record
+          {{ isIndonesian ? 'Edit Data Karyawan Tersimpan' : 'Edit Existing Employee Record' }}
         </button>
         <span v-if="updateResult" class="text-xs text-amber-600 dark:text-amber-400 font-medium">
-          ✓ Updated: {{ updateResult.fullName }} - \${{ updateResult.salary }}
+          {{ isIndonesian ? '✓ Diperbarui:' : '✓ Updated:' }} {{ updateResult.fullName }} - \${{ updateResult.salary }}
         </span>
       </div>
 
@@ -83,7 +90,7 @@
         :schema="validatedSchema"
         :initial-data="initialEmployeeData"
         :is-update="true"
-        lang="en"
+        :lang="currentLocale"
         @cancel="showUpdateModal = false"
         @submit="handleUpdateSubmit"
       />
@@ -102,12 +109,12 @@
         <button
           type="button"
           @click="showSeoModal = true"
-          class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold rounded-lg shadow-sm transition-colors"
+          class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold rounded-lg shadow-sm transition-colors cursor-pointer"
         >
-          Open SEO Article Form
+          {{ isIndonesian ? 'Buka Formulir Artikel SEO' : 'Open SEO Article Form' }}
         </button>
         <span v-if="seoResult" class="text-xs text-indigo-600 dark:text-indigo-400 font-medium">
-          ✓ Saved Article: {{ seoResult.title }}
+          {{ isIndonesian ? '✓ Artikel Tersimpan:' : '✓ Saved Article:' }} {{ seoResult.title }}
         </span>
       </div>
 
@@ -116,7 +123,7 @@
         :schema="seoSchema"
         :seo="seoMapping"
         :is-update="false"
-        lang="en"
+        :lang="currentLocale"
         @cancel="showSeoModal = false"
         @submit="handleSeoSubmit"
       />
@@ -128,26 +135,27 @@
 
     <!-- Props Table -->
     <section class="space-y-4">
-      <h2 class="text-xl font-bold text-slate-900 dark:text-slate-100">Props</h2>
       <PropsTable :props="propsList" />
     </section>
 
     <!-- Events Table -->
     <section class="space-y-4">
-      <h2 class="text-xl font-bold text-slate-900 dark:text-slate-100">Events</h2>
       <EventsTable :events="eventsList" />
     </section>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { FormModal } from '@zyvnox/vue-pack/components'
 import type { Schema, SeoFieldMapping } from '@zyvnox/vue-pack/type'
+import { useSiteI18n } from '@/i18n'
 import DemoSection from '@/components/DemoSection.vue'
 import CodeBlock from '@/components/CodeBlock.vue'
 import PropsTable, { type PropDef } from '@/components/PropsTable.vue'
 import EventsTable, { type EventDef } from '@/components/EventsTable.vue'
+
+const { isIndonesian, currentLocale } = useSiteI18n()
 
 const showValidatedModal = ref(false)
 const showUpdateModal = ref(false)
@@ -157,19 +165,19 @@ const validatedResult = ref<any>(null)
 const updateResult = ref<any>(null)
 const seoResult = ref<any>(null)
 
-const validatedSchema: Schema = {
+const validatedSchema = computed<Schema>(() => ({
   fullName: {
     type: 'text',
-    label: 'Employee Full Name',
-    placeholder: 'Min. 3 characters',
+    label: isIndonesian.value ? 'Nama Lengkap Karyawan' : 'Employee Full Name',
+    placeholder: isIndonesian.value ? 'Min. 3 karakter' : 'Min. 3 characters',
     required: true,
-    tooltip: 'Enter full legal name as per ID card',
+    tooltip: isIndonesian.value ? 'Masukkan nama lengkap resmi sesuai KTP' : 'Enter full legal name as per ID card',
     tooltipPosition: 'right',
     validate: { minLength: 3, maxLength: 50 },
   },
   email: {
     type: 'email',
-    label: 'Corporate Email',
+    label: isIndonesian.value ? 'Email Perusahaan' : 'Corporate Email',
     placeholder: 'name@zyvnox.com',
     required: true,
     validate: {
@@ -178,17 +186,19 @@ const validatedSchema: Schema = {
   },
   role: {
     type: 'select',
-    label: 'Department Role',
-    options: ['Software Engineer', 'UI/UX Designer', 'Product Manager', 'QA Specialist'],
+    label: isIndonesian.value ? 'Jabatan Departemen' : 'Department Role',
+    options: isIndonesian.value
+      ? ['Software Engineer', 'Desainer UI/UX', 'Product Manager', 'Spesialis QA']
+      : ['Software Engineer', 'UI/UX Designer', 'Product Manager', 'QA Specialist'],
     required: true,
   },
   salary: {
     type: 'currency',
-    label: 'Monthly Salary',
+    label: isIndonesian.value ? 'Gaji Bulanan' : 'Monthly Salary',
     required: true,
     validate: { min: 3000000 },
   },
-}
+}))
 
 const initialEmployeeData = {
   fullName: 'Sarah Connor',
@@ -197,29 +207,29 @@ const initialEmployeeData = {
   salary: 15000000,
 }
 
-const seoSchema: Schema = {
+const seoSchema = computed<Schema>(() => ({
   title: {
     type: 'text',
-    label: 'Article Title',
+    label: isIndonesian.value ? 'Judul Artikel' : 'Article Title',
     required: true,
-    placeholder: 'e.g. Modern Frontend Architecture with Vue Pack',
+    placeholder: isIndonesian.value ? 'cth. Arsitektur Frontend Modern dengan Vue Pack' : 'e.g. Modern Frontend Architecture with Vue Pack',
     validate: { minLength: 10, maxLength: 70 },
   },
   slug: {
     type: 'text',
-    label: 'URL Slug',
+    label: isIndonesian.value ? 'Slug URL' : 'URL Slug',
     required: true,
     placeholder: 'e.g. modern-frontend-architecture',
     validate: { pattern: '^[a-z0-9-]+$' },
   },
   metaDescription: {
     type: 'textArea',
-    label: 'Meta Description',
+    label: isIndonesian.value ? 'Deskripsi Meta' : 'Meta Description',
     required: true,
-    placeholder: 'Recommended 120-160 characters for SEO search snippets',
+    placeholder: isIndonesian.value ? 'Disarankan 120-160 karakter untuk cuplikan pencarian SEO' : 'Recommended 120-160 characters for SEO search snippets',
     validate: { minLength: 50, maxLength: 160 },
   },
-}
+}))
 
 const seoMapping: SeoFieldMapping = {
   contentType: 'article',
@@ -230,97 +240,62 @@ const seoMapping: SeoFieldMapping = {
   },
 }
 
-const handleValidatedSubmit = (payload: any) => {
-  validatedResult.value = payload
+const handleValidatedSubmit = (data: any) => {
+  validatedResult.value = data
   showValidatedModal.value = false
 }
 
-const handleUpdateSubmit = (payload: any) => {
-  updateResult.value = payload
+const handleUpdateSubmit = (data: any) => {
+  updateResult.value = data
   showUpdateModal.value = false
 }
 
-const handleSeoSubmit = (payload: any) => {
-  seoResult.value = payload
+const handleSeoSubmit = (data: any) => {
+  seoResult.value = data
   showSeoModal.value = false
 }
 
-const validatedCode = `<template>
-  <button @click="show = true">Open Validated Form Modal</button>
-
-  <FormModal
-    v-if="show"
-    :schema="formSchema"
-    :is-update="false"
-    lang="en"
-    @cancel="show = false"
-    @submit="handleSubmit"
-  />
-</template>
-
-<script setup lang="ts">
-import { ref } from 'vue'
-import { FormModal } from '@zyvnox/vue-pack/components'
-import type { Schema } from '@zyvnox/vue-pack/type'
-
-const show = ref(false)
-
-const formSchema: Schema = {
-  fullName: {
-    type: 'text',
-    label: 'Full Name',
-    required: true,
-    validate: { minLength: 3, maxLength: 50 },
-  },
-  email: {
-    type: 'email',
-    label: 'Corporate Email',
-    required: true,
-    validate: { duplicate: ['admin@zyvnox.com'] },
-  },
-  salary: {
-    type: 'currency',
-    label: 'Monthly Salary',
-    required: true,
-    validate: { min: 3000000 },
-  },
-}
-
-const handleSubmit = (data: any) => {
-  console.log('Valid Form Data:', data)
-  show.value = false
-}
-<\/script>`
+const validatedCode = `<FormModal
+  :schema="schema"
+  :is-update="false"
+  :lang="currentLocale"
+  @cancel="showModal = false"
+  @submit="handleSubmit"
+/>`
 
 const updateCode = `<FormModal
-  :id="101"
-  :schema="formSchema"
-  :initial-data="{ fullName: 'Sarah Connor', salary: 15000000 }"
+  :id="employeeId"
+  :schema="schema"
+  :initial-data="existingRecord"
   :is-update="true"
-  @cancel="show = false"
-  @submit="onUpdate"
+  :lang="currentLocale"
+  @cancel="showModal = false"
+  @submit="handleUpdate"
 />`
 
 const seoCode = `<FormModal
-  :schema="seoSchema"
-  :seo="{ content: { title: 'title', slug: 'slug', description: 'metaDescription' } }"
-  @submit="onSave"
+  :schema="articleSchema"
+  :seo="{
+    contentType: 'article',
+    meta: { title: 'title', slug: 'slug', description: 'metaDescription' }
+  }"
+  :lang="currentLocale"
+  @submit="handleSeoSubmit"
 />`
 
 const propsList: PropDef[] = [
-  { name: 'schema', type: 'Schema', required: true, description: 'Declarative schema object specifying fields, types, and input validation rules' },
-  { name: 'isUpdate', type: 'boolean', default: 'false', description: 'Toggles between Create and Update modal headers, icons, and submit button labels' },
-  { name: 'initialData', type: 'Partial<T>', default: '{}', description: 'Pre-populated initial values used to populate fields when editing records' },
-  { name: 'id', type: 'number | string | null', description: 'ID of the record currently being updated' },
-  { name: 'lang', type: "'en' | 'id'", default: "'en'", description: 'Active language code for buttons, labels, and validation error messages' },
-  { name: 'seo', type: 'SeoFieldMapping', description: 'Mapping configuration that activates real-time SEO score calculation and audit reports' },
-  { name: 'demo', type: 'boolean', default: 'false', description: 'Offline demo mode flag passed down to child inputs and image uploaders' },
+  { name: 'schema', type: 'Schema', required: true, description: 'Declarative field schema definition configuring field types, labels, tooltips, and validation constraints' },
+  { name: 'isUpdate', type: 'boolean', default: 'false', description: 'Toggles between Add/Create and Edit/Update modal headers and button styles' },
+  { name: 'id', type: 'string | number', description: 'Unique entity record ID passed to update handlers and lifecycle hooks' },
+  { name: 'initialData', type: 'Record<string, any>', description: 'Pre-populated field values to populate inputs when opening in update mode' },
+  { name: 'seo', type: 'SeoFieldMapping', description: 'Optional SEO audit mapping configuration linking field names to SEO scoring rules' },
+  { name: 'lang', type: "'en' | 'id'", default: "'en'", description: 'Active language code controlling button labels and validation error messages' },
+  { name: 'width', type: 'string', default: "'max-w-2xl'", description: 'Tailwind CSS max-width constraint for the modal container' },
 ]
 
 const eventsList: EventDef[] = [
-  { name: 'submit', type: '(value: Record<string, any>) => void', description: 'Emitted when all fields pass validation and the user clicks Submit/Save' },
-  { name: 'cancel', type: '() => void', description: 'Emitted when the modal is closed or user clicks Cancel' },
-  { name: 'DataChildRemove', type: '(value: number[]) => void', description: 'Emitted when child array records are marked for deletion' },
-  { name: 'create:Options', type: '(key: string, options: string | number, view: string) => void', description: 'Emitted when a new option is dynamically created in a child Combobox' },
+  { name: 'submit', type: '(data: Record<string, any>, id?: string | number) => void', description: 'Emitted when user submits the form with fully validated payload' },
+  { name: 'cancel', type: '() => void', description: 'Emitted when user cancels or closes the dialog' },
+  { name: 'error', type: '(errors: Record<string, string[]>) => void', description: 'Emitted when submission is blocked by validation failures' },
 ]
 </script>

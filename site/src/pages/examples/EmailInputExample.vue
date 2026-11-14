@@ -1,23 +1,17 @@
 <template>
   <div class="space-y-8">
-    <header class="border-b border-slate-200 dark:border-slate-800 pb-4">
-      <h1 class="text-3xl font-bold text-slate-900 dark:text-white mb-2">
-        EmailInput
-      </h1>
-      <p class="text-sm text-slate-600 dark:text-slate-400">
-        Email address input component with automatic RFC-compliant regex validation, duplicate checks, custom tooltip guidance, and i18n support.
-      </p>
-    </header>
+    <DocHeader />
 
     <!-- Demo 1: Basic Usage -->
     <DemoSection title="Basic Email Input" description="Email field with standard email keyboard hints and reactive binding.">
       <EmailInput
         v-model="basic"
-        label="Work Email"
+        :label="isIndonesian ? 'Email Kerja' : 'Work Email'"
         placeholder="alex@company.com"
+        :lang="currentLocale"
       />
       <div class="text-xs text-slate-500">
-        Bound Value: <code class="font-mono font-bold">{{ basic || '(empty)' }}</code>
+        {{ isIndonesian ? 'Nilai Terikat:' : 'Bound Value:' }} <code class="font-mono font-bold">{{ basic || (isIndonesian ? '(kosong)' : '(empty)') }}</code>
       </div>
 
       <template #code>
@@ -32,16 +26,17 @@
     >
       <EmailInput
         v-model="validatedVal"
-        label="Registered Account Email"
+        :label="isIndonesian ? 'Email Akun Terdaftar' : 'Registered Account Email'"
         placeholder="user@domain.com"
+        :lang="currentLocale"
         :validate="{
           duplicate: ['admin@company.com', 'support@company.com', 'billing@company.com'],
         }"
       />
       <div class="text-xs text-slate-500 space-y-1">
-        <div>Current Email: <code class="font-mono font-bold">{{ validatedVal || '(empty)' }}</code></div>
+        <div>{{ isIndonesian ? 'Email Saat Ini:' : 'Current Email:' }} <code class="font-mono font-bold">{{ validatedVal || (isIndonesian ? '(kosong)' : '(empty)') }}</code></div>
         <div class="text-slate-400 dark:text-slate-500">
-          Reserved/Taken list: <code class="font-mono">['admin@company.com', 'support@company.com', 'billing@company.com']</code>.
+          {{ isIndonesian ? 'Daftar email terpakai/dicadangkan:' : 'Reserved/Taken list:' }} <code class="font-mono">['admin@company.com', 'support@company.com', 'billing@company.com']</code>.
         </div>
       </div>
 
@@ -54,10 +49,11 @@
     <DemoSection title="With Custom Schema Tooltip" description="Clear instruction tooltip displayed beside the email label.">
       <EmailInput
         v-model="withTooltip"
-        label="Recovery Email"
-        tooltip="Used solely for password resets and critical security notices"
+        :label="isIndonesian ? 'Email Pemulihan' : 'Recovery Email'"
+        :tooltip="isIndonesian ? 'Hanya digunakan untuk reset kata sandi dan notifikasi keamanan penting' : 'Used solely for password resets and critical security notices'"
         tooltip-position="right"
         placeholder="recovery@personal.net"
+        :lang="currentLocale"
       />
 
       <template #code>
@@ -70,14 +66,16 @@
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <EmailInput
           v-model="errorVal"
-          label="Billing Contact"
+          :label="isIndonesian ? 'Kontak Penagihan' : 'Billing Contact'"
           required
-          :error="'Mail exchanger unreachable for specified domain'"
+          :error="isIndonesian ? 'Mail exchanger tidak dapat dihubungi untuk domain yang ditentukan' : 'Mail exchanger unreachable for specified domain'"
+          :lang="currentLocale"
         />
         <EmailInput
           v-model="disabledVal"
-          label="Primary Account Email (Read-Only)"
+          :label="isIndonesian ? 'Email Akun Utama (Hanya-Baca)' : 'Primary Account Email (Read-Only)'"
           disabled
+          :lang="currentLocale"
         />
       </div>
 
@@ -88,13 +86,11 @@
 
     <!-- Props Table -->
     <section class="space-y-4">
-      <h2 class="text-xl font-bold text-slate-900 dark:text-slate-100">Props</h2>
       <PropsTable :props="propsList" />
     </section>
 
     <!-- Events Table -->
     <section class="space-y-4">
-      <h2 class="text-xl font-bold text-slate-900 dark:text-slate-100">Events</h2>
       <EventsTable :events="eventsList" />
     </section>
   </div>
@@ -103,10 +99,13 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { EmailInput } from '@zyvnox/vue-pack/components'
+import { useSiteI18n } from '@/i18n'
 import DemoSection from '@/components/DemoSection.vue'
 import CodeBlock from '@/components/CodeBlock.vue'
 import PropsTable, { type PropDef } from '@/components/PropsTable.vue'
 import EventsTable, { type EventDef } from '@/components/EventsTable.vue'
+
+const { isIndonesian, currentLocale } = useSiteI18n()
 
 const basic = ref('')
 const validatedVal = ref('admin@company.com')

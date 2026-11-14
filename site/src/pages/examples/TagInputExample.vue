@@ -1,23 +1,17 @@
 <template>
   <div class="space-y-8">
-    <header class="border-b border-slate-200 dark:border-slate-800 pb-4">
-      <h1 class="text-3xl font-bold text-slate-900 dark:text-white mb-2">
-        TagInput
-      </h1>
-      <p class="text-sm text-slate-600 dark:text-slate-400">
-        Tag chip generator input with keyboard shortcuts (Enter / comma), tag count boundaries (min/max), custom tooltips, and i18n support.
-      </p>
-    </header>
+    <DocHeader />
 
     <!-- Demo 1: Basic Tags -->
     <DemoSection title="Basic Tag Input" description="Add tags by typing and pressing Enter or comma. Remove with backspace or close icon.">
       <TagInput
         v-model="basic"
-        label="Skill Keywords"
-        placeholder="Type skill and press Enter..."
+        :label="isIndonesian ? 'Kata Kunci Keahlian' : 'Skill Keywords'"
+        :placeholder="isIndonesian ? 'Ketik keahlian dan tekan Enter...' : 'Type skill and press Enter...'"
+        :lang="currentLocale"
       />
       <div class="text-xs text-slate-500">
-        Selected Tags: <code class="font-mono font-bold">{{ JSON.stringify(basic) }}</code>
+        {{ isIndonesian ? 'Tag Terpilih:' : 'Selected Tags:' }} <code class="font-mono font-bold">{{ JSON.stringify(basic) }}</code>
       </div>
 
       <template #code>
@@ -32,17 +26,18 @@
     >
       <TagInput
         v-model="validatedTags"
-        label="Article Topics"
-        placeholder="Add between 2 and 5 topics..."
+        :label="isIndonesian ? 'Topik Artikel' : 'Article Topics'"
+        :placeholder="isIndonesian ? 'Tambahkan antara 2 hingga 5 topik...' : 'Add between 2 and 5 topics...'"
+        :lang="currentLocale"
         :validate="{
           min: 2,
           max: 5,
         }"
       />
       <div class="text-xs text-slate-500 space-y-1">
-        <div>Current Tags ({{ validatedTags.length }}): <code class="font-mono font-bold">{{ JSON.stringify(validatedTags) }}</code></div>
+        <div>{{ isIndonesian ? 'Tag Saat Ini (' : 'Current Tags (' }}{{ validatedTags.length }}): <code class="font-mono font-bold">{{ JSON.stringify(validatedTags) }}</code></div>
         <div class="text-slate-400 dark:text-slate-500">
-          Enforces min: 2 tags, max: 5 tags.
+          {{ isIndonesian ? 'Menerapkan batas min: 2 tag, max: 5 tag.' : 'Enforces min: 2 tags, max: 5 tags.' }}
         </div>
       </div>
 
@@ -55,9 +50,10 @@
     <DemoSection title="With Schema Tooltip" description="Displays SEO metadata guidelines via tooltip.">
       <TagInput
         v-model="withTooltip"
-        label="SEO Meta Keywords"
-        tooltip="Enter relevant search index keywords (e.g. vue, reactive, typescript)"
+        :label="isIndonesian ? 'Kata Kunci Meta SEO' : 'SEO Meta Keywords'"
+        :tooltip="isIndonesian ? 'Masukkan kata kunci indeks pencarian yang relevan (misal vue, reaktif, typescript)' : 'Enter relevant search index keywords (e.g. vue, reactive, typescript)'"
         tooltip-position="right"
+        :lang="currentLocale"
       />
 
       <template #code>
@@ -70,13 +66,15 @@
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <TagInput
           v-model="errorVal"
-          label="Server Role Tags"
-          :error="'Production roles must be assigned via IAM policies'"
+          :label="isIndonesian ? 'Tag Peran Server' : 'Server Role Tags'"
+          :error="isIndonesian ? 'Peran produksi harus ditetapkan melalui kebijakan IAM' : 'Production roles must be assigned via IAM policies'"
+          :lang="currentLocale"
         />
         <TagInput
           v-model="disabledVal"
-          label="System Core Tags (Read-Only)"
+          :label="isIndonesian ? 'Tag Inti Sistem (Hanya-Baca)' : 'System Core Tags (Read-Only)'"
           disabled
+          :lang="currentLocale"
         />
       </div>
 
@@ -87,13 +85,11 @@
 
     <!-- Props Table -->
     <section class="space-y-4">
-      <h2 class="text-xl font-bold text-slate-900 dark:text-slate-100">Props</h2>
       <PropsTable :props="propsList" />
     </section>
 
     <!-- Events Table -->
     <section class="space-y-4">
-      <h2 class="text-xl font-bold text-slate-900 dark:text-slate-100">Events</h2>
       <EventsTable :events="eventsList" />
     </section>
   </div>
@@ -102,10 +98,13 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { TagInput } from '@zyvnox/vue-pack/components'
+import { useSiteI18n } from '@/i18n'
 import DemoSection from '@/components/DemoSection.vue'
 import CodeBlock from '@/components/CodeBlock.vue'
 import PropsTable, { type PropDef } from '@/components/PropsTable.vue'
 import EventsTable, { type EventDef } from '@/components/EventsTable.vue'
+
+const { isIndonesian, currentLocale } = useSiteI18n()
 
 const basic = ref<string[]>(['Vue 3', 'TypeScript', 'UnoCSS'])
 const validatedTags = ref<string[]>(['SingleTag'])

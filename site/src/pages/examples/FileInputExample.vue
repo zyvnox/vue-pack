@@ -1,22 +1,16 @@
 <template>
   <div class="space-y-8">
-    <header class="border-b border-slate-200 dark:border-slate-800 pb-4">
-      <h1 class="text-3xl font-bold text-slate-900 dark:text-white mb-2">
-        FileInput
-      </h1>
-      <p class="text-sm text-slate-600 dark:text-slate-400">
-        Single document upload component with remote URL entry, file type & size constraint validation, file inspection metadata, and tooltip guidance.
-      </p>
-    </header>
+    <DocHeader />
 
     <!-- Demo 1: Basic File -->
     <DemoSection title="Basic File Upload" description="Selects a single file or URL link with reactive binding.">
       <FileInput
         v-model="basic"
-        label="Signed NDA Document"
+        :label="isIndonesian ? 'Dokumen NDA Bertanda Tangan' : 'Signed NDA Document'"
+        :lang="currentLocale"
       />
       <div class="text-xs text-slate-500">
-        Current Selection: <code class="font-mono font-bold">{{ typeof basic === 'string' ? basic : (basic?.name ?? '(none)') }}</code>
+        {{ isIndonesian ? 'Pilihan Saat Ini:' : 'Current Selection:' }} <code class="font-mono font-bold">{{ typeof basic === 'string' ? basic : (basic?.name ?? (isIndonesian ? '(tidak ada)' : '(none)')) }}</code>
       </div>
 
       <template #code>
@@ -31,9 +25,10 @@
     >
       <FileInput
         v-model="validatedFile"
-        label="Resume / Curriculum Vitae"
-        tooltip="Only PDF or DOCX format permitted (max 2MB)"
+        :label="isIndonesian ? 'Resume / Riwayat Hidup' : 'Resume / Curriculum Vitae'"
+        :tooltip="isIndonesian ? 'Hanya format PDF atau DOCX yang diizinkan (maksimal 2MB)' : 'Only PDF or DOCX format permitted (max 2MB)'"
         tooltip-position="right"
+        :lang="currentLocale"
         :validate="{
           maxSize: 2048,
           allowedTypes: ['pdf', 'docx'],
@@ -41,7 +36,7 @@
       />
       <div class="text-xs text-slate-500 space-y-1 mt-2">
         <div class="text-slate-400 dark:text-slate-500">
-          Constraints: max 2048 KB, allowed extensions: <code class="font-mono">['pdf', 'docx']</code>.
+          {{ isIndonesian ? 'Batasan: maksimal 2048 KB, ekstensi yang diizinkan:' : 'Constraints: max 2048 KB, allowed extensions:' }} <code class="font-mono">['pdf', 'docx']</code>.
         </div>
       </div>
 
@@ -55,13 +50,15 @@
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <FileInput
           v-model="errorVal"
-          label="Tax Return Filing"
-          :error="'Tax verification server rejected corrupted checksum'"
+          :label="isIndonesian ? 'Pelaporan SPT Pajak' : 'Tax Return Filing'"
+          :error="isIndonesian ? 'Server verifikasi pajak menolak berkas karena checksum rusak' : 'Tax verification server rejected corrupted checksum'"
+          :lang="currentLocale"
         />
         <FileInput
           v-model="disabledVal"
-          label="Archived Payroll Receipt (Read-Only)"
+          :label="isIndonesian ? 'Tanda Terima Penggajian Terarsip (Hanya-Baca)' : 'Archived Payroll Receipt (Read-Only)'"
           disabled
+          :lang="currentLocale"
         />
       </div>
 
@@ -72,13 +69,11 @@
 
     <!-- Props Table -->
     <section class="space-y-4">
-      <h2 class="text-xl font-bold text-slate-900 dark:text-slate-100">Props</h2>
       <PropsTable :props="propsList" />
     </section>
 
     <!-- Events Table -->
     <section class="space-y-4">
-      <h2 class="text-xl font-bold text-slate-900 dark:text-slate-100">Events</h2>
       <EventsTable :events="eventsList" />
     </section>
   </div>
@@ -87,10 +82,13 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { FileInput } from '@zyvnox/vue-pack/components'
+import { useSiteI18n } from '@/i18n'
 import DemoSection from '@/components/DemoSection.vue'
 import CodeBlock from '@/components/CodeBlock.vue'
 import PropsTable, { type PropDef } from '@/components/PropsTable.vue'
 import EventsTable, { type EventDef } from '@/components/EventsTable.vue'
+
+const { isIndonesian, currentLocale } = useSiteI18n()
 
 const basic = ref<File | string | null>('https://example.com/docs/nda-2026.pdf')
 const validatedFile = ref<File | string | null>(null)

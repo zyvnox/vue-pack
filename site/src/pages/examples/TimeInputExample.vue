@@ -1,22 +1,16 @@
 <template>
   <div class="space-y-8">
-    <header class="border-b border-slate-200 dark:border-slate-800 pb-4">
-      <h1 class="text-3xl font-bold text-slate-900 dark:text-white mb-2">
-        TimeInput
-      </h1>
-      <p class="text-sm text-slate-600 dark:text-slate-400">
-        Time selection component with 24-hour formatting, minTime & maxTime boundary validation, tooltip support, and i18n support.
-      </p>
-    </header>
+    <DocHeader />
 
     <!-- Demo 1: Basic Time -->
     <DemoSection title="Basic Time Selection" description="Selects hours and minutes formatted as HH:mm.">
       <TimeInput
         v-model="basic"
-        label="Shift Start Time"
+        :label="isIndonesian ? 'Waktu Mulai Shift' : 'Shift Start Time'"
+        :lang="currentLocale"
       />
       <div class="text-xs text-slate-500">
-        Selected Time: <code class="font-mono font-bold">{{ basic || '(none)' }}</code>
+        {{ isIndonesian ? 'Waktu Terpilih:' : 'Selected Time:' }} <code class="font-mono font-bold">{{ basic || (isIndonesian ? '(tidak ada)' : '(none)') }}</code>
       </div>
 
       <template #code>
@@ -31,16 +25,17 @@
     >
       <TimeInput
         v-model="validatedVal"
-        label="Delivery Window Schedule"
+        :label="isIndonesian ? 'Jadwal Jendela Pengiriman' : 'Delivery Window Schedule'"
+        :lang="currentLocale"
         :validate="{
           minTime: '08:00' as TimeOnly,
           maxTime: '17:00' as TimeOnly,
         }"
       />
       <div class="text-xs text-slate-500 space-y-1">
-        <div>Current Time: <code class="font-mono font-bold">{{ validatedVal || '(none)' }}</code></div>
+        <div>{{ isIndonesian ? 'Waktu Saat Ini:' : 'Current Time:' }} <code class="font-mono font-bold">{{ validatedVal || (isIndonesian ? '(tidak ada)' : '(none)') }}</code></div>
         <div class="text-slate-400 dark:text-slate-500">
-          Allowed operating window: 08:00 through 17:00.
+          {{ isIndonesian ? 'Jendela operasional yang diizinkan: 08:00 hingga 17:00.' : 'Allowed operating window: 08:00 through 17:00.' }}
         </div>
       </div>
 
@@ -53,9 +48,10 @@
     <DemoSection title="With Schema Tooltip" description="Displays operating hours via tooltip.">
       <TimeInput
         v-model="withTooltip"
-        label="Customer Service Hotline Opens"
-        tooltip="Standard operating business hours are 09:00 to 17:00 WIB"
+        :label="isIndonesian ? 'Jam Buka Layanan Pelanggan' : 'Customer Service Hotline Opens'"
+        :tooltip="isIndonesian ? 'Jam kerja operasional standar adalah 09:00 hingga 17:00 WIB' : 'Standard operating business hours are 09:00 to 17:00 WIB'"
         tooltip-position="right"
+        :lang="currentLocale"
       />
 
       <template #code>
@@ -68,13 +64,15 @@
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <TimeInput
           v-model="errorVal"
-          label="Departure Schedule"
-          :error="'Departure cannot be scheduled during maintenance window'"
+          :label="isIndonesian ? 'Jadwal Keberangkatan' : 'Departure Schedule'"
+          :error="isIndonesian ? 'Keberangkatan tidak dapat dijadwalkan selama jendela pemeliharaan' : 'Departure cannot be scheduled during maintenance window'"
+          :lang="currentLocale"
         />
         <TimeInput
           v-model="disabledVal"
-          label="Standard Check-in Time (Read-Only)"
+          :label="isIndonesian ? 'Waktu Check-in Standar (Hanya-Baca)' : 'Standard Check-in Time (Read-Only)'"
           disabled
+          :lang="currentLocale"
         />
       </div>
 
@@ -85,13 +83,11 @@
 
     <!-- Props Table -->
     <section class="space-y-4">
-      <h2 class="text-xl font-bold text-slate-900 dark:text-slate-100">Props</h2>
       <PropsTable :props="propsList" />
     </section>
 
     <!-- Events Table -->
     <section class="space-y-4">
-      <h2 class="text-xl font-bold text-slate-900 dark:text-slate-100">Events</h2>
       <EventsTable :events="eventsList" />
     </section>
   </div>
@@ -101,10 +97,13 @@
 import { ref } from 'vue'
 import { TimeInput } from '@zyvnox/vue-pack/components'
 import type { TimeOnly } from '@zyvnox/vue-pack'
+import { useSiteI18n } from '@/i18n'
 import DemoSection from '@/components/DemoSection.vue'
 import CodeBlock from '@/components/CodeBlock.vue'
 import PropsTable, { type PropDef } from '@/components/PropsTable.vue'
 import EventsTable, { type EventDef } from '@/components/EventsTable.vue'
+
+const { isIndonesian, currentLocale } = useSiteI18n()
 
 const basic = ref<TimeOnly>('09:00' as TimeOnly)
 const validatedVal = ref<TimeOnly>('06:30' as TimeOnly)

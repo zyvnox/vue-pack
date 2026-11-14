@@ -3,10 +3,10 @@
     <header class="px-5 py-3.5 bg-slate-50 dark:bg-slate-800/80 border-b border-slate-200 dark:border-slate-800">
       <h3 class="text-base font-semibold text-slate-900 dark:text-slate-100 flex items-center gap-2">
         <span class="w-2 h-2 rounded-full bg-blue-500"></span>
-        {{ title }}
+        {{ displayTitle }}
       </h3>
-      <p v-if="description" class="text-xs text-slate-600 dark:text-slate-400 mt-1">
-        {{ description }}
+      <p v-if="displayDescription" class="text-xs text-slate-600 dark:text-slate-400 mt-1">
+        {{ displayDescription }}
       </p>
     </header>
     
@@ -21,9 +21,23 @@
 </template>
 
 <script setup lang="ts">
-defineProps<{
+import { computed } from 'vue'
+import { useSiteI18n } from '@/i18n'
+import { translateDemoTitle, translateDemoDescription } from '@/i18n/dictionary'
+
+const props = defineProps<{
   title: string
   description?: string
 }>()
-</script>
 
+const { isIndonesian } = useSiteI18n()
+
+const displayTitle = computed(() => {
+  return isIndonesian.value ? translateDemoTitle(props.title) : props.title
+})
+
+const displayDescription = computed(() => {
+  if (!props.description) return ''
+  return isIndonesian.value ? translateDemoDescription(props.description) : props.description
+})
+</script>

@@ -1,40 +1,48 @@
 <template>
   <div class="space-y-8">
-    <header class="border-b border-slate-200 dark:border-slate-800 pb-4">
-      <h1 class="text-3xl font-bold text-slate-900 dark:text-white mb-2">
-        TabelData (Enterprise CRUD Datatable)
-      </h1>
-      <p class="text-sm text-slate-600 dark:text-slate-400">
-        Enterprise schema-driven datatable suite with multi-column sorting, text search, pagination, custom actions, and seamless FormModal CRUD integration backed by dual-layer validation.
-      </p>
-    </header>
+    <DocHeader />
 
     <!-- Architecture Explanation: How TabelData & FormModal Connect via Validation -->
     <div class="p-5 rounded-2xl border border-indigo-200 bg-indigo-50/70 dark:border-indigo-800 dark:bg-indigo-950/30 text-xs text-indigo-900 dark:text-indigo-200 space-y-3 shadow-sm">
       <div class="flex items-center gap-2 font-bold text-sm text-indigo-950 dark:text-indigo-100">
         <span class="text-base">🔄</span>
-        <span>How TabelData, FormModal, and Validation Connect</span>
+        <span>{{ isIndonesian ? 'Koneksi Arsitektur TabelData, FormModal, dan Validasi' : 'How TabelData, FormModal, and Validation Connect' }}</span>
       </div>
       <p class="leading-relaxed">
-        <code class="font-bold">TabelData</code> does not manage forms directly in table cells. Instead, it delegates all record creation and editing to <code class="font-bold">FormModal</code>, using a connected two-layer validation architecture:
+        <span v-if="isIndonesian">
+          <code class="font-bold">TabelData</code> tidak mengelola formulir secara langsung di dalam sel tabel. Sebaliknya, proses pembuatan dan pengeditan data didelegasikan ke <code class="font-bold">FormModal</code>, menggunakan arsitektur validasi dua lapis yang terhubung:
+        </span>
+        <span v-else>
+          <code class="font-bold">TabelData</code> does not manage forms directly in table cells. Instead, it delegates all record creation and editing to <code class="font-bold">FormModal</code>, using a connected two-layer validation architecture:
+        </span>
       </p>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1">
         <div class="p-3 rounded-xl bg-white dark:bg-slate-900 border border-indigo-100 dark:border-indigo-900/60 shadow-xs">
           <div class="font-bold text-indigo-600 dark:text-indigo-400 mb-1 flex items-center gap-1.5">
-            <span>1️⃣</span> Layer 1: Client-Side Field Validation (FormModal)
+            <span>1️⃣</span> {{ isIndonesian ? 'Lapisan 1: Validasi Field Sisi Klien (FormModal)' : 'Layer 1: Client-Side Field Validation (FormModal)' }}
           </div>
           <p class="text-slate-600 dark:text-slate-400 leading-relaxed">
-            When clicking <code class="font-semibold">+ Tambah Data</code> or <code class="font-semibold">Edit</code>, <code class="font-bold">TabelData</code> passes <code class="font-mono">base.schema.create / update</code> to <code class="font-bold">FormModal</code>. Each field's <code class="font-mono">:validate</code> rules (<code class="font-mono">minLength</code>, <code class="font-mono">min</code>, <code class="font-mono">integer</code>, etc.) run in real time, displaying immediate visual error cues and preventing modal submission if invalid.
+            <span v-if="isIndonesian">
+              Saat menekan <code class="font-semibold">+ Tambah Data</code> atau <code class="font-semibold">Edit</code>, <code class="font-bold">TabelData</code> meneruskan <code class="font-mono">base.schema.create / update</code> ke <code class="font-bold">FormModal</code>. Aturan <code class="font-mono">:validate</code> setiap field (<code class="font-mono">minLength</code>, <code class="font-mono">min</code>, <code class="font-mono">integer</code>, dll.) berjalan realtime, menampilkan umpan balik error seketika dan mencegah submit jika tidak valid.
+            </span>
+            <span v-else>
+              When clicking <code class="font-semibold">+ Tambah Data</code> or <code class="font-semibold">Edit</code>, <code class="font-bold">TabelData</code> passes <code class="font-mono">base.schema.create / update</code> to <code class="font-bold">FormModal</code>. Each field's <code class="font-mono">:validate</code> rules (<code class="font-mono">minLength</code>, <code class="font-mono">min</code>, <code class="font-mono">integer</code>, etc.) run in real time, displaying immediate visual error cues and preventing modal submission if invalid.
+            </span>
           </p>
         </div>
 
         <div class="p-3 rounded-xl bg-white dark:bg-slate-900 border border-indigo-100 dark:indigo-900/60 shadow-xs">
           <div class="font-bold text-purple-600 dark:text-purple-400 mb-1 flex items-center gap-1.5">
-            <span>2️⃣</span> Layer 2: Pipeline Schema Validation (Zod)
+            <span>2️⃣</span> {{ isIndonesian ? 'Lapisan 2: Validasi Skema Pipeline (Zod)' : 'Layer 2: Pipeline Schema Validation (Zod)' }}
           </div>
           <p class="text-slate-600 dark:text-slate-400 leading-relaxed">
-            When the user clicks Submit, <code class="font-bold">FormModal</code> emits <code class="font-mono">@submit(formData)</code> to <code class="font-bold">TabelData</code>. <code class="font-bold">TabelData</code>'s <code class="font-mono">submitFormData</code> then validates the payload against <code class="font-mono">validation.create</code> or <code class="font-mono">validation.update</code> (Zod schema). If valid, it persists to IndexedDB (or sends to backend) and refreshes the table.
+            <span v-if="isIndonesian">
+              Saat pengguna menekan Submit, <code class="font-bold">FormModal</code> memancarkan <code class="font-mono">@submit(formData)</code> ke <code class="font-bold">TabelData</code>. Metode <code class="font-mono">submitFormData</code> pada <code class="font-bold">TabelData</code> memvalidasi payload terhadap <code class="font-mono">validation.create</code> atau <code class="font-mono">validation.update</code> (skema Zod). Jika valid, data disimpan ke IndexedDB (atau dikirim ke backend) dan tabel dimuat ulang otomatis.
+            </span>
+            <span v-else>
+              When the user clicks Submit, <code class="font-bold">FormModal</code> emits <code class="font-mono">@submit(formData)</code> to <code class="font-bold">TabelData</code>. <code class="font-bold">TabelData</code>'s <code class="font-mono">submitFormData</code> then validates the payload against <code class="font-mono">validation.create</code> or <code class="font-mono">validation.update</code> (Zod schema). If valid, it persists to IndexedDB (or sends to backend) and refreshes the table.
+            </span>
           </p>
         </div>
       </div>
@@ -48,14 +56,14 @@
       <div class="space-y-4">
         <div class="flex items-center justify-between">
           <div class="text-xs text-slate-500">
-            Source: IndexedDB Store (<code class="font-mono">"products"</code>) | Mode: Demo
+            {{ isIndonesian ? 'Sumber: Penyimpanan IndexedDB ("products") | Mode: Demo' : 'Source: IndexedDB Store ("products") | Mode: Demo' }}
           </div>
           <button
             type="button"
             @click="reloadTable"
             class="px-3 py-1.5 text-xs font-semibold rounded-md bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 transition-colors"
           >
-            🔄 Refresh Table
+            {{ isIndonesian ? '🔄 Muat Ulang Tabel' : '🔄 Refresh Table' }}
           </button>
         </div>
 
@@ -81,7 +89,7 @@
           <div class="bg-white dark:bg-slate-900 rounded-2xl max-w-lg w-full p-6 border border-slate-200 dark:border-slate-800 shadow-2xl space-y-4">
             <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
               <h3 class="font-bold text-slate-900 dark:text-white text-sm">
-                🔍 Row Inspector: #{{ inspectedItem.id }}
+                {{ isIndonesian ? '🔍 Inspektur Baris: #' : '🔍 Row Inspector: #' }}{{ inspectedItem.id }}
               </h3>
               <button
                 type="button"
@@ -98,7 +106,7 @@
                 @click="inspectedItem = null"
                 class="px-4 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium"
               >
-                Close
+                {{ isIndonesian ? 'Tutup' : 'Close' }}
               </button>
             </div>
           </div>
@@ -112,28 +120,29 @@
 
     <!-- Props Table -->
     <section class="space-y-4">
-      <h2 class="text-xl font-bold text-slate-900 dark:text-slate-100">Props</h2>
       <PropsTable :props="propsList" />
     </section>
 
     <!-- Events Table -->
     <section class="space-y-4">
-      <h2 class="text-xl font-bold text-slate-900 dark:text-slate-100">Events</h2>
       <EventsTable :events="eventsList" />
     </section>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { z } from 'zod'
 import { TabelData } from '@zyvnox/vue-pack/components'
 import { saveToIndexedDB } from '@zyvnox/vue-pack/indexedDB'
 import type { BaseConfig, TabelValidationSchema, TabelPagination, CustomAction } from '@zyvnox/vue-pack/type'
+import { useSiteI18n } from '@/i18n'
 import DemoSection from '@/components/DemoSection.vue'
 import CodeBlock from '@/components/CodeBlock.vue'
 import PropsTable, { type PropDef } from '@/components/PropsTable.vue'
 import EventsTable, { type EventDef } from '@/components/EventsTable.vue'
+
+const { isIndonesian } = useSiteI18n()
 
 const tableKey = ref(0)
 const inspectedItem = ref<any>(null)
@@ -161,7 +170,7 @@ onMounted(async () => {
 })
 
 // Configuration with both Field Validation (Layer 1) and Zod Schema Validation (Layer 2)
-const tableBaseConfig: BaseConfig<any> = {
+const tableBaseConfig = computed<BaseConfig<any>>(() => ({
   source: {
     DB_NAME: 'products',
   },
@@ -169,34 +178,35 @@ const tableBaseConfig: BaseConfig<any> = {
     global: {
       name: {
         type: 'text',
-        label: 'Device Name',
+        label: isIndonesian.value ? 'Nama Perangkat' : 'Device Name',
         required: true,
-        placeholder: 'Min. 3 characters',
+        placeholder: isIndonesian.value ? 'Min. 3 karakter' : 'Min. 3 characters',
         validate: { minLength: 3, maxLength: 60 },
       },
       category: {
         type: 'select',
-        label: 'Category',
+        label: isIndonesian.value ? 'Kategori' : 'Category',
         options: ['Sensors', 'Controllers', 'Actuators', 'Network'],
         required: true,
       },
       price: {
         type: 'currency',
-        label: 'Unit Price',
+        currency: 'IDR',
+        label: isIndonesian.value ? 'Harga Satuan' : 'Unit Price',
         required: true,
-        placeholder: 'Min. 1,000 IDR',
+        placeholder: isIndonesian.value ? 'Min. 1.000 IDR' : 'Min. 1,000 IDR',
         validate: { min: 1000 },
       },
       stock: {
         type: 'number',
-        label: 'Stock Inventory',
+        label: isIndonesian.value ? 'Stok Inventaris' : 'Stock Inventory',
         required: true,
-        placeholder: '0 - 10,000 units',
+        placeholder: isIndonesian.value ? '0 - 10.000 unit' : '0 - 10,000 units',
         validate: { min: 0, max: 10000, integer: true },
       },
       rating: {
         type: 'rate',
-        label: 'Quality Rating',
+        label: isIndonesian.value ? 'Rating Kualitas' : 'Quality Rating',
         required: true,
         validate: { min: 1, max: 5 },
       },
@@ -206,12 +216,12 @@ const tableBaseConfig: BaseConfig<any> = {
   dataTabelDisplay: {
     name: { type: 'text', valueKey: 'name' },
     category: { type: 'text', valueKey: 'category' },
-    price: { type: 'currency', valueKey: 'price' },
+    price: { type: 'currency', valueKey: 'price', currency: 'IDR' },
     stock: { type: 'number', valueKey: 'stock' },
     rating: { type: 'rate', valueKey: 'rating' },
   },
-  lang: 'en',
-}
+  lang: isIndonesian.value ? 'id' : 'en',
+}))
 
 const tableValidation: TabelValidationSchema<any> = {
   create: z.object({
@@ -289,6 +299,7 @@ const tableBaseConfig: BaseConfig<any> = {
       },
       price: {
         type: 'currency',
+        currency: 'IDR',
         label: 'Unit Price',
         required: true,
         validate: { min: 1000 },
@@ -310,7 +321,7 @@ const tableBaseConfig: BaseConfig<any> = {
   headersTabelDisplay: ['name', 'price', 'stock', 'rating'],
   dataTabelDisplay: {
     name: { type: 'text', valueKey: 'name' },
-    price: { type: 'currency', valueKey: 'price' },
+    price: { type: 'currency', valueKey: 'price', currency: 'IDR' },
     stock: { type: 'number', valueKey: 'stock' },
     rating: { type: 'rate', valueKey: 'rating' },
   },

@@ -1,23 +1,18 @@
 <template>
   <div class="space-y-8">
-    <header class="border-b border-slate-200 dark:border-slate-800 pb-4">
-      <h1 class="text-3xl font-bold text-slate-900 dark:text-white mb-2">
-        ColorInput (Color Selector)
-      </h1>
-      <p class="text-sm text-slate-600 dark:text-slate-400">
-        Color selection component supporting both single hex color and multi-color palette array modes, palette item count validation (min/max), custom tooltips, and i18n support.
-      </p>
-    </header>
+    <DocHeader />
 
     <!-- Demo 1: Single Color Selection -->
     <DemoSection title="Single Color Picker" description="Picks a single HEX color code.">
       <ColorInput
         v-model="singleColor"
-        label="Theme Primary Color"
+        :label="isIndonesian ? 'Warna Utama Tema' : 'Theme Primary Color'"
         :single="true"
+        :selectedColors="['#ef4444', '#f97316', '#f59e0b', '#10b981', '#06b6d4', '#3b82f6', '#8b5cf6', '#ec4899']"
+        :lang="currentLocale"
       />
       <div class="text-xs text-slate-500 flex items-center gap-2">
-        <span>Selected Color:</span>
+        <span>{{ isIndonesian ? 'Warna Terpilih:' : 'Selected Color:' }}</span>
         <span class="inline-block w-4 h-4 rounded border border-slate-300 dark:border-slate-600" :style="{ backgroundColor: singleColor }"></span>
         <code class="font-mono font-bold">{{ singleColor }}</code>
       </div>
@@ -34,19 +29,20 @@
     >
       <ColorInput
         v-model="paletteColors"
-        label="Brand Color Palette"
-        tooltip="Select between 2 and 4 brand identity colors"
+        :label="isIndonesian ? 'Palet Warna Merek' : 'Brand Color Palette'"
+        :tooltip="isIndonesian ? 'Pilih antara 2 hingga 4 warna identitas merek' : 'Select between 2 and 4 brand identity colors'"
         tooltip-position="right"
         :single="false"
+        :lang="currentLocale"
         :validate="{
           min: 2,
           max: 4,
         }"
       />
       <div class="text-xs text-slate-500 space-y-1">
-        <div>Current Palette: <code class="font-mono font-bold">{{ JSON.stringify(paletteColors) }}</code></div>
+        <div>{{ isIndonesian ? 'Palet Saat Ini:' : 'Current Palette:' }} <code class="font-mono font-bold">{{ JSON.stringify(paletteColors) }}</code></div>
         <div class="text-slate-400 dark:text-slate-500">
-          Enforces min: 2, max: 4 colors.
+          {{ isIndonesian ? 'Menerapkan batas min: 2, max: 4 warna.' : 'Enforces min: 2, max: 4 colors.' }}
         </div>
       </div>
 
@@ -60,15 +56,17 @@
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <ColorInput
           v-model="errorColor"
-          label="Accent Highlight"
+          :label="isIndonesian ? 'Sorotan Aksen' : 'Accent Highlight'"
           :single="true"
-          :error="['Selected color violates WCAG contrast guidelines against white']"
+          :error="isIndonesian ? ['Warna yang dipilih melanggar pedoman kontras WCAG terhadap putih'] : ['Selected color violates WCAG contrast guidelines against white']"
+          :lang="currentLocale"
         />
         <ColorInput
           v-model="disabledColor"
-          label="Locked System Neutral (Read-Only)"
+          :label="isIndonesian ? 'Netral Sistem Terkunci (Hanya-Baca)' : 'Locked System Neutral (Read-Only)'"
           :single="true"
           disabled
+          :lang="currentLocale"
         />
       </div>
 
@@ -79,13 +77,11 @@
 
     <!-- Props Table -->
     <section class="space-y-4">
-      <h2 class="text-xl font-bold text-slate-900 dark:text-slate-100">Props</h2>
       <PropsTable :props="propsList" />
     </section>
 
     <!-- Events Table -->
     <section class="space-y-4">
-      <h2 class="text-xl font-bold text-slate-900 dark:text-slate-100">Events</h2>
       <EventsTable :events="eventsList" />
     </section>
   </div>
@@ -94,10 +90,13 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { ColorInput } from '@zyvnox/vue-pack/components'
+import { useSiteI18n } from '@/i18n'
 import DemoSection from '@/components/DemoSection.vue'
 import CodeBlock from '@/components/CodeBlock.vue'
 import PropsTable, { type PropDef } from '@/components/PropsTable.vue'
 import EventsTable, { type EventDef } from '@/components/EventsTable.vue'
+
+const { isIndonesian, currentLocale } = useSiteI18n()
 
 const singleColor = ref('#3b82f6')
 const paletteColors = ref<string[]>(['#3b82f6'])
